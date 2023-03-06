@@ -1,51 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   form: any = {
     trigramme: null,
-    password: null
+    password: null,
   };
-  isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
-  roles: string[] = [];
 
-  constructor(private authService: AuthService, private storageService: StorageService) { }
-
-  ngOnInit(): void {
-    if (this.storageService.isLoggedIn()) {
-      this.isLoggedIn = true;
-      this.roles = this.storageService.getUser().roles;
-    }
-  }
+  constructor(
+    private authService: AuthService,
+    private storageService: StorageService,
+    private router: Router
+  ) {}
 
   onSubmit(): void {
-    const { trigramme, password } = this.form;
-
-    this.authService.login(trigramme, password).subscribe({
-      next: data => {
-        this.storageService.saveUser(data);
-
-        this.isLoginFailed = false;
-        this.isLoggedIn = true;
-        this.roles = this.storageService.getUser().roles;
-        this.reloadPage();
+    this.authService.login(this.form).subscribe({
+      next: (data) => {
+        if (data.hasOwnProperty('token')) {
+          this.storageService.saveUser(data);
+          this.router.navigate(['/desactivation'])
+        } else {
+          this.errorMessage = data.permission;
+          this.isLoginFailed = true;
+        }
       },
-      error: err => {
+      error: (err) => {
         this.errorMessage = err.error.message;
         this.isLoginFailed = true;
-      }
+      },
     });
-  }
-
-  reloadPage(): void {
-    window.location.reload();
   }
 }

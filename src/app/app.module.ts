@@ -9,12 +9,14 @@ import { LoginComponent } from './components/login/login.component';
 
 import { httpInterceptorProviders } from './helpers/auth.interceptor';
 import { HomeComponent } from './components/home/home.component';
+import { DesactivationComponent } from './components/desactivation/desactivation.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    DesactivationComponent
   ],
   imports: [
     BrowserModule,
