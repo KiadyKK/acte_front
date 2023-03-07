@@ -3,21 +3,23 @@
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 
 .fondNoir {
-    background-color: #000;
+  background-color: #000;
 }
 
 body {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
+  /* position: relative; */
+  font-family:Arial, Helvetica, sans-serif
 }
 
 .btn-orange {
-    background-color: #FF7900 ;
-    color: white;
+  background-color: #ff7900;
+  color: white;
 }
 
 .btn-orange:hover {
-    background-color: #ca5e00 ;
-    color: white;
-
+  background-color: #ca5e00;
+  color: white;
 }
+
 
