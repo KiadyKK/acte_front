@@ -1,44 +1,35 @@
 <div id="app">
-    <div class="fondNoir d-flex">
-        <img src="assets/images/logo.gif" class="my-2 ms-2 me-4" alt="Logo Orange" title="Logo Orange"  width="35px" height="35px"> 
-        <h5 class="text-light d-flex align-items-center mb-0">ACTES EN MASSE</h5>
-    </div>
-    <nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="isLoggedIn">
-        <ul class="navbar-nav mr-auto" routerLinkActive="active">
-            <li class="nav-item">
-                <a class="nav-link" routerLink="home">Home </a>
-            </li>
-            <li class="nav-item" *ngIf="showAdminBoard">
-                <a href="/admin" class="nav-link" routerLink="admin">Admin Board</a>
-            </li>
-            <li class="nav-item" *ngIf="showModeratorBoard">
-                <a href="/mod" class="nav-link" routerLink="mod">Moderator Board</a>
-            </li>
-            <li class="nav-item">
-                <a href="/user" class="nav-link" *ngIf="isLoggedIn" routerLink="user">User</a>
-            </li>
-        </ul>
+  <nav class="navbar navbar-expand navbar-dark bg-dark py-0">
+    <img
+      src="assets/images/logo.gif"
+      class="my-2 ms-2 me-2"
+      alt="Logo Orange"
+      title="Logo Orange"
+      width="35px"
+      height="35px"
+    />
+    <h5 class="text-light d-flex align-items-center mb-0">ACTES EN MASSE</h5>
+    <ul class="navbar-nav mr-auto" routerLinkActive="active">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="home">Home</a>
+      </li>
+    </ul>
 
-        <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
-            <li class="nav-item">
-                <a href="/register" class="nav-link" routerLink="register">Sign Up</a>
-            </li>
-            <li class="nav-item">
-                <a href="/login" class="nav-link" routerLink="login">Login</a>
-            </li>
-        </ul>
+    <ul class="navbar-nav ms-auto" *ngIf="isLoggedIn">
+      <li class="nav-item">
+        <a href="/profile" class="nav-link" routerLink="profile">{{
+          trigramme
+        }}</a>
+      </li>
+      <li class="nav-item d-flex align-items-center me-2">
+        <a href class="btn btn-outline-primary btn-sm" (click)="logout()"
+          >Déconnexion</a
+        >
+      </li>
+    </ul>
+  </nav>
 
-        <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
-            <li class="nav-item">
-                <a href="/profile" class="nav-link" routerLink="profile">{{ username }}</a>
-            </li>
-            <li class="nav-item">
-                <a href class="nav-link" (click)="logout()">LogOut</a>
-            </li>
-        </ul>
-    </nav>
-
-    <div class="container">
-        <router-outlet></router-outlet>
-    </div>
+  <div>
+    <router-outlet></router-outlet>
+  </div>
 </div>

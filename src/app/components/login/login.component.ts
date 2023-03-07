@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
@@ -8,12 +8,13 @@ import { StorageService } from 'src/app/services/storage/storage.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   form: any = {
     trigramme: null,
     password: null,
   };
   isLoginFailed = false;
+  isLoggedIn: boolean = false;
   errorMessage = '';
 
   constructor(
@@ -22,12 +23,19 @@ export class LoginComponent {
     private router: Router
   ) {}
 
+  ngOnInit(): void {
+    const loggedIn = this.storageService.getItem('token');
+    if (loggedIn) {
+      this.router.navigate(['desactivation']);
+    }
+  }
+
   onSubmit(): void {
     this.authService.login(this.form).subscribe({
       next: (data) => {
         if (data.hasOwnProperty('token')) {
           this.storageService.saveUser(data);
-          this.router.navigate(['/desactivation'])
+          location.reload();
         } else {
           this.errorMessage = data.permission;
           this.isLoginFailed = true;

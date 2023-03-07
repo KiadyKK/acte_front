@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as CryptoJS from 'crypto-js';
-
-const USER_KEY = 'auth-user';
+import { AES, enc }from 'crypto-js';
 
 @Injectable({
   providedIn: 'root',
@@ -10,36 +8,29 @@ export class StorageService {
   constructor() {}
 
   clean(): void {
-    window.sessionStorage.clear();
+    sessionStorage.clear();
   }
 
   public saveUser(data: any): void {
     this.clean();
     
-    window.sessionStorage.setItem("ID", CryptoJS.AES.encrypt(data.ID, "MYKEY4DEMO").toString());
-    window.sessionStorage.setItem("utilisateur", CryptoJS.AES.encrypt(data.utilisateur, "MYKEY4DEMO").toString());
-    window.sessionStorage.setItem("user_id", CryptoJS.AES.encrypt(data.user_id.toString(), "MYKEY4DEMO").toString());
-    window.sessionStorage.setItem("trigramme", CryptoJS.AES.encrypt(data.trigramme, "MYKEY4DEMO").toString());
-    window.sessionStorage.setItem("password", CryptoJS.AES.encrypt(data.password, "MYKEY4DEMO").toString());
-    window.sessionStorage.setItem("status", CryptoJS.AES.encrypt(data.status.toString(), "MYKEY4DEMO").toString());
-    window.sessionStorage.setItem("token", CryptoJS.AES.encrypt(data.token, "MYKEY4DEMO").toString());
+    sessionStorage.setItem("ID", AES.encrypt(data.ID, "MYKEY4DEMO").toString());
+    sessionStorage.setItem("utilisateur", AES.encrypt(data.utilisateur, "MYKEY4DEMO").toString());
+    sessionStorage.setItem("user_id", AES.encrypt(data.user_id.toString(), "MYKEY4DEMO").toString());
+    sessionStorage.setItem("trigramme", AES.encrypt(data.trigramme, "MYKEY4DEMO").toString());
+    sessionStorage.setItem("password", AES.encrypt(data.password, "MYKEY4DEMO").toString());
+    sessionStorage.setItem("status", AES.encrypt(data.status.toString(), "MYKEY4DEMO").toString());
+    sessionStorage.setItem("token", AES.encrypt(data.token, "MYKEY4DEMO").toString());
   }
 
-  public getUser(): any {
-    const user = window.sessionStorage.getItem(USER_KEY);
-    if (user) {
-      return JSON.parse(user);
+  public getItem(key: string): any {
+    const item = sessionStorage.getItem(key) ? sessionStorage.getItem(key) : false;
+    if (item) {
+      const decrypted = AES.decrypt(item, 'MYKEY4DEMO');
+      const decryptedString = decrypted.toString(enc.Utf8);
+      return decryptedString;
     }
 
     return null;
-  }
-
-  public isLoggedIn(): boolean {
-    const user = window.sessionStorage.getItem(USER_KEY);
-    if (user) {
-      return true;
-    }
-
-    return false;
   }
 }
