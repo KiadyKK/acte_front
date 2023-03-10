@@ -81,13 +81,4 @@ export class DesactivationComponent implements OnInit {
   onCheckDateChange(event: any): void {
     this.checkDate = event.target.checked;
   }
-
-  triggerApiCall = () => {
-    for (let j = 0, j_len = 10; j < j_len; j++) {
-      for (let i = 1, i_len = 100; i < i_len; i++) {
-        this.http.get(`https://jsonplaceholder.typicode.com/posts/${i}`)
-          .subscribe(post => console.log(post))
-      }  
-    }
-  };
 }
