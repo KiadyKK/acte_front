@@ -1,1 +1,106 @@
-<p>desactivation works!</p>
+<div class="title">Désactivation</div>
+<div class="parametre">
+  <div class="col-md-3 pe-2">
+    <label for="formFile" class="form-label m-0"
+      ><strong>Fichier CSV</strong></label
+    >
+    <input
+      class="form-control me-3"
+      type="file"
+      id="formFile"
+      (change)="onFileChange($event)"
+    />
+  </div>
+  <div class="col-md-3 ps-3 pe-4">
+    <label class="form-label m-0"><strong>Raison</strong></label>
+    <select class="form-select" aria-label="Default select example">
+      <option
+        *ngFor="let reason of reasons"
+        [value]="reason.rsDes"
+        aria-placeholder="Raison"
+      >
+        {{ reason.rsDes }}
+      </option>
+    </select>
+  </div>
+  <div class="example-wrapper">
+    <div>
+      <input
+        type="checkbox"
+        id="date"
+        class="form-check-input me-2"
+        [value]="checkDate"
+        (change)="onCheckDateChange($event)"
+      />
+      <label for="date" class="form-check-label"
+        ><strong>Date de désactivation</strong></label
+      >
+    </div>
+    <kendo-datetimepicker
+      [disabled]="!checkDate"
+      [format]="format"
+      [(value)]="value"
+    >
+    </kendo-datetimepicker>
+  </div>
+  <div class="d-flex align-items-end ms-4">
+    <button class="btn btn-success ms-auto">
+      <i class="bi bi-check2-circle me-2"></i>Valider
+    </button>
+  </div>
+</div>
+<div class="content">
+  <div class="subTitle">Contenu du fichier CSV</div>
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th scope="col">MSISDN</th>
+        <th scope="col">CLIENT</th>
+        <th scope="col">STATUT</th>
+        <th scope="col">INFORMATION</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>1</th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="row">
+  <div class="col-md-4 pe-0">
+    <div class="content me-2">
+      <div class="subTitle">Résumé</div>
+      <div class="card p-2">
+        <p><strong>Nom du fichier :</strong></p>
+        <p><strong>Nombre ligne :</strong> {{ nbrLigne }}</p>
+        <p><strong>Nombre erreur :</strong></p>
+        <p><strong>Date de désactivation :</strong></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8 ps-0">
+    <div class="content">
+      <div class="subTitle">Information</div>
+      <div class="form-group">
+        <textarea
+          class="form-control mb-2"
+          id="exampleFormControlTextarea1"
+          placeholder="Description courte*"
+          rows="1"
+          [(ngModel)]="description"
+        ></textarea>
+        <textarea
+          class="form-control"
+          id="exampleFormControlTextarea1"
+          placeholder="Commentaire*"
+          rows="5"
+          [(ngModel)]="commentaire"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+</div>

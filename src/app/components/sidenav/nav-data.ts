@@ -2,7 +2,7 @@ export const navbarData = [
     {
         routerLink: 'desactivation',
         icon: 'bi bi-slash-circle',
-        label: 'Desactivation'
+        label: 'Désactivation'
     },
     {
         routerLink: 'metier',

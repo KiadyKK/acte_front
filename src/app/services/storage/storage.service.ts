@@ -20,7 +20,7 @@ export class StorageService {
     sessionStorage.setItem("trigramme", AES.encrypt(data.trigramme, "MYKEY4DEMO").toString());
     sessionStorage.setItem("password", AES.encrypt(data.password, "MYKEY4DEMO").toString());
     sessionStorage.setItem("status", AES.encrypt(data.status.toString(), "MYKEY4DEMO").toString());
-    sessionStorage.setItem("token", AES.encrypt(data.token, "MYKEY4DEMO").toString());
+    sessionStorage.setItem("authorization", AES.encrypt(data.token, "MYKEY4DEMO").toString());
   }
 
   public getItem(key: string): any {

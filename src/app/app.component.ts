@@ -21,7 +21,7 @@ export class AppComponent {
   constructor(private storageService: StorageService) {}
 
   ngOnInit(): void {
-    this.isLoggedIn = this.storageService.getItem('token');
+    this.isLoggedIn = this.storageService.getItem('authorization');
 
     if (this.isLoggedIn) {
       const trigramme = this.storageService.getItem('trigramme');
