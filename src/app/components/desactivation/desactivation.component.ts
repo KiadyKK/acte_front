@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SoapService } from 'src/app/services/soap/soap.service';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-desactivation',
@@ -15,7 +17,7 @@ export class DesactivationComponent implements OnInit {
   public commentaire: string;
   public nbrLigne: number;
 
-  constructor(private soapService: SoapService) {}
+  constructor(private soapService: SoapService, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.soapService.getReasonsRead().subscribe({
@@ -79,4 +81,13 @@ export class DesactivationComponent implements OnInit {
   onCheckDateChange(event: any): void {
     this.checkDate = event.target.checked;
   }
+
+  triggerApiCall = () => {
+    for (let j = 0, j_len = 10; j < j_len; j++) {
+      for (let i = 1, i_len = 100; i < i_len; i++) {
+        this.http.get(`https://jsonplaceholder.typicode.com/posts/${i}`)
+          .subscribe(post => console.log(post))
+      }  
+    }
+  };
 }
