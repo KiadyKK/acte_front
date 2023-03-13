@@ -1,17 +1,15 @@
-.title {
-  width: 100%;
-  background-color: rgb(33, 37, 41);
-  font-size: 25px;
-  color: #ff7900;
-  display: flex;
-  justify-content: center;
-}
-
 .parametre {
   margin-top: 6px;
   background-color: #fff;
   padding: 10px;
   display: flex;
+}
+
+.content-lg {
+  margin-top: 6px;
+  background-color: #fff;
+  padding: 10px;
+  min-height: 450px;
 }
 
 .content {

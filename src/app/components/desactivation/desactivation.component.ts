@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SoapService } from 'src/app/services/soap/soap.service';
 import { HttpClient } from '@angular/common/http';
-
 
 @Component({
   selector: 'app-desactivation',
@@ -9,13 +8,19 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./desactivation.component.css'],
 })
 export class DesactivationComponent implements OnInit {
-  reasons: any;
-  public value: Date = new Date();
-  public format = 'MM/dd/yyyy HH:mm:ss';
+  @ViewChild('inputFile')
+  inputFile: ElementRef;
+
+  public reasons: any;
+  public date: Date = new Date();
+  public format = 'dd/MM/yyyy HH:mm:ss';
   public checkDate: boolean = false;
-  public description: string;
-  public commentaire: string;
+  public description: string = '';
+  public commentaire: string = '';
   public nbrLigne: number;
+  public contenu: Array<any> = [];
+  public fichier: string = '';
+  public nbrError: number;
 
   constructor(private soapService: SoapService, private http: HttpClient) {}
 
@@ -38,9 +43,7 @@ export class DesactivationComponent implements OnInit {
       reader.onload = (e) => {
         let csv: any = reader.result;
         allTextLines = csv.split('\r\n');
-        this.nbrLigne = 0;
         let duplicates: Array<any> = this.findDuplicates(allTextLines, true);
-        let listeMsisdn: Array<any> = this.findDuplicates(allTextLines, false);
         if (duplicates.length) {
           let duplicate: string = '';
           duplicates.forEach((element) => {
@@ -51,6 +54,13 @@ export class DesactivationComponent implements OnInit {
               duplicate
           );
         } else {
+          let listeMsisdn: Array<any> = this.findDuplicates(
+            allTextLines,
+            false
+          );
+          listeMsisdn.forEach((item, index) => {
+            listeMsisdn[index] = item.replace(';', '');
+          });
           let data: any = {
             id_action: 3,
             msisdn: listeMsisdn,
@@ -58,7 +68,20 @@ export class DesactivationComponent implements OnInit {
           };
           this.soapService.verifydesactivation(data).subscribe({
             next: (data) => {
-              console.log(data);
+              if (data.hasOwnProperty('liste')) {
+                console.log(data);
+                this.contenu = data.liste;
+                this.fichier = file.name;
+                this.nbrLigne = data.liste.length;
+                this.nbrError = data.nb_erreur;
+              } else {
+                let msisdn: string = '\n';
+                data.forEach((element: string) => {
+                  msisdn += '- ' + element + '\n';
+                });
+                this.inputFile.nativeElement.value = '';
+                alert('Msisdn incorrecte :' + msisdn);
+              }
             },
           });
         }
@@ -80,5 +103,13 @@ export class DesactivationComponent implements OnInit {
 
   onCheckDateChange(event: any): void {
     this.checkDate = event.target.checked;
+  }
+
+  disableValider(): boolean {
+    return this.fichier === '' &&
+      this.description === '' &&
+      this.commentaire === ''
+      ? true
+      : false;
   }
 }

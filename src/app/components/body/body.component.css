@@ -5,7 +5,7 @@
     padding: 5px;
     z-index: 0;
     position: relative;
-    top: 0;
+    top: 50px;
     transition: all .5s ease;
     background: #b3b3b3;
 }
