@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
 import { SoapService } from 'src/app/services/soap/soap.service';
-import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Component({
   selector: 'app-desactivation',
@@ -17,12 +18,18 @@ export class DesactivationComponent implements OnInit {
   public checkDate: boolean = false;
   public description: string = '';
   public commentaire: string = '';
-  public nbrLigne: number;
+  public nbLigne: number;
   public contenu: Array<any> = [];
   public fichier: string = '';
   public nbrError: number;
+  public selectedReason: any;
+  public listeMsisdn: Array<any>;
 
-  constructor(private soapService: SoapService, private http: HttpClient) {}
+  constructor(
+    private soapService: SoapService,
+    private storageService: StorageService,
+    private acteMasseService: ActeMasseService
+  ) {}
 
   ngOnInit(): void {
     this.soapService.getReasonsRead().subscribe({
@@ -61,6 +68,7 @@ export class DesactivationComponent implements OnInit {
           listeMsisdn.forEach((item, index) => {
             listeMsisdn[index] = item.replace(';', '');
           });
+          this.listeMsisdn = listeMsisdn;
           let data: any = {
             id_action: 3,
             msisdn: listeMsisdn,
@@ -69,10 +77,9 @@ export class DesactivationComponent implements OnInit {
           this.soapService.verifydesactivation(data).subscribe({
             next: (data) => {
               if (data.hasOwnProperty('liste')) {
-                console.log(data);
                 this.contenu = data.liste;
                 this.fichier = file.name;
-                this.nbrLigne = data.liste.length;
+                this.nbLigne = data.liste.length;
                 this.nbrError = data.nb_erreur;
               } else {
                 let msisdn: string = '\n';
@@ -106,10 +113,31 @@ export class DesactivationComponent implements OnInit {
   }
 
   disableValider(): boolean {
-    return this.fichier === '' &&
-      this.description === '' &&
+    return this.fichier === '' ||
+      this.description === '' ||
       this.commentaire === ''
       ? true
       : false;
+  }
+
+  valider(): void {
+    let data: any = {
+      initiateur: this.storageService.getItem('trigramme'),
+      idUtilisateur: this.storageService.getItem('user_id'),
+      comment: this.commentaire,
+      date_prise: this.checkDate ? this.date : null,
+      listeMsisdn: this.listeMsisdn,
+      fichier: this.fichier,
+      nbLigne: this.nbLigne,
+      rsCode: this.selectedReason.rsCode,
+      rsDes: this.selectedReason.rsDes,
+      descript_court: this.description,
+      checkdateprise: this.checkDate,
+    };
+    this.acteMasseService.saveDesactivation(data).subscribe({
+      next: (data) => {
+        console.log(data);
+      },
+    });
   }
 }

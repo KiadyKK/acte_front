@@ -14,10 +14,10 @@
   </div>
   <div class="col-md-3 ps-3 pe-4">
     <label class="form-label m-0"><strong>Raison</strong></label>
-    <select class="form-select" aria-label="Default select example">
+    <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedReason">
       <option
         *ngFor="let reason of reasons"
-        [value]="reason.rsDes"
+        [ngValue]="reason"
         aria-placeholder="Raison"
       >
         {{ reason.rsDes }}
@@ -47,11 +47,8 @@
   <div class="d-flex align-items-end ms-4">
     <button
       class="btn btn-success ms-auto"
-      [disabled]="
-        fichier === '' || description === '' || commentaire === ''
-          ? true
-          : false
-      "
+      [disabled]="disableValider()"
+      (click)="valider()"
     >
       <i class="bi bi-check2-circle me-2"></i>Valider
     </button>
@@ -88,7 +85,7 @@
       <div class="sub-title">Résumé</div>
       <div class="card p-2">
         <p><strong>Nom du fichier : </strong>{{ fichier }}</p>
-        <p><strong>Nombre ligne : </strong> {{ nbrLigne }}</p>
+        <p><strong>Nombre ligne : </strong> {{ nbLigne }}</p>
         <p><strong>Nombre erreur : </strong>{{ nbrError }}</p>
         <p>
           <strong>Date de désactivation : </strong
