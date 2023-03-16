@@ -1,0 +1,37 @@
+.widget {
+  background-color: #B8EBD6  ;
+  height: 81.75vh;
+  margin-top: 6px;
+  padding-top: 10px;
+}
+
+.etat {
+  display: block;
+  border-radius: 50%;
+  width: 20px !important;
+  height: 20px !important;
+  color: white;
+}
+
+.VALIDER {
+  background-color: #7fdd4c;
+}
+.REJETER {
+  background-color: #ff0000;
+}
+.PENDING {
+  background-color: #ff6600;
+}
+.EXECUTER {
+  background-color: #428bca;
+}
+.RELANCE {
+  background-color: #ffe600;
+}
+.MANUEL {
+  background-color: #f19df0;
+}
+
+.widget-action {
+  cursor: pointer;
+}

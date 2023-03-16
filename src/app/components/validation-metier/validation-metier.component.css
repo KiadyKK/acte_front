@@ -1,0 +1,22 @@
+.content-lg {
+  margin-top: 6px;
+  background-color: #fff;
+  padding: 10px;
+  height: 67.75vh;
+}
+
+.content {
+  margin-top: 6px;
+  background-color: #fff;
+  padding: 10px;
+}
+
+.metier-acte {
+  padding: 9px;
+}
+
+.metier-table {
+  height: 20vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

@@ -1,121 +1,128 @@
 <div class="title"><i class="bi bi-slash-circle me-2"></i>Désactivation</div>
-<div class="parametre">
-  <div class="col-md-3 pe-2">
-    <label for="formFile" class="form-label m-0"
-      ><strong>Fichier CSV</strong></label
-    >
-    <input
-      #inputFile
-      class="form-control me-3"
-      type="file"
-      id="formFile"
-      (change)="onFileChange($event)"
-    />
-  </div>
-  <div class="col-md-3 ps-3 pe-4">
-    <label class="form-label m-0"><strong>Raison</strong></label>
-    <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedReason">
-      <option
-        *ngFor="let reason of reasons"
-        [ngValue]="reason"
-        aria-placeholder="Raison"
-      >
-        {{ reason.rsDes }}
-      </option>
-    </select>
-  </div>
-  <div class="example-wrapper">
-    <div>
-      <input
-        type="checkbox"
-        id="date"
-        class="form-check-input me-2"
-        [value]="checkDate"
-        (change)="onCheckDateChange($event)"
-      />
-      <label for="date" class="form-check-label"
-        ><strong>Date de désactivation</strong></label
-      >
-    </div>
-    <kendo-datetimepicker
-      [disabled]="!checkDate"
-      [format]="format"
-      [(value)]="date"
-    >
-    </kendo-datetimepicker>
-  </div>
-  <div class="d-flex align-items-end ms-4">
-    <button
-      class="btn btn-success ms-auto"
-      [disabled]="disableValider()"
-      (click)="valider()"
-    >
-      <i class="bi bi-check2-circle me-2"></i>Valider
-    </button>
-  </div>
-</div>
-<div class="content-lg">
-  <div class="sub-title">Contenu du fichier CSV</div>
-  <table class="table table-sm table-striped" *ngIf="contenu.length">
-    <thead>
-      <tr>
-        <th scope="col">MSISDN</th>
-        <th scope="col">CLIENT</th>
-        <th scope="col">STATUT</th>
-        <th scope="col">INFORMATION</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of contenu">
-        <td>{{ item.msisdn }}</td>
-        <td>{{ item.client }}</td>
-        <td>
-          <i
-            [ngClass]="item.s_msisdn === 'OK' ? 'bi bi-check-lg' : 'bi bi-x-lg'"
-          ></i>
-        </td>
-        <td>{{ item.notification }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
 <div class="row">
-  <div class="col-md-6 pe-0">
-    <div class="content me-2">
-      <div class="sub-title">Résumé</div>
-      <div class="card p-2">
-        <p><strong>Nom du fichier : </strong>{{ fichier }}</p>
-        <p><strong>Nombre ligne : </strong> {{ nbLigne }}</p>
-        <p><strong>Nombre erreur : </strong>{{ nbrError }}</p>
-        <p>
-          <strong>Date de désactivation : </strong
-          ><span *ngIf="checkDate">{{
-            date | date : "dd/MM/yyyy h:mm:ss a"
-          }}</span>
-        </p>
+  <div class="col-md-9 pe-1">
+    <div class="parametre">
+      <div class="col-md-3 pe-2">
+        <label for="formFile" class="form-label m-0"
+          ><strong>Fichier CSV</strong></label
+        >
+        <input
+          #inputFile
+          class="form-control me-3"
+          type="file"
+          id="formFile"
+          (change)="onFileChange($event)"
+        />
+      </div>
+      <div class="col-md-3 ps-3 pe-4">
+        <label class="form-label m-0"><strong>Raison</strong></label>
+        <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedReason">
+          <option
+            *ngFor="let reason of reasons"
+            [ngValue]="reason"
+            aria-placeholder="Raison"
+          >
+            {{ reason.rsDes }}
+          </option>
+        </select>
+      </div>
+      <div class="example-wrapper">
+        <div>
+          <input
+            type="checkbox"
+            id="date"
+            class="form-check-input me-2"
+            [value]="checkDate"
+            (change)="onCheckDateChange($event)"
+          />
+          <label for="date" class="form-check-label"
+            ><strong>Date de désactivation</strong></label
+          >
+        </div>
+        <kendo-datetimepicker
+          [disabled]="!checkDate"
+          format="dd/MM/yyyy HH:mm:ss"
+          [(value)]="date"
+        >
+        </kendo-datetimepicker>
+      </div>
+      <div class="d-flex align-items-end ms-4">
+        <button
+          class="btn btn-success ms-auto"
+          [disabled]="disableValider()"
+          (click)="valider()"
+        >
+          <i class="bi bi-check2-circle me-2"></i>Valider
+        </button>
+      </div>
+    </div>
+    <div class="content-lg">
+      <div class="sub-title">Contenu du fichier CSV</div>
+      <table class="table table-sm table-striped" *ngIf="contenu.length">
+        <thead>
+          <tr>
+            <th scope="col">MSISDN</th>
+            <th scope="col">CLIENT</th>
+            <th scope="col">STATUT</th>
+            <th scope="col">INFORMATION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of contenu">
+            <td>{{ item.msisdn }}</td>
+            <td>{{ item.client }}</td>
+            <td>
+              <i
+                [ngClass]="item.s_msisdn === 'OK' ? 'bi bi-check-lg' : 'bi bi-x-lg'"
+              ></i>
+            </td>
+            <td>{{ item.notification }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col-md-6 pe-0">
+        <div class="content me-2">
+          <div class="sub-title">Résumé</div>
+          <div class="card p-2">
+            <p><strong>Nom du fichier : </strong>{{ fichier }}</p>
+            <p><strong>Nombre ligne : </strong> {{ nbLigne }}</p>
+            <p><strong>Nombre erreur : </strong>{{ nbrError }}</p>
+            <p>
+              <strong>Date de désactivation : </strong
+              ><span *ngIf="checkDate">{{
+                date | date : "dd/MM/yyyy h:mm:ss a"
+              }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 ps-0">
+        <div class="content">
+          <div class="sub-title">Information</div>
+          <div class="form-group">
+            <textarea
+              class="form-control mb-2"
+              id="exampleFormControlTextarea1"
+              placeholder="Description courte*"
+              rows="1"
+              [(ngModel)]="description"
+            ></textarea>
+            <textarea
+              class="form-control"
+              id="exampleFormControlTextarea1"
+              placeholder="Commentaire*"
+              rows="5"
+              [(ngModel)]="commentaire"
+            ></textarea>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-md-6 ps-0">
-    <div class="content">
-      <div class="sub-title">Information</div>
-      <div class="form-group">
-        <textarea
-          class="form-control mb-2"
-          id="exampleFormControlTextarea1"
-          placeholder="Description courte*"
-          rows="1"
-          [(ngModel)]="description"
-        ></textarea>
-        <textarea
-          class="form-control"
-          id="exampleFormControlTextarea1"
-          placeholder="Commentaire*"
-          rows="5"
-          [(ngModel)]="commentaire"
-        ></textarea>
-      </div>
-    </div>
+  <div class="col-md-3 ps-1">
+    <app-widget></app-widget>
   </div>
 </div>
 

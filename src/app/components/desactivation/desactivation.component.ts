@@ -14,14 +14,13 @@ export class DesactivationComponent implements OnInit {
 
   public reasons: any;
   public date: Date = new Date();
-  public format = 'dd/MM/yyyy HH:mm:ss';
   public checkDate: boolean = false;
   public description: string = '';
   public commentaire: string = '';
-  public nbLigne: number;
+  public nbLigne: string;
   public contenu: Array<any> = [];
   public fichier: string = '';
-  public nbrError: number;
+  public nbrError: string;
   public selectedReason: any;
   public listeMsisdn: Array<any>;
 
@@ -86,7 +85,7 @@ export class DesactivationComponent implements OnInit {
                 data.forEach((element: string) => {
                   msisdn += '- ' + element + '\n';
                 });
-                this.inputFile.nativeElement.value = '';
+                this.clear();
                 alert('Msisdn incorrecte :' + msisdn);
               }
             },
@@ -125,19 +124,43 @@ export class DesactivationComponent implements OnInit {
       initiateur: this.storageService.getItem('trigramme'),
       idUtilisateur: this.storageService.getItem('user_id'),
       comment: this.commentaire,
-      date_prise: this.checkDate ? this.date : null,
-      listeMsisdn: this.listeMsisdn,
-      fichier: this.fichier,
-      nbLigne: this.nbLigne,
+      date_prise_compte: this.date,
+      listeMsisdn: {
+        fichier: this.fichier,
+        nbLigne: this.nbLigne,
+        nb_erreur: this.nbrError,
+        liste: this.contenu,
+      },
       rsCode: this.selectedReason.rsCode,
       rsDes: this.selectedReason.rsDes,
       descript_court: this.description,
-      checkdateprise: this.checkDate,
+      checkdateprise: this.checkDate ? 'true' : 'false',
+      idAction: 3,
+      etat: 'PENDING',
+      lblAction: 'Désactivation',
+      lbl_etape: 'En attente de validation métier',
     };
     this.acteMasseService.saveDesactivation(data).subscribe({
       next: (data) => {
-        console.log(data);
+        if (data) {
+          alert('Erreur : ' + data);
+          this.clear();
+        } else {
+          alert('Enregistrement effectué !');
+          this.clear();
+          this.commentaire = '';
+          this.description = '';
+          this.contenu = [];
+        }
       },
     });
+  }
+
+  clear(): void {
+    this.inputFile.nativeElement.value = '';
+    this.fichier = '';
+    this.nbLigne = '';
+    this.nbrError = '';
+    this.checkDate = false;
   }
 }

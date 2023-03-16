@@ -1,0 +1,40 @@
+<div class="widget">
+  <div class="row mb-3" *ngFor="let item of lst_monitoring">
+    <div
+      class="col-md-2 ps-1 pe-0 d-flex justify-content-center align-items-center"
+    >
+      <span class="etat d-flex align-items-center" [ngClass]="item.etat">
+        <i
+          *ngIf="item.id_verification == 1"
+          class="bi bi-arrow-repeat etat d-flex align-items-center justify-content-center"
+        ></i>
+      </span>
+    </div>
+    <div class="col-md-10 px-0 text-smaller">
+      <p class="text-orange mb-0">
+        {{ item.dateCM | date : "dd-MM-yyyy HH:mm:ss" }}
+        <span class="ms-2">[ {{ item.id_interaction }} ]</span>
+      </p>
+      <p class="mb-0">
+        <span class="text-blue widget-action me-1" (click)="affichageValidateur(item.idActe)"
+          ><strong>{{ item.action }}</strong></span
+        >
+        <span class="me-1"
+          >par : <i>{{ item.initiateur }}</i></span
+        >
+        <span *ngIf="item.id_verification != 0"
+          >[{{ item.nb_ligne_fin }} / {{ item.nb_ligne_tot }}]
+        </span>
+        <span *ngIf="item.nb_ligne_fin == item.nb_ligne_tot"
+          >[{{ item.nb_ligne_fin }} / {{ item.nb_ligne_tot }}]</span
+        >
+      </p>
+      <p class="mb-0">
+        <strong>( {{ item.etape }} )</strong>
+        <i *ngIf="item.custcode != null && item.custcode.client != null">
+          {{ item.custcode.client }}</i
+        >
+      </p>
+    </div>
+  </div>
+</div>

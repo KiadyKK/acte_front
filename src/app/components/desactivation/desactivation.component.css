@@ -9,7 +9,8 @@
   margin-top: 6px;
   background-color: #fff;
   padding: 10px;
-  min-height: 450px;
+  height: 46.5vh;
+  overflow-y: auto;
 }
 
 .content {
