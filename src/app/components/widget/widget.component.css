@@ -35,3 +35,7 @@
 .widget-action {
   cursor: pointer;
 }
+
+.widget-action:hover {
+  color: #492191;
+}

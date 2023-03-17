@@ -16,8 +16,10 @@ export class ValidationMetierComponent {
 
   onActeClick(idActe: number): void {
     this.metierService.afficherInteraction(idActe).subscribe({
-      next: (data) => {
+      next: (data: Interaction) => {
         this.content = data;
+        this.date = new Date(data.date_prise_compte!);
+        this.comValidateur = data.commentaire!;
       },
     });
   }
@@ -30,13 +32,41 @@ export class ValidationMetierComponent {
     if (confirm('Voulez-vous vraiment rejeter cet acte ?')) {
       let data: any = {
         id: this.content.idActe,
-        comment: this.comValidateur
-      }
+        comment: this.comValidateur,
+      };
       this.metierService.rejeter(data).subscribe({
-        next: data => {
-          console.log(data);
-        }
-      })
+        next: (data) => {
+          if (data > 0) {
+            alert('Annulation terminée !');
+            this.content = new Interaction();
+          } else {
+            alert('Annulation echouée !');
+          }
+        },
+      });
     }
+  }
+
+  valider(): void {
+    let date_prise_old: Date = new Date(this.content.date_prise_compte!);
+    let date_prise_new: any;
+    if (date_prise_old >= this.date) {
+      date_prise_new = null;
+    } else {
+      date_prise_new = this.date;
+    }
+    let data: any = {
+      id: this.content.idActe,
+      comment: this.comValidateur,
+      date_prise_new: date_prise_new,
+      type: 1,
+    };
+    this.metierService.valider(data).subscribe({
+      next: (data) => {
+        if (data) {
+          alert('Validation terminée !');
+        }
+      },
+    });
   }
 }
