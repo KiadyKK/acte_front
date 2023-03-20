@@ -21,4 +21,8 @@ export class MetierService {
   valider(data: any): Observable<any> {
     return this.http.post(METIER_API + 'valider', data)
   }
+
+  validerJoker(data: any): Observable<any> {
+    return this.http.post(METIER_API + 'valider-joker', data)
+  }
 }
