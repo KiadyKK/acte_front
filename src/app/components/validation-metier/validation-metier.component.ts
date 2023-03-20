@@ -69,7 +69,7 @@ export class ValidationMetierComponent {
             listeMsisdn: this.content.input.liste,
             validForm: validForm,
             rsCode: this.content.id_reutilisable,
-            titre: 'Desactivation',
+            titre: 'Désactivation',
             checkdatepriseencompte: this.content.checkdatepriseencompte,
             comment: this.comValidateur,
             date_prise_new: date_prise_new,

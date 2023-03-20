@@ -8,5 +8,10 @@ export const navbarData = [
         routerLink: 'metier',
         icon: 'bi bi-check-circle',
         label: 'Validation Métier'
+    },
+    {
+        routerLink: 'technique',
+        icon: 'bi bi-check-square',
+        label: 'Validation Technique'
     }
 ]

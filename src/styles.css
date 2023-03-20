@@ -137,3 +137,7 @@ thead {
   overflow-x: hidden;
   overflow-y: auto;
 }
+
+progress__indeterminate-circle-graphic {
+  stroke: #ff7900 !important;
+}

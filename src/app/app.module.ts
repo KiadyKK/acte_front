@@ -21,6 +21,7 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { spinnerInterceptorProviders } from './helpers/spinner.interceptor';
 import { WidgetComponent } from './components/widget/widget.component';
+import { ValidationTechniqueComponent } from './components/validation-technique/validation-technique.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { WidgetComponent } from './components/widget/widget.component';
     DashboardComponent,
     ValidationMetierComponent,
     SpinnerComponent,
-    WidgetComponent
+    WidgetComponent,
+    ValidationTechniqueComponent
   ],
   imports: [
     BrowserModule,
