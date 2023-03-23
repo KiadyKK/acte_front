@@ -1,218 +1,258 @@
 <div class="title">
   <i class="bi bi-check-circle me-2"></i>Validation Métier
 </div>
+
 <div class="row">
-  <div class="col-md-9 pe-1">
-    <div class="content-lg">
-      <div class="sub-title mb-0">ACTE : {{ content.lblAction }}</div>
-      <ng-container *ngIf="content.id">
-        <div class="row metier-acte pb-0">
-          <div class="col-md-1 px-1 d-flex flex-column">
-            <p class="child-title rounded-top ps-2 py-1 mb-0">ID</p>
-            <p class="child-content rounded-bottom px-2 py-1 mb-0">
-              {{ content.id_interaction }}
-            </p>
-          </div>
-
-          <div class="col-md-3 px-1 d-flex flex-column">
-            <p class="child-title rounded-top ps-2 py-1 mb-0">Description</p>
-            <p class="child-content rounded-bottom px-2 py-1 mb-0">
-              {{ content.description_courte }}
-            </p>
-          </div>
-
-          <div class="col-md-4 px-1 d-flex flex-column">
-            <p class="child-title rounded-top ps-2 py-1 mb-0">Commentaire</p>
-            <p class="child-content rounded-bottom px-2 py-1 mb-0">
-              {{ content.commentaire }}
-            </p>
-          </div>
-
-          <div class="col-md-2 px-1 d-flex flex-column">
-            <p class="child-title rounded-top ps-2 py-1 mb-0">Raison</p>
-            <p class="child-content rounded-bottom px-2 py-1 mb-0">
-              {{ content.lblraison }}
-            </p>
-          </div>
-
-          <div class="col-md-2 px-1 d-flex flex-column">
-            <p class="child-title rounded-top ps-2 py-1 mb-0">Etat</p>
-            <p class="child-content rounded-bottom px-2 py-1 mb-0">
-              {{ content.etat }}
-            </p>
-          </div>
-        </div>
-        <div class="row metier-acte pb-0">
-          <div class="col-md-3 px-1 d-flex flex-column">
-            <p class="child-title rounded-top ps-2 py-1 mb-0">
-              Date de création
-            </p>
-            <p class="child-content rounded-bottom px-2 py-1 mb-0">
-              {{ content.date_creation }}
-            </p>
-          </div>
-
-          <div class="col-md-3 px-1 d-flex flex-column">
-            <p class="child-title rounded-top ps-2 py-1 mb-0">
-              Date d'activation
-            </p>
-            <p class="child-content rounded-bottom px-2 py-1 mb-0">
-              {{ content.date_prise_compte }}
-            </p>
-          </div>
-
-          <div class="col-md-3 px-1 d-flex flex-column">
-            <p class="child-title rounded-top ps-2 py-1 mb-0">Initiateur</p>
-            <p class="child-content rounded-bottom px-2 py-1 mb-0">
-              {{ content.initiateur }}
-            </p>
-          </div>
-
-          <div class="col-md-3 px-1 d-flex flex-column">
-            <p class="child-title rounded-top ps-2 py-1 mb-0">Nom du fichier</p>
-            <p class="child-content rounded-bottom px-2 py-1 mb-0">
-              {{ content.nom_fichier }}
-            </p>
-          </div>
-        </div>
-
-        <div class="row metier-acte pb-0">
-          <div class="col-md-3 px-1 d-flex flex-column">
-            <p class="child-title rounded-top ps-2 py-1 mb-0">
-              Date de modification
-            </p>
-            <p class="child-content rounded-bottom px-2 py-1 mb-0">
-              {{ content.dateCM }}
-            </p>
-          </div>
-
-          <div class="col-md-3 px-1 d-flex flex-column">
-            <p class="child-title rounded-top ps-2 py-1 mb-0">Etape</p>
-            <p class="child-content rounded-bottom px-2 py-1 mb-0">
-              {{ content.etape }}
-            </p>
-          </div>
-
-          <div class="col-md-3 px-1 d-flex flex-column">
-            <p class="child-title rounded-top ps-2 py-1 mb-0">
-              Nombre de ligne
-            </p>
-            <p class="child-content rounded-bottom px-2 py-1 mb-0">
-              {{ content.nbligne }}
-            </p>
-          </div>
-
-          <div class="col-md-3 px-1 d-flex flex-column">
-            <p class="child-title rounded-top ps-2 py-1 mb-0">
-              Date de prise en compte
-            </p>
-            <p class="child-content rounded-bottom px-2 py-1 mb-0">
-              <i
-                *ngIf="content.checkdatepriseencompte == 'true'"
-                class="bi bi-check-lg"
-              ></i>
-              <i
-                *ngIf="content.checkdatepriseencompte == 'false'"
-                class="bi bi-x-lg"
-              ></i>
-            </p>
-          </div>
-        </div>
-      </ng-container>
-
-      <div class="metier-table">
-        <table
-          *ngIf="
-            content.idAction === 3 ||
-            content.idAction == 12 ||
-            content.idAction == 13
-          "
-          class="table table-sm table-striped mt-3"
+  <div class="col-md-9 d-flex flex-column pe-0">
+    <div class="h-100">
+      <div class="content-dark-1">
+        <ngb-accordion
+          #acc="ngbAccordion"
+          class="accordion-blue"
+          activeIds="config-panel-one"
         >
-          <thead>
-            <tr>
-              <th>MSISDN</th>
-              <th>CLIENT</th>
-              <th>STATUS</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of content.input.liste">
-              <td>
-                {{ item.msisdn }}
-              </td>
-              <td>
-                {{ item.client }}
-              </td>
-              <td>
-                {{ item.s_msisdn }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="content">
-      <div class="sub-title-green mb-0">
-        VALIDATEUR :
-        <span *ngIf="content.idRole == 4">Ticket renvoyé a l'initateur</span>
-        <span *ngIf="content.idRole == 2">En attente du validateur technique</span>
-      </div>
-      
-      <div
-        class="d-flex align-items-end mt-2"
-        *ngIf="content.id && content.idRole == 1"
-      >
-        <div class="example-wrapper me-3">
-          <div>
-            <label for="date" class="form-check-label"
-              ><strong>Date de prise en compte</strong></label
-            >
-          </div>
-          <kendo-datetimepicker format="dd/MM/yyyy HH:mm:ss" [(value)]="date">
-          </kendo-datetimepicker>
-        </div>
-
-        <div class="me-3">
-          <label for="comValidateur"
-            ><strong>Commentaire du validateur</strong></label
+          <ngb-panel
+            id="config-panel-one"
+            [title]="
+              'Acte ' +
+              (content.lblAction == '' ? '' : ': ' + content.lblAction)
+            "
+            [disabled]="!content.id"
           >
-          <textarea
-            class="form-control"
-            id="comValidateur"
-            placeholder="Commentaire"
-            rows="1"
-            cols="50"
-            [(ngModel)]="comValidateur"
-          ></textarea>
+            <ng-template ngbPanelContent>
+              <table class="table table-sm table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Date de création</th>
+                    <th scope="col">Date d'activation</th>
+                    <th scope="col">Raison</th>
+                    <th scope="col">Etat</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      {{ content.date_creation | date : "dd/MM/yyyy HH:mm:ss" }}
+                    </td>
+                    <td>
+                      {{
+                        content.checkdatepriseencompte === "false"
+                          ? ""
+                          : (content.date_prise_compte
+                            | date : "dd/MM/yyyy HH:mm:ss")
+                      }}
+                    </td>
+                    <td>
+                      {{ content.lblraison }}
+                    </td>
+                    <td>{{ content.etat }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
+
+        <div class="my-3"></div>
+
+        <ngb-accordion
+          #acc="ngbAccordion"
+          class="accordion-gris"
+          activeIds="config-panel-one"
+        >
+          <ngb-panel
+            title="Informations supplémentaires"
+            [disabled]="!content.id"
+          >
+            <ng-template ngbPanelContent>
+              <table class="table table-sm table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Commentaire</th>
+                    <th scope="col">Initiateur</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      {{ content.nom_fichier }}
+                    </td>
+                    <td>
+                      {{ content.description_courte }}
+                    </td>
+                    <td>
+                      {{ content.commentaire }}
+                    </td>
+                    <td>{{ content.initiateur }}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <hr class="mt-4" />
+
+              <table class="table table-sm table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Nom du fichier</th>
+                    <th scope="col">Date de modification</th>
+                    <th scope="col">Etape</th>
+                    <th scope="col">Nombre de ligne</th>
+                    <th scope="col">Date de prise en compte</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      {{ content.nom_fichier }}
+                    </td>
+                    <td>
+                      {{
+                        content.checkdatepriseencompte === "false"
+                          ? ""
+                          : (content.dateCM | date : "dd/MM/yyyy HH:mm:ss")
+                      }}
+                    </td>
+                    <td>
+                      {{ content.etape }}
+                    </td>
+                    <td>{{ content.nbligne }}</td>
+                    <td class="p-0">
+                      <i
+                        *ngIf="content.checkdatepriseencompte == 'true'"
+                        class="bi bi-check-lg"
+                      ></i>
+                      <i
+                        *ngIf="content.checkdatepriseencompte == 'false'"
+                        class="bi bi-x-lg"
+                      ></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
+      </div>
+
+      <div class="content-dark-2">
+        <ngb-accordion
+          #acc="ngbAccordion"
+          class="accordion-orange"
+          activeIds="config-panel-three"
+        >
+          <ngb-panel
+            id="config-panel-three"
+            title="Liste MSISDN"
+            [disabled]="!content.id"
+          >
+            <ng-template ngbPanelContent>
+              <table
+                *ngIf="
+                  content.idAction === 3 ||
+                  content.idAction == 12 ||
+                  content.idAction == 13
+                "
+                class="table table-sm table-striped"
+              >
+                <thead>
+                  <tr>
+                    <th>MSISDN</th>
+                    <th>CLIENT</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of content.input.liste">
+                    <td>
+                      {{ item.msisdn }}
+                    </td>
+                    <td>
+                      {{ item.client }}
+                    </td>
+                    <td>
+                      {{ item.s_msisdn }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
+      </div>
+
+      <div class="content-gris">
+        <div
+          class="sub-title-yellow mb-0"
+          *ngIf="content.idRole == 4 || content.idRole == 2"
+        >
+          <span *ngIf="content.idRole == 4">Ticket renvoyé a l'initateur</span>
+          <span *ngIf="content.idRole == 2"
+            >En attente du validateur technique</span
+          >
         </div>
 
-        <div class="d-flex align-items-end justify-content-end">
-          <button class="btn btn-danger" (click)="rejeter()">
-            <i class="bi bi-x-circle me-2"></i>Rejeter
-          </button>
-          <div class="ms-2">
+        <div
+          class="d-flex align-items-end"
+          *ngIf="content.id && content.idRole == 1"
+        >
+          <div
+            class="example-wrapper me-3"
+            *ngIf="content.checkdatepriseencompte === 'true'"
+          >
             <div>
-              <input
-                type="checkbox"
-                id="date"
-                class="form-check-input me-2"
-                [value]="joker"
-                (change)="onJokerChange($event)"
-              />
-              <label for="date" class="form-check-label"
-                ><strong>Joker</strong></label
+              <label for="date" class="form-check-label mb-2"
+                ><strong>Date de prise en compte</strong></label
               >
             </div>
-            <button class="btn btn-success" (click)="valider()">
-              <i class="bi bi-check2-circle me-2"></i>Valider
+            <kendo-datetimepicker format="dd/MM/yyyy HH:mm:ss" [(value)]="date">
+            </kendo-datetimepicker>
+          </div>
+
+          <div class="me-3">
+            <label for="comValidateur" class="mb-2"
+              ><strong>Commentaire du validateur</strong></label
+            >
+            <textarea
+              class="form-control form-control-sm"
+              id="comValidateur"
+              placeholder="Commentaire"
+              rows="1"
+              cols="50"
+              [(ngModel)]="comValidateur"
+            ></textarea>
+          </div>
+
+          <div class="d-flex align-items-end justify-content-end">
+            <button class="btn btn-danger btn-sm" (click)="rejeter()">
+              <i class="bi bi-x-circle me-2"></i>Rejeter
             </button>
+            <div class="ms-2">
+              <div>
+                <input
+                  type="checkbox"
+                  id="date"
+                  class="form-check-input me-2"
+                  [value]="joker"
+                  (change)="onJokerChange($event)"
+                />
+                <label for="date" class="form-check-label"
+                  ><strong>Joker</strong></label
+                >
+              </div>
+              <button class="btn btn-success btn-sm" (click)="valider()">
+                <i class="bi bi-check2-circle me-2"></i>Valider
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-md-3 ps-1">
-    <app-widget (onActeClick)="onActeClick($event)"></app-widget>
+  <div class="col-md-3 d-flex flex-column ps-0">
+    <div class="h-100 widget">
+      <app-widget (onActeClick)="onActeClick($event)"></app-widget>
+    </div>
   </div>
 </div>

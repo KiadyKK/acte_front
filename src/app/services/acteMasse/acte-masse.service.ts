@@ -16,14 +16,7 @@ export class ActeMasseService {
     });
   }
 
-  monitoring(
-    id_role: number,
-    user_id: number,
-    pageNumber: number
-  ): Observable<any> {
-    return this.http.get(
-      ACTE_API +
-        `monitoring?id_role=${id_role}&user_id=${user_id}&pageNumber=${pageNumber}`
-    );
+  monitoring(data: any): Observable<any> {
+    return this.http.post(ACTE_API + `monitoring`, data);
   }
 }

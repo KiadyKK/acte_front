@@ -19,7 +19,7 @@ export class Interaction {
   id_reutilisable?: any;
   initiateur?: string;
   input?: any;
-  lblAction?: string;
+  lblAction?: string = '';
   lblraison?: string;
   nbligne?: any;
   nom_fichier?: string;

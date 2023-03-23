@@ -2,12 +2,11 @@
     width: calc(100% - 3rem);
     height: 100vh;
     margin-left: 3rem;
-    padding: 5px;
     z-index: 0;
     position: relative;
     top: 50px;
     transition: all .5s ease;
-    background: #b3b3b3;
+    font-size: 14px;
 }
 
 .body-trimmed {

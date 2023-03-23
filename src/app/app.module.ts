@@ -22,6 +22,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { spinnerInterceptorProviders } from './helpers/spinner.interceptor';
 import { WidgetComponent } from './components/widget/widget.component';
 import { ValidationTechniqueComponent } from './components/validation-technique/validation-technique.component';
+import { ActivationComponent } from './components/activation/activation.component';
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import { ValidationTechniqueComponent } from './components/validation-technique/
     ValidationMetierComponent,
     SpinnerComponent,
     WidgetComponent,
-    ValidationTechniqueComponent
+    ValidationTechniqueComponent,
+    ActivationComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,8 @@ import { ValidationTechniqueComponent } from './components/validation-technique/
     DateInputsModule,
     LabelModule,
     ButtonsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    NgbAccordionModule
   ],
   providers: [authInterceptorProviders, spinnerInterceptorProviders],
   bootstrap: [AppComponent],

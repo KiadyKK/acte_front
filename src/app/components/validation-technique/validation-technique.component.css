@@ -1,23 +1,34 @@
-.content-lg {
-  margin-top: 6px;
-  background-color: #fff;
-  padding: 10px;
-  height: 67.75vh;
+.validation {
+  background-color: #e9e9e9;
 }
 
-.content {
-  margin-top: 6px;
-  background-color: #fff;
-  padding: 10px;
-  height: 13.3vh;
-}
-
-.metier-acte {
-  padding: 9px;
-}
-
-.metier-table {
-  height: 20vh;
+.content-dark-1 {
+  background-color: #343a40;
   overflow-y: auto;
-  overflow-x: hidden;
+}
+
+.content-dark-2 {
+  background-color: #777;
+}
+
+.content-dark-1,
+.content-dark-2 {
+  min-height: 35.05vh;
+  padding: 20px;
+}
+
+.content-gris {
+  background-color: #b3b3b3;
+  padding: 20px;
+  height: 100px;
+}
+
+.bi-check-lg {
+  color: #50be87;
+  font-size: 19px;
+}
+
+.bi-x-lg {
+  color: #f31212;
+  font-size: 19px;
 }

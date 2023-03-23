@@ -1,15 +1,14 @@
 .parametre {
-  margin-top: 6px;
-  background-color: #fff;
-  padding: 10px;
+  background-color: #343a40;
+  padding: 20px;
   display: flex;
+  color: #fff;
 }
 
 .content-lg {
-  margin-top: 6px;
-  background-color: #fff;
-  padding: 10px;
-  height: 46.5vh;
+  background-color: #777;
+  padding: 20px;
+  height: 37.5vh;
   overflow-y: auto;
 }
 
@@ -17,4 +16,29 @@
   margin-top: 6px;
   background-color: #fff;
   padding: 10px;
+}
+
+.content-md {
+  background-color: #b3b3b3;
+  padding: 20px;
+  /* height: 46.5vh; */
+}
+
+.bi-check-lg {
+  color: #50BE87;
+  font-size: 19px;
+}
+
+.bi-x-lg {
+  color: #f31212;
+  font-size: 19px;
+}
+
+.bg-gris {
+  background-color: #ddd;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 2px 0;
 }

@@ -20,7 +20,12 @@ export class WidgetComponent implements OnInit {
   ngOnInit(): void {
     let id_role = this.storageService.getItem('status');
     let user_id = this.storageService.getItem('user_id');
-    this.acteMasseService.monitoring(id_role, user_id, 1).subscribe({
+    let data: any = {
+      id_role: id_role,
+      user_id: user_id,
+      pageNumber: 1
+    }
+    this.acteMasseService.monitoring(data).subscribe({
       next: (data) => {
         this.lst_monitoring = data;
       },
