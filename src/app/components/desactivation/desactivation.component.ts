@@ -31,7 +31,7 @@ export class DesactivationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.soapService.getReasonsRead().subscribe({
+    this.soapService.getReasonsRead('d').subscribe({
       next: (data) => {
         this.reasons = data;
       },

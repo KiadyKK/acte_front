@@ -26,7 +26,7 @@ body {
 }
 
 kendo-datetimepicker {
-  width: 210px !important;
+  width: 175px !important;
   height: 31px !important;
   border: solid 1px rgb(212, 212, 212) !important;
   font-size: 14px !important;
@@ -118,6 +118,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
   color: #ffffff !important;
 }
 
+.accordion-purple > .accordion-item > .accordion-header > .accordion-button {
+  background-color: #a885d8;
+  color: #000 !important;
+}
+
+.accordion-pink > .accordion-item > .accordion-header > .accordion-button {
+  background-color: #ffb4e6;
+  color: #000 !important;
+}
+
+.accordion-green > .accordion-item > .accordion-header > .accordion-button {
+  background-color: #50be87;
+  color: #000 !important;
+}
+
 .sub-title-green {
   background-color: #50be87;
 }
@@ -162,7 +177,31 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 }
 
 .accordion-body {
-  padding: 10px 10px;
+  padding: 10px;
+}
+
+.accordion-h50 > .accordion-item > .collapse > .accordion-body {
+  padding: 0;
+}
+
+.accordion-contents-50 {
+  height: 28.5vh;
+  overflow-y: auto;
+}
+
+.accordion-contents-40 {
+  min-height: 21vh;
+  overflow-y: auto;
+}
+
+.accordion-small > .accordion-item > .accordion-header {
+  height: 30px;
+}
+
+.accordion-small > .accordion-item > .accordion-header > .accordion-button {
+  font-size: 13px;
+  padding: 2px;
+  height: 30px;
 }
 
 .sub-content,
@@ -215,4 +254,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
   font-weight: bold;
   font-size: x-large;
   margin-left: 3px;
+}
+
+.bg-gris {
+  background-color: #ddd;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 2px 0;
 }

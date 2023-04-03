@@ -9,7 +9,6 @@
   background-color: #777;
   padding: 20px;
   height: 37.5vh;
-  overflow-y: auto;
 }
 
 .content {
@@ -25,20 +24,11 @@
 }
 
 .bi-check-lg {
-  color: #50BE87;
+  color: #50be87;
   font-size: 19px;
 }
 
 .bi-x-lg {
   color: #f31212;
   font-size: 19px;
-}
-
-.bg-gris {
-  background-color: #ddd;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  margin: 2px 0;
 }

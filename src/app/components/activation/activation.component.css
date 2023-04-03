@@ -1,0 +1,33 @@
+.parametre {
+  background-color: #343a40;
+  padding: 20px;
+  display: flex;
+  color: #fff;
+}
+
+.content-lg {
+  background-color: #777;
+  padding: 20px;
+  height: 37.5vh;
+}
+
+.content-md {
+  background-color: #b3b3b3;
+  padding: 20px;
+  min-height: 32.5vh;
+}
+
+.select-content {
+  border: none;
+  width: 100%;
+  overflow-y: unset;
+  font-size: 13px;
+}
+
+.fs-13 {
+  font-size: 13px;
+}
+
+li {
+  list-style-type: none;
+}
