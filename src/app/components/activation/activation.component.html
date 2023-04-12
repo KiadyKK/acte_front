@@ -8,7 +8,7 @@
         >
         <input
           #inputFile
-          class="form-control form-control-sm me-3"
+          class="form-control form-control-sm input-dark me-3"
           type="file"
           id="formFile"
           (change)="onFileChange($event)"
@@ -18,7 +18,7 @@
       <div class="col-md-3 ps-3 pe-4">
         <label class="form-label m-0 mb-2"><strong>Raison</strong></label>
         <select
-          class="form-select form-select-sm"
+          class="form-select form-select-sm input-dark"
           aria-label="Default select example"
           [(ngModel)]="selectedReason"
         >
@@ -45,7 +45,7 @@
             ><strong>Date de désactivation</strong></label
           >
         </div>
-        <kendo-datetimepicker
+        <kendo-datetimepicker class="input-dark"
           [disabled]="!checkDate"
           format="dd/MM/yyyy HH:mm:ss"
           [(value)]="date"
@@ -58,7 +58,7 @@
           ><strong>Custcode</strong></label
         >
         <div class="input-group input-group-sm">
-          <input type="text" class="form-control" [(ngModel)]="custcode" />
+          <input type="text" class="form-control input-dark" [(ngModel)]="custcode" />
           <button
             [disabled]="custcode === ''"
             class="btn btn-primary"
@@ -68,13 +68,6 @@
             <i class="bi bi-search"></i>
           </button>
         </div>
-        <!-- <input
-          #inputFile
-          class="form-control form-control-sm me-3"
-          type="text"
-          id="custcode"
-          [(ngModel)]="custcode"
-        /> -->
       </div>
 
       <div class="d-flex align-items-end ms-3">
@@ -136,11 +129,10 @@
                           [value]="service.servicename"
                           (change)="onCheckboxChange($event, item.key)"
                         />
-                        <span
-                          class="text-danger"
+                        <i
+                          class="bi bi-asterisk text-danger ms-1"
                           *ngIf="service.svCsind === 'true'"
-                          ><i class="bi bi-star-fill ms-1"></i
-                        ></span>
+                        ></i>
                         {{ service.servicename }}
                       </li>
                     </ul>
@@ -205,6 +197,11 @@
                                     type="radio"
                                     [name]="parametre.prmDes"
                                     [id]="nValue.valueDes"
+                                    [checked]="
+                                      parametre.defValue === nValue.value
+                                    "
+                                    [value]="nValue.valueDes ?? nValue.value"
+                                    (change)="onRadioParameterChange(parametre, nValue)"
                                   />
                                   <label
                                     class="form-check-label"
@@ -227,7 +224,7 @@
                                 </div>
                               </ng-container>
                             </div>
-                            <div *ngIf="!parametre.nValues.length">
+                            <!-- <div *ngIf="!parametre.nValues.length">
                               <li>
                                 <div
                                   *ngIf="
@@ -246,7 +243,7 @@
                                   }}</label>
                                 </div>
                               </li>
-                            </div>
+                            </div> -->
                           </div>
                         </ng-template>
                       </ngb-panel>
@@ -260,27 +257,58 @@
       </div>
     </div>
     <div class="content-md">
-      <div class="row h-100">
-        <div class="col-md-4">
+      <div class="row mb-3">
+        <div class="col-md-12">
           <ngb-accordion
             #acc="ngbAccordion"
             class="accordion-blue"
             activeIds="config-panel-one"
           >
-            <ngb-panel id="config-panel-one" title="Contenu du fichier CSV">
+            <ngb-panel
+              id="config-panel-one"
+              title="Contenu du fichier CSV"
+              [disabled]="contenu.length === 0"
+            >
               <ng-template ngbPanelContent>
-                <div class="accordion-contents-40 fs-13">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Officia assumenda porro vero voluptates aliquam. Error
-                  perferendis mollitia officia vitae? Saepe sunt expedita rem
-                  necessitatibus tempore nulla asperiores aperiam similique
-                  eveniet.
-                </div>
+                <table class="table table-sm table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">MSISDN</th>
+                      <th scope="col">SIM</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of contenu">
+                      <td>
+                        <i
+                          [ngClass]="
+                            item.s_msisdn === 'OK'
+                              ? 'bi bi-check-circle-fill text-success me-1'
+                              : 'bi bi-x-circle-fill text-danger me-1'
+                          "
+                        ></i>
+                        {{ item.msisdn }}
+                      </td>
+                      <td>
+                        <i
+                          [ngClass]="
+                            item.s_sim === 'OK'
+                              ? 'bi bi-check-circle-fill text-success me-1'
+                              : 'bi bi-x-circle-fill text-danger me-1'
+                          "
+                        ></i
+                        >{{ item.sim }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </ng-template>
             </ngb-panel>
           </ngb-accordion>
         </div>
-        <div class="col-md-4">
+      </div>
+      <div class="row h-100">
+        <div class="col-md-6">
           <ngb-accordion
             #acc="ngbAccordion"
             class="accordion-green"
@@ -288,21 +316,29 @@
           >
             <ngb-panel id="config-panel-one" title="Résumé">
               <ng-template ngbPanelContent>
-                <div class="accordion-contents-40 fs-13">
+                <div class="accordion-contents-40">
                   <p class="bg-gris">
                     <strong>Nom du fichier : </strong
                     ><span class="ms-auto">{{ fichier }}</span>
                   </p>
                   <p class="bg-gris">
                     <strong>Nom du client : </strong
-                    ><span class="ms-auto">{{ fichier }}</span>
+                    ><span class="ms-auto">{{ client }}</span>
+                  </p>
+                  <p class="bg-gris">
+                    <strong>Nombre de ligne : </strong
+                    ><span class="ms-auto">{{ nbLigne }}</span>
+                  </p>
+                  <p class="bg-gris">
+                    <strong>Nombre d'erreur : </strong
+                    ><span class="ms-auto">{{ nbrError }}</span>
                   </p>
                 </div>
               </ng-template>
             </ngb-panel>
           </ngb-accordion>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <ngb-accordion
             #acc="ngbAccordion"
             class="accordion-orange"
@@ -310,7 +346,7 @@
           >
             <ngb-panel id="config-panel-one" title="Information">
               <ng-template ngbPanelContent>
-                <div class="accordion-contents-40 fs-13">
+                <div class="accordion-contents-40">
                   <label for="description" class="mb-1"
                     ><strong>Description courte</strong
                     ><span class="red">*</span></label

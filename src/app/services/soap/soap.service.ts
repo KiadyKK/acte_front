@@ -33,4 +33,8 @@ export class SoapService {
   getClient(custcode: string): Observable<any> {
     return this.http.get(SOAP_API + `custcode?custcode=${custcode}`)
   }
+
+  verifyActivation(data: any): Observable<any> {
+    return this.http.post(SOAP_API + 'verify-activation', data);
+  }
 }

@@ -18,6 +18,7 @@ export class ActivationComponent {
   public serviceRateplans: any;
   public date: Date = new Date();
   public checkDate: boolean = false;
+  public client: string;
   public custcode: string = '';
   public description: string = '';
   public commentaire: string = '';
@@ -27,10 +28,11 @@ export class ActivationComponent {
   public nbrError: string;
   public selectedReason: any;
   public selectedRateplans: any;
-  public listeMsisdn: Array<any>;
   public form: FormGroup;
   public listServices: Array<any> = [];
   public listParametres: any;
+
+  public service: any;
 
   constructor(
     private soapService: SoapService,
@@ -57,64 +59,105 @@ export class ActivationComponent {
   onFileChange(event: any): void {
     if (event.target.files.length > 0) {
       let file: File = event.target.files.item(0);
-      let allTextLines = [];
+      if (file.type === 'text/csv') {
+        let allTextLines = [];
 
-      // File reader method
-      let reader: FileReader = new FileReader();
-      reader.readAsText(file);
-      reader.onload = (e) => {
-        let csv: any = reader.result;
-        allTextLines = csv.split('\r\n');
-        let duplicates: Array<any> = this.findDuplicates(allTextLines, true);
-        if (duplicates.length) {
-          let duplicate: string = '';
-          duplicates.forEach((element) => {
-            duplicate += '- ' + element + '\n';
-          });
-          alert(
-            'Erreur doublon. Veulliez vérifier ces informations : \n' +
-              duplicate
+        // File reader method
+        let reader: FileReader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = (e) => {
+          let csv: any = reader.result;
+          allTextLines = csv.split('\r\n');
+
+          let listeMsisdns: Array<any> = [];
+          let listeSims: Array<any> = [];
+
+          for (let i = 0; i < allTextLines.length; i++) {
+            listeMsisdns.push(allTextLines[i].split(';')[0]);
+            listeSims.push(allTextLines[i].split(';')[1]);
+          }
+
+          let duplicateMsisdns: Array<any> = this.findDuplicates(
+            listeMsisdns,
+            true,
+            [12]
           );
-        } else {
-          let listeMsisdn: Array<any> = this.findDuplicates(
-            allTextLines,
-            false
+          let duplicateSims: Array<any> = this.findDuplicates(
+            listeSims,
+            true,
+            [19, 20]
           );
-          listeMsisdn.forEach((item, index) => {
-            listeMsisdn[index] = item.replace(';', '');
-          });
-          this.listeMsisdn = listeMsisdn;
-          let data: any = {
-            id_action: 3,
-            msisdn: listeMsisdn,
-            fichier: file.name,
-          };
-          // this.soapService.verifydesactivation(data).subscribe({
-          //   next: (data) => {
-          //     if (data.hasOwnProperty('liste')) {
-          //       this.contenu = data.liste;
-          //       this.fichier = file.name;
-          //       this.nbLigne = data.liste.length;
-          //       this.nbrError = data.nb_erreur;
-          //     } else {
-          //       let msisdn: string = '\n';
-          //       data.forEach((element: string) => {
-          //         msisdn += '- ' + element + '\n';
-          //       });
-          //       this.clear();
-          //       alert('Msisdn incorrecte :' + msisdn);
-          //     }
-          //   },
-          // });
-        }
-      };
+
+          if (duplicateMsisdns.length) {
+            let duplicate: string = '';
+            duplicateMsisdns.forEach((element) => {
+              duplicate += '- ' + element + '\n';
+            });
+            alert(
+              'Erreur MSISDN. Veulliez vérifier ces informations : \n' +
+                duplicate
+            );
+            this.clear();
+          } else if (duplicateSims.length) {
+            let duplicate: string = '';
+            duplicateSims.forEach((element) => {
+              duplicate += '- ' + element + '\n';
+            });
+            alert(
+              'Erreur SIM. Veulliez vérifier ces informations : \n' + duplicate
+            );
+            this.clear();
+          } else {
+            let listeMsisdn: Array<any> = this.findDuplicates(
+              listeMsisdns,
+              false
+            );
+
+            let listeSim: Array<any> = this.findDuplicates(listeSims, false);
+
+            let csv: Array<any> = [];
+
+            for (let i = 0; i < listeMsisdn.length; i++) {
+              csv.push({
+                msisdn: listeMsisdn[i],
+                sim:
+                  listeSim[i].length === 19 ? listeSim[i] + '*' : listeSim[i],
+              });
+            }
+
+            let data: any = {
+              id_action: 1,
+              csv: csv,
+              fichier: file.name,
+            };
+
+            this.soapService.verifyActivation(data).subscribe({
+              next: (data) => {
+                this.contenu = data.liste;
+                this.fichier = file.name;
+                this.nbLigne = data.liste.length;
+                this.nbrError = data.nb_erreur;
+              },
+            });
+          }
+        };
+      } else {
+        alert('Vous devez uploader un fichier de type .csv');
+        this.clear();
+      }
     }
   }
 
-  findDuplicates(array: Array<any>, duplicate: boolean): Array<any> {
+  findDuplicates(
+    array: Array<any>,
+    duplicate: boolean,
+    length: Array<number> = [0]
+  ): Array<any> {
     if (duplicate) {
       return array.filter(
-        (item, index) => array.indexOf(item) !== index && item !== ''
+        (item, index) =>
+          (array.indexOf(item) !== index && item !== '') ||
+          !length.includes(item.length)
       );
     } else {
       return array.filter(
@@ -130,7 +173,11 @@ export class ActivationComponent {
   rechercheClient(): void {
     this.soapService.getClient(this.custcode).subscribe({
       next: (data) => {
-        console.log(data);
+        if (data) {
+          this.client = data.client;
+        } else {
+          alert('Client introuvable !');
+        }
       },
     });
   }
@@ -170,21 +217,19 @@ export class ActivationComponent {
     });
   }
 
-  onCheckboxChange(event: any, key: any) {
+  onCheckboxChange(event: any, key: any): void {
     let service = this.serviceRateplans[key].filter((item: any) => {
       return item.servicename === event.target.value;
     });
 
-    console.log('serviceParamerterInd', service[0].serviceParamerterInd);
-
     if (event.target.checked) {
       if (service[0].serviceParamerterInd) {
+        this.service = service[0];
         let { sncode, sccode } = service[0];
         this.soapService.getParametersRead(sncode, sccode).subscribe({
           next: (data) => {
-            console.log(data);
             this.listParametres = data;
-            // this.updateViaService(data, service);
+            this.updateViaService(data, service);
           },
         });
       } else {
@@ -199,249 +244,141 @@ export class ActivationComponent {
       const index = this.listServices.findIndex(
         (x) => x.servicename === service[0].servicename
       );
-      this.listServices.splice(index, 1);
+      if (index > -1) {
+        this.listServices.splice(index, 1);
+      }
     }
   }
 
   updateViaService(result: any, service: any): void {
-    let parametre = [];
+    let parametre: Array<any> = [];
     let { sncode, spcode, servicename } = service[0];
+    // Si le projet dispose de plusieurs parametres
+    for (let i = 0; i < result.length; i++) {
+      // Verifier si un sous parametre dispose de valeurs par defaut
+      if (result[i].hasOwnProperty('defValue')) {
+        for (let j = 0; j < result[i].nValues.length; j++) {
+          if (result[i].defValue == result[i].nValues[j].value) {
+            let valueSeqno =
+              result[i].nValues[j].valueSeqno == null
+                ? 1
+                : result[i].nValues[j].valueSeqno;
+            let valueDes =
+              result[i].nValues[j].valueDes == null
+                ? result[i].nValues[j].value
+                : result[i].nValues[j].valueDes;
+            let value =
+              result[i].type == 'LB' ? valueSeqno : result[i].nValues[j].value;
 
-    if (result.length > 1) {
-      // Si le projet dispose de plusieurs parametres
-      for (let i = 0; i < result.length; i++) {
-        // Verifier si un parametre dispose des sous parametres
-        if (result[i].nValues) {
-          // Verifier si un sous parametre dispose de valeurs par defaut
-          if (result[i].defValue) {
-            if (!Array.isArray(result[i].nValues)) {
-              if (result[i].defValue == result[i].nValues.value) {
-                let value = result[i].nValues.value;
-                let valueSeqno: any;
-                let valueDes: any;
-
-                if (result[i].nValues.valueSeqno == null) {
-                  valueSeqno = 1;
-                } else {
-                  valueSeqno = result[i].nValues.valueSeqno;
-                }
-
-                if (result[i].nValues.valueDes == null) {
-                  valueDes = result[i].nValues.value;
-                } else {
-                  valueDes = result[i].nValues.valueDes;
-                }
-
-                if (result[i].type == 'LB') {
-                  value = valueSeqno;
-                }
-
-                let prmNo = result[i].prmNo;
-                let prmDes = result[i].prmDes;
-
-                let param_parametre_resultat1 = {
-                  prmNo: prmNo,
-                  prmDes: prmDes,
-                  valueSeqno: valueSeqno,
-                  value: value,
-                  valueDes: valueDes,
-                };
-
-                parametre.push(param_parametre_resultat1);
-              }
-
-              if (result[i].type == 'DF') {
-                let value = result[i].defValue;
-                let valueDes = result[i].defValue;
-                let valueSeqno = 1;
-                let prmNo = result[i].prmNo;
-                let prmDes = result[i].prmDes;
-                let param_parametre_resultat2 = {
-                  prmNo: prmNo,
-                  prmDes: prmDes,
-                  valueSeqno: valueSeqno,
-                  value: value,
-                  valueDes: valueDes,
-                };
-                parametre.push(param_parametre_resultat2);
-              }
-            } else {
-              for (let j = 0; j < result[i].nValues.length; i++) {
-                if (result[i].defValue == result[i].nValues[j].value) {
-                  let value = result[i].nValues[j].value;
-                  let valueSeqno;
-                  let valueDes;
-
-                  if (result[i].nValues[j].valueSeqno == null) {
-                    valueSeqno = 1;
-                  } else {
-                    valueSeqno = result[i].nValues[j].valueSeqno;
-                  }
-
-                  if (result[i].nValues[j].valueDes == null) {
-                    valueDes = result[i].nValues[j].value;
-                  } else {
-                    valueDes = result[i].nValues[j].valueDes;
-                  }
-
-                  if (result[i].type == 'LB') {
-                    value = valueSeqno;
-                  }
-
-                  var prmNo = result[i].prmNo;
-                  var prmDes = result[i].prmDes;
-                  var param_parametre_resultat3 = {
-                    prmNo: prmNo,
-                    prmDes: prmDes,
-                    valueSeqno: valueSeqno,
-                    value: value,
-                    valueDes: valueDes,
-                  };
-                  parametre.push(param_parametre_resultat3);
-                }
-              }
-
-              // Si le parametre en question dispose du type DF donc, on ne prend pas les nvalue mais le textareo qui dispose d'une valeur par défaut
-              if (result[i].type == 'DF') {
-                var value = result[i].defValue;
-                var valueDes = result[i].defValue;
-                var valueSeqno = 1;
-                var prmNo = result[i].prmNo;
-                var prmDes = result[i].prmDes;
-                var param_parametre_resultat4 = {
-                  prmNo: prmNo,
-                  prmDes: prmDes,
-                  valueSeqno: valueSeqno,
-                  value: value,
-                  valueDes: valueDes,
-                };
-                parametre.push(param_parametre_resultat4);
-              }
-            }
+            let prmNo = result[i].prmNo;
+            let prmDes = result[i].prmDes;
+            let param_parametre_resultat = {
+              prmNo: prmNo,
+              prmDes: prmDes,
+              valueSeqno: valueSeqno,
+              value: value,
+              valueDes: valueDes,
+            };
+            parametre.push(param_parametre_resultat);
           }
         }
-      }
 
-      let resultat_via_service = {
+        // Si le parametre en question dispose du type DF donc, on ne prend pas les nvalue mais le textareo qui dispose d'une valeur par défaut
+        if (result[i].type == 'DF') {
+          let value = result[i].defValue;
+          let valueDes = result[i].defValue;
+          let valueSeqno = 1;
+          let prmNo = result[i].prmNo;
+          let prmDes = result[i].prmDes;
+          let param_parametre_resultat = {
+            prmNo: prmNo,
+            prmDes: prmDes,
+            valueSeqno: valueSeqno,
+            value: value,
+            valueDes: valueDes,
+          };
+          parametre.push(param_parametre_resultat);
+        }
+      }
+    }
+
+    if (parametre.length) {
+      let new_service = {
         sncode: sncode,
         spcode: spcode,
         servicename: servicename,
         parametre: parametre,
       };
-      this.listServices.push(resultat_via_service);
-    } else {
-      if (result[0].defValue) {
-        if (!Array.isArray(result[0].nValues)) {
-          if (result[0].defValue == result[0].nValues.value) {
-            let value = result[0].nValues.value;
-            let valueSeqno;
-            let valueDes;
+      this.listServices.push(new_service);
+    }
+  }
 
-            if (result[0].nValues.valueSeqno == null) {
-              valueSeqno = 1;
+  onRadioParameterChange(parametre: any, nvalue: any): void {
+    let valueseqno_par_defaut = nvalue.valueSeqno ?? 1;
+    let valueDes_par_defaut = nvalue.valueDes ?? nvalue.value;
+    nvalue.value =
+      parametre.type === 'LB' ? valueseqno_par_defaut : nvalue.value;
+    let { servicename } = this.service;
+    let param_parametre = {
+      prmNo: parametre.prmNo,
+      prmDes: parametre.prmDes,
+      valueSeqno: valueseqno_par_defaut,
+      value: nvalue.value,
+      valueDes: valueDes_par_defaut,
+    };
+
+    if (this.listServices.length) {
+      let index_service: number = 0;
+      let check_service: boolean = false;
+      let check_parameter: boolean = false;
+
+      for (let i = 0; i < this.listServices.length; i++) {
+        if (this.listServices[i].servicename === servicename) {
+          for (let j = 0; j < this.listServices[i].parametre.length; j++) {
+            if (
+              param_parametre.prmNo ==
+                this.listServices[i].parametre[j].prmNo &&
+              param_parametre.value !=
+                this.listServices[i].parametre[j].value &&
+              param_parametre.valueDes !=
+                this.listServices[i].parametre[j].valueDes
+            ) {
+              this.listServices[i].parametre.splice(j, 1);
+              this.listServices[i].parametre.push(param_parametre);
+              check_service = true;
+              check_parameter = false;
+              break;
             } else {
-              valueSeqno = result[0].nValues.valueSeqno;
-            }
-
-            if (result[0].nValues.valueDes == null) {
-              valueDes = result[0].nValues.value;
-            } else {
-              valueDes = result[0].nValues.valueDes;
-            }
-
-            if (result[0].type == 'LB') {
-              value = valueSeqno;
-            }
-
-            let prmNo = result[0].prmNo;
-            let prmDes = result[0].prmDes;
-            let param_parametre_resultat = {
-              prmNo: prmNo,
-              prmDes: prmDes,
-              valueSeqno: valueSeqno,
-              value: value,
-              valueDes: valueDes,
-            };
-            parametre.push(param_parametre_resultat);
-          }
-
-          if (result[0].type == 'DF') {
-            let value = result[0].defValue;
-            let valueDes = result[0].defValue;
-            let valueSeqno = 1;
-            let prmNo = result[0].prmNo;
-            let prmDes = result[0].prmDes;
-            let param_parametre_resultat = {
-              prmNo: prmNo,
-              prmDes: prmDes,
-              valueSeqno: valueSeqno,
-              value: value,
-              valueDes: valueDes,
-            };
-            parametre.push(param_parametre_resultat);
-          }
-        } else {
-          for (let j = 0; j < result[0].nValues.length; j++) {
-            if (result[0].defValue == result[0].nValues[j].value) {
-              let value = result[0].nValues[j].value;
-              let valueSeqno;
-              let valueDes;
-
-              if (result[0].nValues[j].valueSeqno == null) {
-                valueSeqno = 1;
-              } else {
-                valueSeqno = result[0].nValues[j].valueSeqno;
-              }
-
-              if (result[0].nValues[j].valueDes == null) {
-                valueDes = result[0].nValues[j].value;
-              } else {
-                valueDes = result[0].nValues[j].valueDes;
-              }
-
-              if (result[0].type == 'LB') {
-                value = valueSeqno;
-              }
-
-              let prmNo = result[0].prmNo;
-              let prmDes = result[0].prmDes;
-              let param_parametre_resultat = {
-                prmNo: prmNo,
-                prmDes: prmDes,
-                valueSeqno: valueSeqno,
-                value: value,
-                valueDes: valueDes,
-              };
-              parametre.push(param_parametre_resultat);
-            }
-
-            if (result[0].type == 'DF') {
-              let value = result[0].defValue;
-              let valueDes = result[0].defValue;
-              let valueSeqno = 1;
-              let prmNo = result[0].prmNo;
-              let prmDes = result[0].prmDes;
-              let param_parametre_resultat = {
-                prmNo: prmNo,
-                prmDes: prmDes,
-                valueSeqno: valueSeqno,
-                value: value,
-                valueDes: valueDes,
-              };
-              parametre.push(param_parametre_resultat);
+              index_service = i;
+              check_service = false;
+              check_parameter = true;
             }
           }
         }
       }
-    }
 
-    let resultat_via_service = {
+      if (!check_service && check_parameter) {
+        this.listServices[index_service].parametre.push(param_parametre);
+      } else if (!check_service && !check_parameter) {
+        this.insertService(param_parametre);
+      }
+    } else {
+      this.insertService(param_parametre);
+    }
+    console.log(this.listServices);
+  }
+
+  insertService(param_parametre: any): void {
+    let { sncode, spcode, servicename } = this.service;
+    let array_parametre: Array<any> = [];
+    array_parametre.push(param_parametre);
+    let new_service = {
       sncode: sncode,
       spcode: spcode,
       servicename: servicename,
-      parametre: parametre,
+      parametre: array_parametre,
     };
-    this.listServices.push(resultat_via_service);
+    this.listServices.push(new_service);
   }
 
   disableValider(): boolean {
@@ -473,20 +410,20 @@ export class ActivationComponent {
       lblAction: 'Désactivation',
       lbl_etape: 'En attente de validation métier',
     };
-    this.acteMasseService.saveDesactivation(data).subscribe({
-      next: (data) => {
-        if (data) {
-          alert('Erreur : ' + data);
-          this.clear();
-        } else {
-          alert('Enregistrement effectué !');
-          this.clear();
-          this.commentaire = '';
-          this.description = '';
-          this.contenu = [];
-        }
-      },
-    });
+    // this.acteMasseService.saveDesactivation(data).subscribe({
+    //   next: (data) => {
+    //     if (data) {
+    //       alert('Erreur : ' + data);
+    //       this.clear();
+    //     } else {
+    //       alert('Enregistrement effectué !');
+    //       this.clear();
+    //       this.commentaire = '';
+    //       this.description = '';
+    //       this.contenu = [];
+    //     }
+    //   },
+    // });
   }
 
   clear(): void {
