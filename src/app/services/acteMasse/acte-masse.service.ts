@@ -10,13 +10,19 @@ const ACTE_API = 'http://localhost:8080/acte-masse/';
 export class ActeMasseService {
   constructor(private http: HttpClient) {}
 
+  monitoring(data: any): Observable<any> {
+    return this.http.post(ACTE_API + `monitoring`, data);
+  }
+
   saveDesactivation(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'desactivation', data, {
       responseType: 'text',
     });
   }
 
-  monitoring(data: any): Observable<any> {
-    return this.http.post(ACTE_API + `monitoring`, data);
+  saveActivation(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'activation', data, {
+      responseType: 'text',
+    });
   }
 }

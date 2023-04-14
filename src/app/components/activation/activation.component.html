@@ -45,7 +45,8 @@
             ><strong>Date de désactivation</strong></label
           >
         </div>
-        <kendo-datetimepicker class="input-dark"
+        <kendo-datetimepicker
+          class="input-dark"
           [disabled]="!checkDate"
           format="dd/MM/yyyy HH:mm:ss"
           [(value)]="date"
@@ -58,7 +59,11 @@
           ><strong>Custcode</strong></label
         >
         <div class="input-group input-group-sm">
-          <input type="text" class="form-control input-dark" [(ngModel)]="custcode" />
+          <input
+            type="text"
+            class="form-control input-dark"
+            [(ngModel)]="custcode"
+          />
           <button
             [disabled]="custcode === ''"
             class="btn btn-primary"
@@ -179,6 +184,10 @@
                               <input
                                 type="text"
                                 class="form-control form-control-sm"
+                                [value]="parametre.defValue ?? ''"
+                                (keyup)="
+                                  onTextParameterChange($event, parametre)
+                                "
                               />
                             </div>
                             <div *ngIf="parametre.nValues.length">
@@ -201,7 +210,9 @@
                                       parametre.defValue === nValue.value
                                     "
                                     [value]="nValue.valueDes ?? nValue.value"
-                                    (change)="onRadioParameterChange(parametre, nValue)"
+                                    (change)="
+                                      onRadioParameterChange(parametre, nValue)
+                                    "
                                   />
                                   <label
                                     class="form-check-label"
@@ -323,15 +334,33 @@
                   </p>
                   <p class="bg-gris">
                     <strong>Nom du client : </strong
-                    ><span class="ms-auto">{{ client }}</span>
+                    ><span class="ms-auto">{{ client.client }}</span>
                   </p>
                   <p class="bg-gris">
                     <strong>Nombre de ligne : </strong
                     ><span class="ms-auto">{{ nbLigne }}</span>
                   </p>
-                  <p class="bg-gris">
-                    <strong>Nombre d'erreur : </strong
+                  <p
+                    class="bg-gris"
+                    [ngClass]="{
+                      'text-danger': +nbrError !== 0 && nbrError !== ''
+                    }"
+                  >
+                    <i
+                      *ngIf="+nbrError !== 0 && nbrError !== ''"
+                      class="bi bi-x-circle-fill me-1"
+                    ></i
+                    ><strong>Nombre d'erreur : </strong
                     ><span class="ms-auto">{{ nbrError }}</span>
+                  </p>
+                  <p class="m-0 text-end">
+                    <button
+                      class="btn btn-success btn-sm"
+                      [disabled]="!selectedRateplans"
+                      (click)="openModalListeService()"
+                    >
+                      Liste des services
+                    </button>
                   </p>
                 </div>
               </ng-template>

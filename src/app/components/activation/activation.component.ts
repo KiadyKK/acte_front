@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
 import { SoapService } from 'src/app/services/soap/soap.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalListeServicesComponent } from './modal-liste-services/modal-liste-services.component';
+import { ModalChecklisteServicesComponent } from './modal-checkliste-services/modal-checkliste-services.component';
 
 @Component({
   selector: 'app-activation',
@@ -18,17 +20,16 @@ export class ActivationComponent {
   public serviceRateplans: any;
   public date: Date = new Date();
   public checkDate: boolean = false;
-  public client: string;
+  public client: any = '';
   public custcode: string = '';
   public description: string = '';
   public commentaire: string = '';
   public nbLigne: string;
   public contenu: Array<any> = [];
   public fichier: string = '';
-  public nbrError: string;
+  public nbrError: string = '';
   public selectedReason: any;
   public selectedRateplans: any;
-  public form: FormGroup;
   public listServices: Array<any> = [];
   public listParametres: any;
 
@@ -37,7 +38,8 @@ export class ActivationComponent {
   constructor(
     private soapService: SoapService,
     private storageService: StorageService,
-    private acteMasseService: ActeMasseService
+    private acteMasseService: ActeMasseService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -174,15 +176,18 @@ export class ActivationComponent {
     this.soapService.getClient(this.custcode).subscribe({
       next: (data) => {
         if (data) {
-          this.client = data.client;
+          this.client = data;
         } else {
           alert('Client introuvable !');
+          this.client = '';
         }
       },
     });
   }
 
   onRateplansChange(): void {
+    this.listServices = [];
+    this.listParametres = [];
     let { rpcode, rpVscode } = this.selectedRateplans;
     this.soapService.getServiceRateplans(rpcode, rpVscode).subscribe({
       next: (data) => {
@@ -218,6 +223,7 @@ export class ActivationComponent {
   }
 
   onCheckboxChange(event: any, key: any): void {
+    this.listParametres = [];
     let service = this.serviceRateplans[key].filter((item: any) => {
       return item.servicename === event.target.value;
     });
@@ -327,6 +333,12 @@ export class ActivationComponent {
       valueDes: valueDes_par_defaut,
     };
 
+    for (let i = 0; i < this.listParametres.length; i++) {
+      if (this.listParametres[i].prmNo == parametre.prmNo) {
+        this.listParametres[i].defValue = nvalue.value;
+      }
+    }
+
     if (this.listServices.length) {
       let index_service: number = 0;
       let check_service: boolean = false;
@@ -365,7 +377,58 @@ export class ActivationComponent {
     } else {
       this.insertService(param_parametre);
     }
-    console.log(this.listServices);
+  }
+
+  onTextParameterChange(event: any, parametre: any): void {
+    let { value } = event.target;
+    let { servicename } = this.service;
+    let param_parametre = {
+      prmNo: parametre.prmNo,
+      prmDes: parametre.prmDes,
+      valueSeqno: 1,
+      value: value,
+      valueDes: value,
+    };
+
+    for (let i = 0; i < this.listParametres.length; i++) {
+      if (this.listParametres[i].prmNo == parametre.prmNo) {
+        this.listParametres[i].defValue = value;
+      }
+    }
+
+    if (this.listServices.length) {
+      let index_service: number = 0;
+      let check_service: boolean = false;
+      let check_parameter: boolean = false;
+
+      for (let i = 0; i < this.listServices.length; i++) {
+        if (this.listServices[i].servicename === servicename) {
+          for (let j = 0; j < this.listServices[i].parametre.length; j++) {
+            if (
+              param_parametre.prmNo == this.listServices[i].parametre[j].prmNo
+            ) {
+              this.listServices[i].parametre.splice(j, 1);
+              this.listServices[i].parametre.push(param_parametre);
+              check_service = true;
+              check_parameter = false;
+              break;
+            } else {
+              index_service = i;
+              check_service = false;
+              check_parameter = true;
+            }
+          }
+        }
+      }
+
+      if (!check_service && check_parameter) {
+        this.listServices[index_service].parametre.push(param_parametre);
+      } else if (!check_service && !check_parameter) {
+        this.insertService(param_parametre);
+      }
+    } else {
+      this.insertService(param_parametre);
+    }
   }
 
   insertService(param_parametre: any): void {
@@ -381,49 +444,91 @@ export class ActivationComponent {
     this.listServices.push(new_service);
   }
 
+  openModalListeService() {
+    const modalRef = this.modalService.open(ModalListeServicesComponent, {
+      size: 'lg',
+      centered: true,
+    });
+    modalRef.componentInstance.services = this.listServices;
+    modalRef.componentInstance.selectedRateplans = this.selectedRateplans.rpDes;
+  }
+
   disableValider(): boolean {
-    return this.fichier === '' ||
+    return (
+      this.fichier === '' ||
+      !this.selectedReason ||
+      this.client === '' ||
+      +this.nbrError !== 0 ||
       this.description === '' ||
-      this.commentaire === ''
-      ? true
-      : false;
+      this.commentaire === '' ||
+      !this.listServices.length
+    );
   }
 
   valider(): void {
-    let data: any = {
-      initiateur: this.storageService.getItem('trigramme'),
-      idUtilisateur: this.storageService.getItem('user_id'),
-      comment: this.commentaire,
-      date_prise_compte: this.date,
-      listeMsisdn: {
-        fichier: this.fichier,
-        nbLigne: this.nbLigne,
-        nb_erreur: this.nbrError,
-        liste: this.contenu,
-      },
-      rsCode: this.selectedReason.rsCode,
-      rsDes: this.selectedReason.rsDes,
-      descript_court: this.description,
-      checkdateprise: this.checkDate ? 'true' : 'false',
-      idAction: 3,
-      etat: 'PENDING',
-      lblAction: 'Désactivation',
-      lbl_etape: 'En attente de validation métier',
-    };
-    // this.acteMasseService.saveDesactivation(data).subscribe({
-    //   next: (data) => {
-    //     if (data) {
-    //       alert('Erreur : ' + data);
-    //       this.clear();
-    //     } else {
-    //       alert('Enregistrement effectué !');
-    //       this.clear();
-    //       this.commentaire = '';
-    //       this.description = '';
-    //       this.contenu = [];
-    //     }
-    //   },
-    // });
+    let requiredServices: Array<any> = [];
+    for (const key in this.serviceRateplans) {
+      this.serviceRateplans[key].forEach((item: any, index: number) => {
+        if (item.svCsind == 'true') {
+          requiredServices.push(item);
+        }
+      });
+    }
+
+    let checkService = requiredServices.filter((requiredService: any) => {
+      return !this.listServices.some((listService: any) => {
+        return requiredService.servicename === listService.servicename;
+      });
+    });
+
+    if (checkService.length) {
+      this.openModalCheckService(checkService);
+    } else {
+      let data: any = {
+        initiateur: this.storageService.getItem('trigramme'),
+        idUtilisateur: +this.storageService.getItem('user_id'),
+        client: this.client,
+        plan_tarifaire: this.selectedRateplans,
+        service: this.listServices,
+        descript_court: this.description,
+        comment: this.commentaire,
+        listeMsisdn: {
+          fichier: this.fichier,
+          nbLigne: this.nbLigne,
+          nb_erreur: this.nbrError,
+          liste: this.contenu,
+        },
+        date_prise_compte: this.date,
+        rsCode: this.selectedReason.rsCode,
+        rsDes: this.selectedReason.rsDes,
+        checkdateprise: this.checkDate ? 'true' : 'false',
+        idAction: 1,
+        etat: 'PENDING',
+        lblAction: 'Nouvelle Activation',
+        lbl_etape: 'En attente de validation métier',
+      };
+      this.acteMasseService.saveActivation(data).subscribe({
+        next: (data) => {
+          if (data) {
+            alert('Erreur : ' + data);
+          } else {
+            alert('Enregistrement effectué !');
+            this.clear();
+            this.commentaire = '';
+            this.description = '';
+            this.contenu = [];
+          }
+        },
+      });
+    }
+  }
+
+  openModalCheckService(services: any) {
+    const modalRef = this.modalService.open(ModalChecklisteServicesComponent, {
+      size: 'lg',
+      centered: true,
+    });
+    modalRef.componentInstance.services = services;
   }
 
   clear(): void {

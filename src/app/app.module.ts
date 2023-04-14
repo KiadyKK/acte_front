@@ -24,6 +24,8 @@ import { WidgetComponent } from './components/widget/widget.component';
 import { ValidationTechniqueComponent } from './components/validation-technique/validation-technique.component';
 import { ActivationComponent } from './components/activation/activation.component';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
+import { ModalListeServicesComponent } from './components/activation/modal-liste-services/modal-liste-services.component';
+import { ModalChecklisteServicesComponent } from './components/activation/modal-checkliste-services/modal-checkliste-services.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
     SpinnerComponent,
     WidgetComponent,
     ValidationTechniqueComponent,
-    ActivationComponent
+    ActivationComponent,
+    ModalListeServicesComponent,
+    ModalChecklisteServicesComponent,
   ],
   imports: [
     BrowserModule,
