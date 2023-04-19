@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -14,13 +14,13 @@ export class ActeMasseService {
     return this.http.post(ACTE_API + `monitoring`, data);
   }
 
-  saveDesactivation(data: any): Observable<any> {
+  saveDesactivation(data: FormData): Observable<any> {
     return this.http.post(ACTE_API + 'desactivation', data, {
       responseType: 'text',
     });
   }
 
-  saveActivation(data: any): Observable<any> {
+  saveActivation(data: FormData): Observable<any> {
     return this.http.post(ACTE_API + 'activation', data, {
       responseType: 'text',
     });

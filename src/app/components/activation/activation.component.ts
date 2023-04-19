@@ -15,6 +15,8 @@ export class ActivationComponent {
   @ViewChild('inputFile')
   inputFile: ElementRef;
 
+  private selectedFile: File | null;
+
   public reasons: any;
   public rateplans: any;
   public serviceRateplans: any;
@@ -60,13 +62,13 @@ export class ActivationComponent {
 
   onFileChange(event: any): void {
     if (event.target.files.length > 0) {
-      let file: File = event.target.files.item(0);
-      if (file.type === 'text/csv') {
+      this.selectedFile = event.target.files.item(0);
+      if (this.selectedFile!.type === 'text/csv') {
         let allTextLines = [];
 
         // File reader method
         let reader: FileReader = new FileReader();
-        reader.readAsText(file);
+        reader.readAsText(this.selectedFile!);
         reader.onload = (e) => {
           let csv: any = reader.result;
           allTextLines = csv.split('\r\n');
@@ -130,13 +132,13 @@ export class ActivationComponent {
             let data: any = {
               id_action: 1,
               csv: csv,
-              fichier: file.name,
+              fichier: this.selectedFile!.name,
             };
 
             this.soapService.verifyActivation(data).subscribe({
               next: (data) => {
                 this.contenu = data.liste;
-                this.fichier = file.name;
+                this.fichier = this.selectedFile!.name;
                 this.nbLigne = data.liste.length;
                 this.nbrError = data.nb_erreur;
               },
@@ -191,15 +193,6 @@ export class ActivationComponent {
     let { rpcode, rpVscode } = this.selectedRateplans;
     this.soapService.getServiceRateplans(rpcode, rpVscode).subscribe({
       next: (data) => {
-        // for (let i = 0; i < data.length; i++) {
-        //   data.filter((item: any) => {
-        //     if (item.sncode === 325 || item.sncode === 2564) {
-        //       console.log(item);
-        //       return;
-        //     }
-        //   })
-        //   break;
-        // }
         if (data.length) {
           let result = data.reduce((acc: any, cur: any) => {
             acc[cur.nom_package] = acc[cur.nom_package] || [];
@@ -507,7 +500,12 @@ export class ActivationComponent {
         lblAction: 'Nouvelle Activation',
         lbl_etape: 'En attente de validation métier',
       };
-      this.acteMasseService.saveActivation(data).subscribe({
+
+      const formData: FormData = new FormData();
+      formData.append('file', this.selectedFile!);
+      formData.append('data', JSON.stringify(data));
+
+      this.acteMasseService.saveActivation(formData).subscribe({
         next: (data) => {
           if (data) {
             alert('Erreur : ' + data);
@@ -533,9 +531,15 @@ export class ActivationComponent {
 
   clear(): void {
     this.inputFile.nativeElement.value = '';
+    this.selectedFile = null;
+    this.date = new Date();
+    this.custcode = '';
     this.fichier = '';
+    this.client = '';
     this.nbLigne = '';
     this.nbrError = '';
     this.checkDate = false;
+    this.serviceRateplans = null;
+    this.listParametres = [];
   }
 }

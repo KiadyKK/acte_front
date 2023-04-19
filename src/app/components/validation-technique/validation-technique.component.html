@@ -75,7 +75,7 @@
               <tbody>
                 <tr>
                   <td>
-                    {{ content.nom_fichier }}
+                    {{ content.idActe }}
                   </td>
                   <td>
                     {{ content.description_courte }}
@@ -103,7 +103,7 @@
               <tbody>
                 <tr>
                   <td>
-                    {{ content.nom_fichier }}
+                    <a class="text-decoration-none" [href]="apiUrl+'acte-masse/download?id='+content.idActe+'&file='+content.nom_fichier">{{ content.nom_fichier }}</a>
                   </td>
                   <td>
                     {{

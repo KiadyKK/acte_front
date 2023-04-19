@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Interaction } from 'src/app/models/interaction.model';
 import { MetierService } from 'src/app/services/metier/metier.service';
 import { TechniqueService } from 'src/app/services/technique/technique.service';
+import { GlobalConstants } from 'src/app/shared/globalConstants/global-constants';
 
 @Component({
   selector: 'app-validation-technique',
@@ -9,6 +10,7 @@ import { TechniqueService } from 'src/app/services/technique/technique.service';
   styleUrls: ['./validation-technique.component.css'],
 })
 export class ValidationTechniqueComponent {
+  public apiUrl: string = GlobalConstants.apiURL;
   public date: Date = new Date();
   public comValidateur: string;
   public content: Interaction = new Interaction();

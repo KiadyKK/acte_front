@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MetierService } from 'src/app/services/metier/metier.service';
 import { Interaction } from 'src/app/models/interaction.model';
+import { GlobalConstants } from 'src/app/shared/globalConstants/global-constants';
 
 @Component({
   selector: 'app-validation-metier',
@@ -8,6 +9,7 @@ import { Interaction } from 'src/app/models/interaction.model';
   styleUrls: ['./validation-metier.component.css'],
 })
 export class ValidationMetierComponent {
+  public apiUrl: string = GlobalConstants.apiURL;
   public date: Date = new Date();
   public comValidateur: string;
   public joker: boolean = false;

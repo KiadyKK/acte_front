@@ -12,6 +12,8 @@ export class DesactivationComponent implements OnInit {
   @ViewChild('inputFile')
   inputFile: ElementRef;
 
+  private selectedFile: File | null;
+
   public reasons: any;
   public date: Date = new Date();
   public checkDate: boolean = false;
@@ -40,12 +42,12 @@ export class DesactivationComponent implements OnInit {
 
   onFileChange(event: any) {
     if (event.target.files.length > 0) {
-      let file: File = event.target.files.item(0);
+      this.selectedFile = event.target.files.item(0);
       let allTextLines = [];
 
       // File reader method
       let reader: FileReader = new FileReader();
-      reader.readAsText(file);
+      reader.readAsText(this.selectedFile!);
       reader.onload = (e) => {
         let csv: any = reader.result;
         allTextLines = csv.split('\r\n');
@@ -71,13 +73,13 @@ export class DesactivationComponent implements OnInit {
           let data: any = {
             id_action: 3,
             msisdn: listeMsisdn,
-            fichier: file.name,
+            fichier: this.selectedFile!.name,
           };
           this.soapService.verifydesactivation(data).subscribe({
             next: (data) => {
               if (data.hasOwnProperty('liste')) {
                 this.contenu = data.liste;
-                this.fichier = file.name;
+                this.fichier = this.selectedFile!.name;
                 this.nbLigne = data.liste.length;
                 this.nbrError = data.nb_erreur;
               } else {
@@ -140,7 +142,12 @@ export class DesactivationComponent implements OnInit {
       lblAction: 'Désactivation',
       lbl_etape: 'En attente de validation métier',
     };
-    this.acteMasseService.saveDesactivation(data).subscribe({
+
+    const formData: FormData = new FormData();
+    formData.append('file', this.selectedFile!)
+    formData.append('data', JSON.stringify(data))
+
+    this.acteMasseService.saveDesactivation(formData).subscribe({
       next: (data) => {
         if (data) {
           alert('Erreur : ' + data);
@@ -152,12 +159,13 @@ export class DesactivationComponent implements OnInit {
           this.description = '';
           this.contenu = [];
         }
-      },
+      }
     });
   }
 
   clear(): void {
     this.inputFile.nativeElement.value = '';
+    this.selectedFile = null;
     this.fichier = '';
     this.nbLigne = '';
     this.nbrError = '';
