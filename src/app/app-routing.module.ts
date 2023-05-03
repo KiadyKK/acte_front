@@ -6,6 +6,7 @@ import { LoginComponent } from './components/login/login.component';
 import { ValidationMetierComponent } from './components/validation-metier/validation-metier.component';
 import { ValidationTechniqueComponent } from './components/validation-technique/validation-technique.component';
 import { ActivationComponent } from './components/activation/activation.component';
+import { TakeoverComponent } from './components/takeover/takeover.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -17,6 +18,11 @@ const routes: Routes = [
   {
     path: 'desactivation',
     component: DesactivationComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'takeover',
+    component: TakeoverComponent,
     canActivate: [AuthGuard],
   },
   {

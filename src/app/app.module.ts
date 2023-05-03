@@ -26,6 +26,7 @@ import { ActivationComponent } from './components/activation/activation.componen
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalListeServicesComponent } from './components/activation/modal-liste-services/modal-liste-services.component';
 import { ModalChecklisteServicesComponent } from './components/activation/modal-checkliste-services/modal-checkliste-services.component';
+import { TakeoverComponent } from './components/takeover/takeover.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { ModalChecklisteServicesComponent } from './components/activation/modal-
     ActivationComponent,
     ModalListeServicesComponent,
     ModalChecklisteServicesComponent,
+    TakeoverComponent
   ],
   imports: [
     BrowserModule,

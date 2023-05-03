@@ -10,6 +10,11 @@ export const navbarData = [
     label: 'Désactivation',
   },
   {
+    routerLink: 'takeover',
+    icon: 'bi bi-unlock',
+    label: 'Take-Over',
+  },
+  {
     routerLink: 'metier',
     icon: 'bi bi-check-circle',
     label: 'Validation Métier',
