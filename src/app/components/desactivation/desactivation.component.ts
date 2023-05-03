@@ -83,12 +83,8 @@ export class DesactivationComponent implements OnInit {
                 this.nbLigne = data.liste.length;
                 this.nbrError = data.nb_erreur;
               } else {
-                let msisdn: string = '\n';
-                data.forEach((element: string) => {
-                  msisdn += '- ' + element + '\n';
-                });
                 this.clear();
-                alert('Msisdn incorrecte :' + msisdn);
+                alert('Msisdn incorrecte : ' + data.msisdn + '\nErreur : ' + data.error);
               }
             },
           });

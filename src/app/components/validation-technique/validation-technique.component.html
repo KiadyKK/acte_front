@@ -175,6 +175,28 @@
                 </tr>
               </tbody>
             </table>
+
+            <table
+                *ngIf="content.idAction === 1"
+                class="table table-sm table-striped"
+              >
+                <thead>
+                  <tr>
+                    <th>MSISDN</th>
+                    <th>SIM</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of content.input.liste">
+                    <td>
+                      {{ item.msisdn }}
+                    </td>
+                    <td>
+                      {{ item.sim }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
           </ng-template>
         </ngb-panel>
       </ngb-accordion>

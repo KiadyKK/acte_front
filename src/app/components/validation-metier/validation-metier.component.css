@@ -16,7 +16,7 @@
 .content-gris {
   background-color: #b3b3b3;
   padding: 20px;
-  height: 100px;
+  min-height: 100px;
 }
 
 .bi-check-lg {

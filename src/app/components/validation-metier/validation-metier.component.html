@@ -105,7 +105,17 @@
                 <tbody>
                   <tr>
                     <td>
-                      <a class="text-decoration-none" [href]="apiUrl+'acte-masse/download?id='+content.idActe+'&file='+content.nom_fichier">{{ content.nom_fichier }}</a>
+                      <a
+                        class="text-decoration-none"
+                        [href]="
+                          apiUrl +
+                          'acte-masse/download?id=' +
+                          content.idActe +
+                          '&file=' +
+                          content.nom_fichier
+                        "
+                        >{{ content.nom_fichier }}</a
+                      >
                     </td>
                     <td>
                       {{
@@ -177,6 +187,61 @@
                   </tr>
                 </tbody>
               </table>
+
+              <table
+                *ngIf="content.idAction === 1"
+                class="table table-sm table-striped"
+              >
+                <thead>
+                  <tr>
+                    <th>MSISDN</th>
+                    <th>SIM</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of content.input.liste">
+                    <td>
+                      {{ item.msisdn }}
+                    </td>
+                    <td>
+                      {{ item.sim }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
+
+        <div class="my-3"></div>
+
+        <ngb-accordion
+          #acc="ngbAccordion"
+          class="accordion-green"
+          activeIds="config-panel-four"
+          *ngIf="content.idAction === 1"
+        >
+          <ngb-panel title="Liste services" [disabled]="!content.id">
+            <ng-template ngbPanelContent>
+              <p class="text-center text-uppercase">
+                <strong>Plan Tarifaire : </strong
+                >{{ content.plan_tarifaire.rpDes }}
+              </p>
+              <ul>
+                <li *ngFor="let service of content.service_param; index as i">
+                  <strong
+                    ><span class="text-decoration-underline"
+                      >Service n° {{ i + 1 }}</span
+                    >
+                    : {{ service.servicename }}</strong
+                  >
+                  <ul *ngIf="service.parametre">
+                    <li *ngFor="let param of service.parametre">
+                      {{ param.prmDes + " (" + param.valueDes + ")" }}
+                    </li>
+                  </ul>
+                </li>
+              </ul>
             </ng-template>
           </ngb-panel>
         </ngb-accordion>
@@ -193,10 +258,7 @@
           >
         </div>
 
-        <div
-          class="d-flex align-items-end"
-          *ngIf="content.id && content.idRole == 1"
-        >
+        <div class="d-flex" *ngIf="content.id && content.idRole == 1">
           <div
             class="example-wrapper me-3"
             *ngIf="content.checkdatepriseencompte === 'true'"
@@ -237,7 +299,7 @@
                   [value]="joker"
                   (change)="onJokerChange($event)"
                 />
-                <label for="date" class="form-check-label"
+                <label for="date" class="form-check-label mb-2"
                   ><strong>Joker</strong></label
                 >
               </div>

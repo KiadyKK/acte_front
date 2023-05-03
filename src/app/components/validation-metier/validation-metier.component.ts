@@ -51,19 +51,37 @@ export class ValidationMetierComponent {
 
   valider(): void {
     let date_prise_old: Date = new Date(this.content.date_prise_compte!);
-    let date_prise_new: any;
-    if (date_prise_old >= this.date) {
-      date_prise_new = null;
-    } else {
-      date_prise_new = this.date;
-    }
+    let date_prise_new: any = date_prise_old >= this.date ? null : this.date;
 
     if (this.joker) {
       let validForm: any =
         this.content.checkdatepriseencompte === 'false'
           ? new Date()
-          : this.content.date_prise_compte?.replace(" ", "T");
+          : this.content.date_prise_compte?.replace(' ', 'T');
       switch (this.content.idAction) {
+        case 1:
+        //NOUVELLE ACTIVATION***************************************
+          let data1: any = {
+            id: this.content.idActe,
+            listeMsisdn: this.content.input.liste,
+            validForm: validForm,
+            titre: 'Nouvelle activation',
+            checkdatepriseencompte: this.content.checkdatepriseencompte,
+            comment: this.comValidateur,
+          }
+          this.metierService.validerJoker(data1).subscribe({
+            next: (data) => {
+              console.log(data);
+              if (!data.error) {
+                alert('Validation terminée !');
+                this.onActeClick(this.content.idActe);
+              } else {
+                alert('Msisdn : ' + data.msisdnError + '\nError : ' + data.error);
+              }
+            },
+          });
+
+          break;
         //DESACTIVATION*********************************************
         case 3:
           let data: any = {
@@ -83,7 +101,7 @@ export class ValidationMetierComponent {
                 alert('Validation terminée !');
                 this.onActeClick(this.content.idActe);
               } else {
-                alert(data.error + ' Msisdn : ' + data.msisdnError);
+                alert('Msisdn : ' + data.msisdnError + '\nError : ' + data.error);
               }
             },
           });
