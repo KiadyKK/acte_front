@@ -64,6 +64,29 @@ export class ValidationTechniqueComponent {
         : this.content.date_prise_compte?.replace(' ', 'T');
 
     switch (this.content.idAction) {
+      case 1:
+        //NOUVELLE ACTIVATION***************************************
+          let data1: any = {
+            id: this.content.idActe,
+            listeMsisdn: this.content.input.liste,
+            validForm: validForm,
+            titre: 'Nouvelle activation',
+            checkdatepriseencompte: this.content.checkdatepriseencompte,
+            comment: this.comValidateur,
+          }
+          this.metierService.validerJoker(data1).subscribe({
+            next: (data) => {
+              if (!data.error) {
+                alert('Validation terminée !');
+                this.onActeClick(this.content.idActe);
+              } else {
+                alert('Msisdn : ' + data.msisdnError + '\nError : ' + data.error);
+              }
+            },
+          });
+
+          break;
+          
       //DESACTIVATION*********************************************
       case 3:
         let data: any = {
@@ -82,7 +105,7 @@ export class ValidationTechniqueComponent {
               alert('Validation terminée !');
               this.onActeClick(this.content.idActe);
             } else {
-              alert(data.error + ' Msisdn : ' + data.msisdnError);
+              alert('Msisdn : ' + data.msisdnError + '\nError : ' + data.error);
             }
           },
         });

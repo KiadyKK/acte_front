@@ -71,7 +71,6 @@ export class ValidationMetierComponent {
           }
           this.metierService.validerJoker(data1).subscribe({
             next: (data) => {
-              console.log(data);
               if (!data.error) {
                 alert('Validation terminée !');
                 this.onActeClick(this.content.idActe);
@@ -82,6 +81,7 @@ export class ValidationMetierComponent {
           });
 
           break;
+          
         //DESACTIVATION*********************************************
         case 3:
           let data: any = {
