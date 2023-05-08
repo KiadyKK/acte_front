@@ -10,8 +10,8 @@
 }
 
 .body-trimmed {
-    width: calc(100% - 13.5625rem);
-    margin-left: 13.5625rem;
+    width: calc(100% - 15rem);
+    margin-left: 15rem;
 }
 
 .body-md-screen {

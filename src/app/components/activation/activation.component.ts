@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
-import { SoapService } from 'src/app/services/soap/soap.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalListeServicesComponent } from './modal-liste-services/modal-liste-services.component';
@@ -38,20 +37,19 @@ export class ActivationComponent {
   public service: any;
 
   constructor(
-    private soapService: SoapService,
     private storageService: StorageService,
     private acteMasseService: ActeMasseService,
     private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
-    this.soapService.getReasonsRead('a').subscribe({
+    this.acteMasseService.getReasonsRead('a').subscribe({
       next: (data) => {
         this.reasons = data;
       },
     });
 
-    this.soapService.getRateplansRead().subscribe({
+    this.acteMasseService.getRateplansRead().subscribe({
       next: (data) => {
         this.rateplans = data.sort((a: any, b: any) => {
           return a.rpDes.localeCompare(b.rpDes);
@@ -135,7 +133,7 @@ export class ActivationComponent {
               fichier: this.selectedFile!.name,
             };
 
-            this.soapService.verifyActivation(data).subscribe({
+            this.acteMasseService.verifyActivation(data).subscribe({
               next: (data) => {
                 this.contenu = data.liste;
                 this.fichier = this.selectedFile!.name;
@@ -175,7 +173,7 @@ export class ActivationComponent {
   }
 
   rechercheClient(): void {
-    this.soapService.getClient(this.custcode).subscribe({
+    this.acteMasseService.getClient(this.custcode).subscribe({
       next: (data) => {
         if (data) {
           this.client = data;
@@ -191,7 +189,7 @@ export class ActivationComponent {
     this.listServices = [];
     this.listParametres = [];
     let { rpcode, rpVscode } = this.selectedRateplans;
-    this.soapService.getServiceRateplans(rpcode, rpVscode).subscribe({
+    this.acteMasseService.getServiceRateplans(rpcode, rpVscode).subscribe({
       next: (data) => {
         if (data.length) {
           let result = data.reduce((acc: any, cur: any) => {
@@ -225,7 +223,7 @@ export class ActivationComponent {
       if (service[0].serviceParamerterInd) {
         this.service = service[0];
         let { sncode, sccode } = service[0];
-        this.soapService.getParametersRead(sncode, sccode).subscribe({
+        this.acteMasseService.getParametersRead(sncode, sccode).subscribe({
           next: (data) => {
             this.listParametres = data;
             this.updateViaService(data, service);

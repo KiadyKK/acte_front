@@ -1,0 +1,149 @@
+<div class="title">
+  <i class="bi bi-pencil-square me-2"></i>Modification Informations
+</div>
+<div class="row">
+  <div class="col-md-9 d-flex flex-column pe-0">
+    <div class="parametre">
+      <div class="col-md-4 pe-2">
+        <label for="formFile" class="form-label m-0 mb-2"
+          ><strong>Fichier CSV</strong></label
+        >
+        <input
+          #inputFile
+          class="form-control form-control-sm input-dark me-3"
+          type="file"
+          id="formFile"
+          (change)="onFileChange($event)"
+        />
+      </div>
+
+      <div class="d-flex align-items-end ms-4">
+        <button
+          class="btn btn-success btn-sm"
+          [disabled]="disableValider()"
+          (click)="valider()"
+        >
+          <i class="bi bi-check2-circle me-2"></i>Valider
+        </button>
+      </div>
+    </div>
+    <div class="content-lg">
+      <ngb-accordion
+        #acc="ngbAccordion"
+        class="accordion-blue"
+        activeIds="config-panel-three"
+      >
+        <ngb-panel
+          id="config-panel-three"
+          title="Contenu du fichier CSV"
+          [disabled]="contenu.length === 0"
+        >
+          <ng-template ngbPanelContent>
+            <table class="table table-sm table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">MSISDN</th>
+                  <th scope="col">CLIENT</th>
+                  <th scope="col">STATUT</th>
+                  <th scope="col">INFORMATION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of contenu">
+                  <td>{{ item.msisdn }}</td>
+                  <td>{{ item.client }}</td>
+                  <td class="p-0">
+                    <i
+                      [ngClass]="
+                        item.s_msisdn === 'OK' ? 'bi bi-check-lg' : 'bi bi-x-lg'
+                      "
+                    ></i>
+                  </td>
+                  <td>{{ item.notification }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+    <div class="content-md">
+        <div class="row h-100">
+            <div class="col-md-6">
+              <ngb-accordion
+                #acc="ngbAccordion"
+                class="accordion-green"
+                activeIds="config-panel-one"
+              >
+                <ngb-panel id="config-panel-one" title="Résumé">
+                  <ng-template ngbPanelContent>
+                    <div class="accordion-contents-40">
+                      <p class="bg-gris">
+                        <strong>Nom du fichier : </strong
+                        ><span class="ms-auto">{{ fichier }}</span>
+                      </p>
+                      <p class="bg-gris">
+                        <strong>Nombre de ligne : </strong
+                        ><span class="ms-auto">{{ nbLigne }}</span>
+                      </p>
+                      <p
+                        class="bg-gris"
+                        [ngClass]="{
+                          'text-danger': +nbrError !== 0 && nbrError !== ''
+                        }"
+                      >
+                        <i
+                          *ngIf="+nbrError !== 0 && nbrError !== ''"
+                          class="bi bi-x-circle-fill me-1"
+                        ></i
+                        ><strong>Nombre d'erreur : </strong
+                        ><span class="ms-auto">{{ nbrError }}</span>
+                      </p>
+                    </div>
+                  </ng-template>
+                </ngb-panel>
+              </ngb-accordion>
+            </div>
+            <div class="col-md-6">
+              <ngb-accordion
+                #acc="ngbAccordion"
+                class="accordion-orange"
+                activeIds="config-panel-one"
+              >
+                <ngb-panel id="config-panel-one" title="Information">
+                  <ng-template ngbPanelContent>
+                    <div class="accordion-contents-40">
+                      <label for="description" class="mb-1"
+                        ><strong>Description courte</strong
+                        ><span class="red">*</span></label
+                      >
+                      <textarea
+                        class="form-control form-control-sm mb-2"
+                        id="description"
+                        rows="1"
+                        [(ngModel)]="description"
+                      ></textarea>
+                      <label for="commentaire" class="mb-1"
+                        ><strong>Commentaire</strong
+                        ><span class="red">*</span></label
+                      >
+                      <textarea
+                        class="form-control form-control-sm"
+                        id="commentaire"
+                        rows="3"
+                        [(ngModel)]="commentaire"
+                      ></textarea>
+                    </div>
+                  </ng-template>
+                </ngb-panel>
+              </ngb-accordion>
+            </div>
+          </div>
+    </div>
+  </div>
+  <div class="col-md-3 d-flex flex-column ps-0">
+    <div class="h-100 widget">
+      <app-widget></app-widget>
+    </div>
+  </div>
+</div>

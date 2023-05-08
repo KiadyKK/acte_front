@@ -134,7 +134,10 @@
                         class="bi bi-check-lg"
                       ></i>
                       <i
-                        *ngIf="content.checkdatepriseencompte == 'false'"
+                        *ngIf="
+                          !content.checkdatepriseencompte ||
+                          content.checkdatepriseencompte == 'false'
+                        "
                         class="bi bi-x-lg"
                       ></i>
                     </td>
@@ -160,6 +163,7 @@
             <ng-template ngbPanelContent>
               <table
                 *ngIf="
+                  content.idAction === 2 ||
                   content.idAction === 3 ||
                   content.idAction == 12 ||
                   content.idAction == 13

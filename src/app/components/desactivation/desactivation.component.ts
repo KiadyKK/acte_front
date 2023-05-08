@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
-import { SoapService } from 'src/app/services/soap/soap.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Component({
@@ -27,13 +26,12 @@ export class DesactivationComponent implements OnInit {
   public listeMsisdn: Array<any>;
 
   constructor(
-    private soapService: SoapService,
     private storageService: StorageService,
     private acteMasseService: ActeMasseService
   ) {}
 
   ngOnInit(): void {
-    this.soapService.getReasonsRead('d').subscribe({
+    this.acteMasseService.getReasonsRead('d').subscribe({
       next: (data) => {
         this.reasons = data;
       },
@@ -75,7 +73,7 @@ export class DesactivationComponent implements OnInit {
             msisdn: listeMsisdn,
             fichier: this.selectedFile!.name,
           };
-          this.soapService.verifydesactivation(data).subscribe({
+          this.acteMasseService.verifydesactivation(data).subscribe({
             next: (data) => {
               if (data.hasOwnProperty('liste')) {
                 this.contenu = data.liste;

@@ -48,7 +48,8 @@
 }
 
 .sidenav-collapsed {
-  width: 13.5625rem;
+  width: 15rem;
+  /* width: 13.5625rem; */
 }
 
 .sidenav-nav {

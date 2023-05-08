@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
-import { SoapService } from 'src/app/services/soap/soap.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Component({
@@ -26,7 +25,6 @@ export class TakeoverComponent {
   public contenu: Array<any> = [];
 
   constructor(
-    private soapService: SoapService,
     private storageService: StorageService,
     private acteMasseService: ActeMasseService
   ) {}
@@ -36,7 +34,7 @@ export class TakeoverComponent {
   }
 
   rechercheClient(): void {
-    this.soapService.getClient(this.custcode).subscribe({
+    this.acteMasseService.getClient(this.custcode).subscribe({
       next: (data) => {
         if (data) {
           this.client = data;

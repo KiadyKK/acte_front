@@ -25,4 +25,42 @@ export class ActeMasseService {
       responseType: 'text',
     });
   }
+
+  saveModifyFields(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'modify-fields', data, {
+      responseType: 'text',
+    });
+  }
+
+  getReasonsRead(rsState: string): Observable<any> {
+    return this.http.get(ACTE_API + `reasons-read?rsState=${rsState}`);
+  }
+
+  getRateplansRead(): Observable<any> {
+    return this.http.get(ACTE_API + 'rateplans-read')
+  }
+
+  getServiceRateplans(rpcode: number, rpVscode: number): Observable<any> {
+    return this.http.get(ACTE_API + `service-rateplans?rpcode=${rpcode}&rpVscode=${rpVscode}`)
+  }
+
+  getParametersRead(sncode: number, sccode: number): Observable<any> {
+    return this.http.get(ACTE_API + `parameters-read?sncode=${sncode}&sccode=${sccode}`)
+  }
+
+  getClient(custcode: string): Observable<any> {
+    return this.http.get(ACTE_API + `custcode?custcode=${custcode}`)
+  }
+
+  verifydesactivation(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-desactivation', data);
+  }
+
+  verifyActivation(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-activation', data);
+  }
+
+  verifyModifyFields(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-modify-fields', data);
+  }
 }

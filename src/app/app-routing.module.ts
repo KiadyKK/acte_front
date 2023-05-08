@@ -7,6 +7,7 @@ import { ValidationMetierComponent } from './components/validation-metier/valida
 import { ValidationTechniqueComponent } from './components/validation-technique/validation-technique.component';
 import { ActivationComponent } from './components/activation/activation.component';
 import { TakeoverComponent } from './components/takeover/takeover.component';
+import { ModifyFieldsComponent } from './components/modify-fields/modify-fields.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -18,6 +19,11 @@ const routes: Routes = [
   {
     path: 'desactivation',
     component: DesactivationComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'modify-fields',
+    component: ModifyFieldsComponent,
     canActivate: [AuthGuard],
   },
   {
