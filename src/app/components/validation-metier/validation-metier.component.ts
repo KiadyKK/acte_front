@@ -61,7 +61,7 @@ export class ValidationMetierComponent {
           : this.content.date_prise_compte?.replace(' ', 'T');
       switch (this.content.idAction) {
         case 1:
-        //NOUVELLE ACTIVATION***************************************
+          //NOUVELLE ACTIVATION***************************************
           let data1: any = {
             id: this.content.idActe,
             listeMsisdn: this.content.input.liste,
@@ -69,20 +69,45 @@ export class ValidationMetierComponent {
             titre: 'Nouvelle activation',
             checkdatepriseencompte: this.content.checkdatepriseencompte,
             comment: this.comValidateur,
-          }
+          };
           this.metierService.validerJoker(data1).subscribe({
             next: (data) => {
               if (!data.error) {
                 alert('Validation terminée !');
                 this.onActeClick(this.content.idActe);
               } else {
-                alert('Msisdn : ' + data.msisdnError + '\nError : ' + data.error);
+                alert(
+                  'Msisdn : ' + data.msisdnError + '\nError : ' + data.error
+                );
               }
             },
           });
 
           break;
-          
+
+        case 2:
+          //MODIFICATION INFO CLIENT***************************************
+          let data2: any = {
+            id: this.content.idActe,
+            listeMsisdn: this.content.input.liste,
+            titre: 'Modification Info-client',
+            comment: this.comValidateur,
+          };
+          this.metierService.validerJoker(data2).subscribe({
+            next: (data) => {
+              if (!data.error) {
+                alert('Validation terminée !');
+                this.onActeClick(this.content.idActe);
+              } else {
+                alert(
+                  'Msisdn : ' + data.msisdnError + '\nError : ' + data.error
+                );
+              }
+            },
+          });
+
+          break;
+
         //DESACTIVATION*********************************************
         case 3:
           let data: any = {
@@ -102,7 +127,9 @@ export class ValidationMetierComponent {
                 alert('Validation terminée !');
                 this.onActeClick(this.content.idActe);
               } else {
-                alert('Msisdn : ' + data.msisdnError + '\nError : ' + data.error);
+                alert(
+                  'Msisdn : ' + data.msisdnError + '\nError : ' + data.error
+                );
               }
             },
           });

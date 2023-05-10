@@ -68,14 +68,16 @@ export class ModifyFieldsComponent {
           } else {
             this.acteMasseService.verifyModifyFields(data).subscribe({
               next: (data) => {
-                // for (let i = 0; i < listeMsisdn.length; i++) {
-                //   for (let j = 0; j < data.liste.length; j++) {
-                //     if (listeMsisdn[i].msisdn === data.liste[j].msisdn) {
-                //       listeMsisdn[i].s_msisdn = data.liste[j].s_msisdn;
-                //       listeMsisdn[i].notification = data.liste[j].notification;
-                //     }
-                //   }
-                // }
+                for (let i = 0; i < listeMsisdn.length; i++) {
+                  for (let j = 0; j < data.liste.length; j++) {
+                    if (listeMsisdn[i].msisdn === data.liste[j].msisdn) {
+                      data.liste[j].adrLname = listeMsisdn[i].adrLname
+                      data.liste[j].adrName = listeMsisdn[i].adrName
+                      data.liste[j].adrStreet = listeMsisdn[i].adrStreet
+                      data.liste[j].adrCity = listeMsisdn[i].adrCity
+                    }
+                  }
+                }
 
                 this.contenu = data.liste;
                 this.fichier = this.selectedFile!.name;
