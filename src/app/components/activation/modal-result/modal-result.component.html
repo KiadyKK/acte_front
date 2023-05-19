@@ -1,0 +1,27 @@
+<div class="modal-header bg-orange">
+  <button
+    type="button"
+    class="btn btn-lg text-light ms-auto p-0"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <i class="bi bi-x-lg"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <p><strong>Client : </strong>{{ client ? client : "introuvable" }}</p>
+  <hr />
+  <div *ngIf="client">
+    <p>Sélectionnez la raison puis chargez le fichier csv.</p>
+    <p>La date d'activation est optionnelle</p>
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-success btn-sm"
+    (click)="activeModal.close('Close click')"
+  >
+    Fermer
+  </button>
+</div>

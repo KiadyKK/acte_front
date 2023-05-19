@@ -1,3 +1,110 @@
+<div class="title"><i class="bi bi-view-list me-2"></i>Tableau de bord</div>
+
+<div class="p-3">
+  <div class="card d-flex flex-row p-3 mb-2">
+    <div class="me-4">
+      <kendo-daterange>
+        <kendo-floatinglabel text="Start">
+          <kendo-dateinput
+            kendoDateRangeStartInput
+            [(value)]="$any(dateRange).start"
+            format="dd/MM/yy"
+          ></kendo-dateinput>
+        </kendo-floatinglabel>
+        <kendo-floatinglabel text="End">
+          <kendo-dateinput
+            kendoDateRangeEndInput
+            [(value)]="$any(dateRange).end"
+            format="dd/MM/yy"
+            (valueChange)="searchByDate($event)"
+          ></kendo-dateinput>
+        </kendo-floatinglabel>
+      </kendo-daterange>
+    </div>
+
+    <div class="me-4">
+      <label class="form-label mb-0">Etat</label>
+      <select
+        class="form-select form-select-sm"
+        aria-label="Default select example"
+        [(ngModel)]="searchEtat"
+        (ngModelChange)="searchByEtat($event)"
+      >
+        <option value="" aria-placeholder="Etat"></option>
+        <option value="VALIDER" aria-placeholder="Etat">VALIDER</option>
+        <option value="REJETER" aria-placeholder="Etat">REJETER</option>
+        <option value="PENDING" aria-placeholder="Etat">PENDING</option>
+        <option value="RELANCE" aria-placeholder="Etat">RELANCE</option>
+        <option value="EXECUTER" aria-placeholder="Etat">EXECUTER</option>
+        <option value="MANUEL" aria-placeholder="Etat">MANUEL</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="acte" class="form-label mb-0">Acte</label>
+      <input
+        class="form-control form-control-sm"
+        type="text"
+        name="searchTerm"
+        id="acte"
+        [(ngModel)]="searchAction"
+        (ngModelChange)="searchByAction($event)"
+      />
+    </div>
+  </div>
+
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Action</th>
+        <th scope="col">Initiateur</th>
+        <th scope="col">Etape</th>
+        <th scope="col">Date de création</th>
+        <th scope="col">Etat</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="
+          let item of monitoring
+            | slice : (page - 1) * pageSize : (page - 1) * pageSize + pageSize
+        "
+      >
+        <td>
+          <strong>{{ item.idActe }}</strong>
+        </td>
+        <td>
+          <a
+            class="text-decoration-none text-blue widget-action"
+            routerLink="/metier/{{ item.idActe }}"
+            ><strong>{{ item.action }}</strong></a
+          >
+        </td>
+        <td>{{ item.initiateur }}</td>
+        <td>{{ item.etape }}</td>
+        <td>{{ item.dateCM | date : "dd-MM-yyyy HH:mm:ss" }}</td>
+        <td>
+          <span [ngClass]="'badge rounded-pill ' + item.etat">{{
+            item.etat
+          }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-center">
+    <ngb-pagination
+      [collectionSize]="monitoring.length"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      [boundaryLinks]="true"
+      [maxSize]="5"
+    ></ngb-pagination>
+  </div>
+</div>
+
+<!-- 
 <div class="row mb-3" *ngFor="let item of lst_monitoring">
   <div
     class="col-md-2 ps-1 pe-0 d-flex justify-content-center align-items-center"
@@ -37,4 +144,4 @@
       >
     </p>
   </div>
-</div>
+</div> -->

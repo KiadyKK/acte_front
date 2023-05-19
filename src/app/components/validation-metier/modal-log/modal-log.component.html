@@ -1,0 +1,35 @@
+<div class="modal-header bg-orange">
+  <h5 class="modal-title">Logs</h5>
+  <button
+    type="button"
+    class="btn btn-lg text-light ms-auto p-0"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <i class="bi bi-x-lg"></i>
+  </button>
+</div>
+<div class="modal-body" style="max-height: 700px; overflow-y: auto">
+  <div *ngFor="let log of logs" style="font-size: 14px">
+    <p>
+      <strong class="text-decoration-underline">Date :</strong>
+      {{ log.date_debut }}
+    </p>
+    <p>
+      <strong class="text-decoration-underline">Action :</strong> {{ log.log }}
+    </p>
+    <p>
+      <strong class="text-decoration-underline">Log :</strong> {{ log.action }}
+    </p>
+    <hr />
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-success btn-sm"
+    (click)="activeModal.close('Close click')"
+  >
+    Fermer
+  </button>
+</div>

@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Monitoring } from 'src/app/models/monitoring';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 
@@ -8,9 +9,18 @@ import { StorageService } from 'src/app/services/storage/storage.service';
   styleUrls: ['./widget.component.css'],
 })
 export class WidgetComponent implements OnInit {
-  lst_monitoring: Array<any>;
+  dateRange = { start: null, end: null };
 
-  @Output() onActeClick: EventEmitter<number> = new EventEmitter();
+  monitoring: Monitoring[] = [];
+  allMonitoring: Monitoring[] = [];
+
+  searchEtat: string = '';
+  searchAction: string = '';
+  page = 1;
+  pageSize = 15;
+
+  id_role: number;
+  user_id: number;
 
   constructor(
     private storageService: StorageService,
@@ -18,21 +28,46 @@ export class WidgetComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    let id_role = this.storageService.getItem('status');
-    let user_id = this.storageService.getItem('user_id');
+    this.id_role = +this.storageService.getItem('status');
+    this.user_id = +this.storageService.getItem('user_id');
     let data: any = {
-      id_role: id_role,
-      user_id: user_id,
-      pageNumber: 1
-    }
+      id_role: this.id_role,
+      user_id: this.user_id,
+      pageNumber: 1,
+    };
     this.acteMasseService.monitoring(data).subscribe({
       next: (data) => {
-        this.lst_monitoring = data;
+        this.monitoring = data;
+        this.allMonitoring = data;
       },
     });
   }
 
-  affichageValidateur(idActe: number): void {
-    this.onActeClick.emit(idActe)
+  searchByAction(event: string): void {
+    this.monitoring = this.allMonitoring.filter((val) =>
+      val.action.toLowerCase().includes(event)
+    );
+  }
+
+  searchByDate(event: any): void {
+    let data: any = {
+      id_role: this.id_role,
+      user_id: this.user_id,
+      pageNumber: 1,
+      startDate: this.dateRange.start,
+      endDate: this.dateRange.end
+    };
+    this.acteMasseService.monitoring(data).subscribe({
+      next: (data) => {
+        this.monitoring = data;
+        this.allMonitoring = data;
+      },
+    });
+  }
+
+  searchByEtat(event: string): void {
+    this.monitoring = this.allMonitoring.filter((val) =>
+      val.etat.includes(event)
+    );
   }
 }

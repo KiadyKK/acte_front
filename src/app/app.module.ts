@@ -7,9 +7,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { BodyComponent } from './components/body/body.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DesactivationComponent } from './components/desactivation/desactivation.component';
-import { HomeComponent } from './components/home/home.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ValidationMetierComponent } from './components/validation-metier/validation-metier.component';
 import { authInterceptorProviders } from './helpers/auth.interceptor';
@@ -23,21 +21,23 @@ import { spinnerInterceptorProviders } from './helpers/spinner.interceptor';
 import { WidgetComponent } from './components/widget/widget.component';
 import { ValidationTechniqueComponent } from './components/validation-technique/validation-technique.component';
 import { ActivationComponent } from './components/activation/activation.component';
-import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalListeServicesComponent } from './components/activation/modal-liste-services/modal-liste-services.component';
 import { ModalChecklisteServicesComponent } from './components/activation/modal-checkliste-services/modal-checkliste-services.component';
 import { TakeoverComponent } from './components/takeover/takeover.component';
 import { ModifyFieldsComponent } from './components/modify-fields/modify-fields.component';
+import { ModalResultComponent } from './components/activation/modal-result/modal-result.component';
+import { ModalResumeComponent } from './shared/modal-resume/modal-resume.component';
+import { ModalLogComponent } from './components/validation-metier/modal-log/modal-log.component';
+import { ModalRetourCxComponent } from './components/validation-metier/modal-retour-cx/modal-retour-cx.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent,
     DesactivationComponent,
     BodyComponent,
     SidenavComponent,
-    DashboardComponent,
     ValidationMetierComponent,
     SpinnerComponent,
     WidgetComponent,
@@ -46,7 +46,11 @@ import { ModifyFieldsComponent } from './components/modify-fields/modify-fields.
     ModalListeServicesComponent,
     ModalChecklisteServicesComponent,
     TakeoverComponent,
-    ModifyFieldsComponent
+    ModifyFieldsComponent,
+    ModalResultComponent,
+    ModalResumeComponent,
+    ModalLogComponent,
+    ModalRetourCxComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +64,7 @@ import { ModifyFieldsComponent } from './components/modify-fields/modify-fields.
     LabelModule,
     ButtonsModule,
     MatProgressSpinnerModule,
-    NgbAccordionModule
+    NgbModule
   ],
   providers: [authInterceptorProviders, spinnerInterceptorProviders],
   bootstrap: [AppComponent],

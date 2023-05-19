@@ -1,5 +1,9 @@
 export const navbarData = [
   {
+    routerLink: 'board',
+    icon: 'bi bi-view-list',
+    label: 'Tableau de bord',
+  },{
     routerLink: 'activation',
     icon: 'bi bi-power',
     label: 'Nouvelle activation',
@@ -19,14 +23,14 @@ export const navbarData = [
     icon: 'bi bi-unlock',
     label: 'Take-Over',
   },
-  {
-    routerLink: 'metier',
-    icon: 'bi bi-check-circle',
-    label: 'Validation Métier',
-  },
-  {
-    routerLink: 'technique',
-    icon: 'bi bi-check-square',
-    label: 'Validation Technique',
-  },
+  // {
+  //   routerLink: 'metier',
+  //   icon: 'bi bi-check-circle',
+  //   label: 'Validation Métier',
+  // },
+  // {
+  //   routerLink: 'technique',
+  //   icon: 'bi bi-check-square',
+  //   label: 'Validation Technique',
+  // },
 ];

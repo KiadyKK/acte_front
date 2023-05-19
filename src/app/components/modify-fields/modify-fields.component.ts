@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { ModalResumeComponent } from 'src/app/shared/modal-resume/modal-resume.component';
 
 @Component({
   selector: 'app-modify-fields',
@@ -18,11 +20,12 @@ export class ModifyFieldsComponent {
   public nbLigne: string;
   public contenu: Array<any> = [];
   public fichier: string = '';
-  public nbrError: string = '';
+  public nbrError: number = 0;
 
   constructor(
     private storageService: StorageService,
-    private acteMasseService: ActeMasseService
+    private acteMasseService: ActeMasseService,
+    private modalService: NgbModal
   ) {}
 
   onFileChange(event: any) {
@@ -52,7 +55,7 @@ export class ModifyFieldsComponent {
               adrName: col[1],
               adrStreet: col[2],
               adrCity: col[3],
-              msisdn: col[4]
+              msisdn: col[4],
             });
           }
 
@@ -71,10 +74,10 @@ export class ModifyFieldsComponent {
                 for (let i = 0; i < listeMsisdn.length; i++) {
                   for (let j = 0; j < data.liste.length; j++) {
                     if (listeMsisdn[i].msisdn === data.liste[j].msisdn) {
-                      data.liste[j].adrLname = listeMsisdn[i].adrLname
-                      data.liste[j].adrName = listeMsisdn[i].adrName
-                      data.liste[j].adrStreet = listeMsisdn[i].adrStreet
-                      data.liste[j].adrCity = listeMsisdn[i].adrCity
+                      data.liste[j].adrLname = listeMsisdn[i].adrLname;
+                      data.liste[j].adrName = listeMsisdn[i].adrName;
+                      data.liste[j].adrStreet = listeMsisdn[i].adrStreet;
+                      data.liste[j].adrCity = listeMsisdn[i].adrCity;
                     }
                   }
                 }
@@ -96,6 +99,7 @@ export class ModifyFieldsComponent {
 
   disableValider(): boolean {
     return this.fichier === '' ||
+      this.nbrError !== 0 ||
       this.description === '' ||
       this.commentaire === ''
       ? true
@@ -121,13 +125,13 @@ export class ModifyFieldsComponent {
     };
 
     const formData: FormData = new FormData();
-    formData.append('file', this.selectedFile!)
-    formData.append('data', JSON.stringify(data))
+    formData.append('file', this.selectedFile!);
+    formData.append('data', JSON.stringify(data));
 
     this.acteMasseService.saveModifyFields(formData).subscribe({
       next: (data) => {
-        if (data) {
-          alert('Erreur : ' + data);
+        if (data.error) {
+          alert('Erreur : ' + data.error);
           this.clear();
         } else {
           alert('Enregistrement effectué !');
@@ -136,7 +140,7 @@ export class ModifyFieldsComponent {
           this.description = '';
           this.contenu = [];
         }
-      }
+      },
     });
   }
 
@@ -145,6 +149,15 @@ export class ModifyFieldsComponent {
     this.selectedFile = null;
     this.fichier = '';
     this.nbLigne = '';
-    this.nbrError = '';
+    this.nbrError = 0;
+  }
+
+  openModalResume() {
+    const modalRef = this.modalService.open(ModalResumeComponent, {
+      size: 'lg',
+      centered: true,
+    });
+    modalRef.componentInstance.nbLigne = this.nbLigne;
+    modalRef.componentInstance.nbrError = this.nbrError;
   }
 }

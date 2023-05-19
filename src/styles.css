@@ -8,6 +8,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  /* background-color: #D6D6D6 ; */
 }
 
 .btn-orange {
@@ -25,11 +26,16 @@ body {
   padding-top: 10px;
 }
 
-kendo-datetimepicker {
+kendo-daterange {
+  height: 52px !important;
+}
+
+kendo-datetimepicker,
+kendo-dateinput {
   width: 175px !important;
   height: 31px !important;
-  border: none !important;
-  /* border: solid 1px rgb(212, 212, 212) !important; */
+  /* border: none !important; */
+  border: solid 1px rgb(212, 212, 212) !important;
   font-size: 14px !important;
 }
 
@@ -104,40 +110,39 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 .sub-title-orange,
 .sub-title-gris,
 .sub-title-yellow {
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-radius: 4px;
   font-weight: bold;
   padding: 13px 10px;
 }
 
 .accordion-blue > .accordion-item > .accordion-header > .accordion-button {
-  background-color: #4ab4e6;
-  color: #000 !important;
+  /* background-color: #4ab4e6; */
+  color: #1273db !important;
 }
 
 .accordion-gris > .accordion-item > .accordion-header > .accordion-button {
-  background-color: #b3b3b3;
-  color: #000 !important;
+  /* background-color: #b3b3b3; */
+  color: #595959 !important;
 }
 
 .accordion-orange > .accordion-item > .accordion-header > .accordion-button {
-  background-color: #ff7900;
-  color: #ffffff !important;
+  /* background-color: #ff7900; */
+  color: #ff7900 !important;
 }
 
 .accordion-purple > .accordion-item > .accordion-header > .accordion-button {
-  background-color: #a885d8;
-  color: #000 !important;
+  /* background-color: #a885d8; */
+  color: #8c50e0 !important;
 }
 
 .accordion-pink > .accordion-item > .accordion-header > .accordion-button {
-  background-color: #ffb4e6;
-  color: #000 !important;
+  /* background-color: #ffb4e6; */
+  color: #ff8ad4 !important;
 }
 
 .accordion-green > .accordion-item > .accordion-header > .accordion-button {
-  background-color: #50be87;
-  color: #000 !important;
+  /* background-color: #50be87; */
+  color: #50be87 !important;
 }
 
 .sub-title-green {
@@ -158,13 +163,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 }
 
 .sub-title-yellow {
-  background-color: #ffd200;
+  background-color: #FFF6B6;
 }
 
-.accordion-item {
+/* .accordion-item {
   border: none !important;
   border-radius: 4px !important;
-}
+} */
+
+/* .accordion-item > .collapse {
+  border: solid 1px #dee2e6;
+  border-top: none;
+  border-bottom-left-radius: 4px !important;
+  border-bottom-right-radius: 4px !important;
+} */
 
 .accordion-header {
   height: 47px;
@@ -198,7 +210,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 
 .accordion-contents-40 {
   min-height: 21vh;
-  overflow-y: auto;
 }
 
 .accordion-small > .accordion-item > .accordion-header {
@@ -281,4 +292,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 .bg-orange {
   background-color: #ff7900;
   color: white;
+}
+
+.fs-13 {
+  font-size: 13px;
 }

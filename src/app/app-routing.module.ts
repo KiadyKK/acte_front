@@ -8,9 +8,15 @@ import { ValidationTechniqueComponent } from './components/validation-technique/
 import { ActivationComponent } from './components/activation/activation.component';
 import { TakeoverComponent } from './components/takeover/takeover.component';
 import { ModifyFieldsComponent } from './components/modify-fields/modify-fields.component';
+import { WidgetComponent } from './components/widget/widget.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  {
+    path: 'board',
+    component: WidgetComponent,
+    canActivate: [AuthGuard],
+  },
   {
     path: 'activation',
     component: ActivationComponent,
@@ -32,7 +38,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'metier',
+    path: 'metier/:id',
     component: ValidationMetierComponent,
     canActivate: [AuthGuard],
   },
@@ -41,7 +47,7 @@ const routes: Routes = [
     component: ValidationTechniqueComponent,
     canActivate: [AuthGuard],
   },
-  { path: '', redirectTo: 'desactivation', pathMatch: 'full' },
+  { path: '', redirectTo: 'board', pathMatch: 'full' },
 ];
 
 @NgModule({

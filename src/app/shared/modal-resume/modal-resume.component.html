@@ -12,9 +12,6 @@
 
 <div class="modal-body">
   <p>
-    <strong>Nom du client : </strong><span class="ms-auto">{{ client }}</span>
-  </p>
-  <p>
     <strong>Nombre de ligne : </strong
     ><span class="ms-auto">{{ nbLigne }}</span>
   </p>
@@ -30,25 +27,6 @@
     ><strong>Nombre d'erreur : </strong
     ><span class="ms-auto">{{ nbrError }}</span>
   </p>
-
-  <hr>
-  <p><strong>Plan tarifaire : </strong>{{ selectedRateplans }}</p>
-
-  <hr>
-  <p><strong>Services</strong></p>
-  <ul>
-    <li *ngFor="let service of services; index as i">
-      <strong
-        ><span class="text-decoration-underline">Service n° {{ i + 1 }}</span> :
-        {{ service.servicename }}</strong
-      >
-      <ul *ngIf="service.parametre">
-        <li *ngFor="let param of service.parametre">
-          {{ param.prmDes + " (" + param.valueDes + ")" }}
-        </li>
-      </ul>
-    </li>
-  </ul>
 </div>
 
 <div class="modal-footer">

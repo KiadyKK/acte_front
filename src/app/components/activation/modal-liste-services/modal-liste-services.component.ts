@@ -4,13 +4,14 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-modal-liste-services',
   templateUrl: './modal-liste-services.component.html',
-  styleUrls: ['./modal-liste-services.component.css']
+  styleUrls: ['./modal-liste-services.component.css'],
 })
 export class ModalListeServicesComponent {
   @Input() services: any;
   @Input() selectedRateplans: any;
+  @Input() client: string;
+  @Input() nbLigne: any;
+  @Input() nbrError: any;
 
-  constructor(
-    public activeModal: NgbActiveModal
-  ) { }
+  constructor(public activeModal: NgbActiveModal) {}
 }

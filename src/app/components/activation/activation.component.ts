@@ -4,6 +4,7 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalListeServicesComponent } from './modal-liste-services/modal-liste-services.component';
 import { ModalChecklisteServicesComponent } from './modal-checkliste-services/modal-checkliste-services.component';
+import { ModalResultComponent } from './modal-result/modal-result.component';
 
 @Component({
   selector: 'app-activation',
@@ -177,12 +178,20 @@ export class ActivationComponent {
       next: (data) => {
         if (data) {
           this.client = data;
+          this.openModalResult(data.client);
         } else {
-          alert('Client introuvable !');
           this.client = '';
+          this.openModalResult(null);
         }
       },
     });
+  }
+
+  openModalResult(client: any): void {
+    const modalRef = this.modalService.open(ModalResultComponent, {
+      centered: true,
+    });
+    modalRef.componentInstance.client = client;
   }
 
   onRateplansChange(): void {
@@ -442,6 +451,9 @@ export class ActivationComponent {
     });
     modalRef.componentInstance.services = this.listServices;
     modalRef.componentInstance.selectedRateplans = this.selectedRateplans.rpDes;
+    modalRef.componentInstance.client = this.client.client;
+    modalRef.componentInstance.nbLigne = this.nbLigne;
+    modalRef.componentInstance.nbrError = this.nbrError;
   }
 
   disableValider(): boolean {

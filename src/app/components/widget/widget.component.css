@@ -37,3 +37,7 @@
 .widget-action:hover {
   color: #492191;
 }
+
+kendo-dateinput {
+  width: 100px !important;
+}

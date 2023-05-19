@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { ModalResumeComponent } from 'src/app/shared/modal-resume/modal-resume.component';
 
 @Component({
   selector: 'app-desactivation',
@@ -21,13 +23,14 @@ export class DesactivationComponent implements OnInit {
   public nbLigne: string;
   public contenu: Array<any> = [];
   public fichier: string = '';
-  public nbrError: string;
+  public nbrError: number = 0;
   public selectedReason: any;
   public listeMsisdn: Array<any>;
 
   constructor(
     private storageService: StorageService,
-    private acteMasseService: ActeMasseService
+    private acteMasseService: ActeMasseService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -82,7 +85,12 @@ export class DesactivationComponent implements OnInit {
                 this.nbrError = data.nb_erreur;
               } else {
                 this.clear();
-                alert('Msisdn incorrecte : ' + data.msisdn + '\nErreur : ' + data.error);
+                alert(
+                  'Msisdn incorrecte : ' +
+                    data.msisdn +
+                    '\nErreur : ' +
+                    data.error
+                );
               }
             },
           });
@@ -109,6 +117,7 @@ export class DesactivationComponent implements OnInit {
 
   disableValider(): boolean {
     return this.fichier === '' ||
+      this.nbrError !== 0 ||
       this.description === '' ||
       this.commentaire === ''
       ? true
@@ -138,13 +147,13 @@ export class DesactivationComponent implements OnInit {
     };
 
     const formData: FormData = new FormData();
-    formData.append('file', this.selectedFile!)
-    formData.append('data', JSON.stringify(data))
+    formData.append('file', this.selectedFile!);
+    formData.append('data', JSON.stringify(data));
 
     this.acteMasseService.saveDesactivation(formData).subscribe({
       next: (data) => {
-        if (data) {
-          alert('Erreur : ' + data);
+        if (data.error) {
+          alert('Erreur : ' + data.error);
           this.clear();
         } else {
           alert('Enregistrement effectué !');
@@ -153,7 +162,7 @@ export class DesactivationComponent implements OnInit {
           this.description = '';
           this.contenu = [];
         }
-      }
+      },
     });
   }
 
@@ -162,7 +171,16 @@ export class DesactivationComponent implements OnInit {
     this.selectedFile = null;
     this.fichier = '';
     this.nbLigne = '';
-    this.nbrError = '';
+    this.nbrError = 0;
     this.checkDate = false;
+  }
+
+  openModalResume() {
+    const modalRef = this.modalService.open(ModalResumeComponent, {
+      size: 'lg',
+      centered: true,
+    });
+    modalRef.componentInstance.nbLigne = this.nbLigne;
+    modalRef.componentInstance.nbrError = this.nbrError;
   }
 }
