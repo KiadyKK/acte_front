@@ -1,0 +1,31 @@
+<div class="modal-header bg-orange">
+  <button
+    type="button"
+    class="btn btn-lg text-light ms-auto p-0"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <i class="bi bi-x-lg"></i>
+  </button>
+</div>
+
+<div class="modal-body">
+  <div *ngIf="type === 1">
+    <p *ngIf="!error">Enregistrement effectué !</p>
+    <p *ngIf="error">Erreur : {{ error }}</p>
+  </div>
+  <div *ngIf="type === 0">
+    <p *ngIf="!error">Annulation terminée !</p>
+    <p *ngIf="error">Annulation echouée !</p>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-success btn-sm"
+    (click)="activeModal.close('Close click')"
+  >
+    Fermer
+  </button>
+</div>

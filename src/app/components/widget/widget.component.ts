@@ -17,7 +17,7 @@ export class WidgetComponent implements OnInit {
   searchEtat: string = '';
   searchAction: string = '';
   page = 1;
-  pageSize = 15;
+  pageSize = 7;
 
   id_role: number;
   user_id: number;
@@ -43,9 +43,9 @@ export class WidgetComponent implements OnInit {
     });
   }
 
-  searchByAction(event: string): void {
+  searchByActe(event: string): void {
     this.monitoring = this.allMonitoring.filter((val) =>
-      val.action.toLowerCase().includes(event)
+      val.action.includes(event)
     );
   }
 

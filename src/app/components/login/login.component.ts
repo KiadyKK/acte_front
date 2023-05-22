@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     const loggedIn = this.storageService.getItem('authorization');
     if (loggedIn) {
-      this.router.navigate(['board']);
+      this.router.navigate(['']);
     }
   }
 

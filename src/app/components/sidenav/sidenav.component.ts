@@ -47,11 +47,11 @@ export class SidenavComponent implements OnInit {
     });
   }
 
-  closeSidenav(): void {
-    this.collapsed = false;
-    this.onToggleSidenav.emit({
-      collapsed: this.collapsed,
-      screenWidth: this.screenWidth,
-    });
-  }
+  // closeSidenav(): void {
+  //   this.collapsed = false;
+  //   this.onToggleSidenav.emit({
+  //     collapsed: this.collapsed,
+  //     screenWidth: this.screenWidth,
+  //   });
+  // }
 }

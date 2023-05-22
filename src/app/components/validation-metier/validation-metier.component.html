@@ -145,7 +145,7 @@
               <td>
                 {{ content.lblraison }}
               </td>
-              <td>{{ content.etat }}</td>
+              <td [ngClass]="content.etat">{{ content.etat }}</td>
             </tr>
             <tr style="height: 30px"></tr>
             <tr>
