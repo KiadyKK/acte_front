@@ -43,9 +43,9 @@ export class WidgetComponent implements OnInit {
     });
   }
 
-  searchByAction(event: string): void {
+  searchByActe(event: string): void {
     this.monitoring = this.allMonitoring.filter((val) =>
-      val.action.toLowerCase().includes(event)
+      val.action.includes(event)
     );
   }
 

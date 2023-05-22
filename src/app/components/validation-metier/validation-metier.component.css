@@ -28,3 +28,28 @@
   color: #f31212;
   font-size: 19px;
 }
+
+.VALIDER {
+  font-weight: bold;
+  color: #7fdd4c;
+}
+.REJETER {
+  font-weight: bold;
+  color: #ff0000;
+}
+.PENDING {
+  font-weight: bold;
+  color: #ff6600;
+}
+.EXECUTER {
+  font-weight: bold;
+  color: #428bca;
+}
+.RELANCE {
+  font-weight: bold;
+  color: #FFB400;
+}
+.MANUEL {
+  font-weight: bold;
+  color: #f19df0;
+}

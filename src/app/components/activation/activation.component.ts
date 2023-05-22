@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalListeServicesComponent } from './modal-liste-services/modal-liste-services.component';
 import { ModalChecklisteServicesComponent } from './modal-checkliste-services/modal-checkliste-services.component';
 import { ModalResultComponent } from './modal-result/modal-result.component';
+import { ModalSavingComponent } from 'src/app/shared/modal-saving/modal-saving.component';
 
 @Component({
   selector: 'app-activation',
@@ -518,17 +519,26 @@ export class ActivationComponent {
       this.acteMasseService.saveActivation(formData).subscribe({
         next: (data) => {
           if (data) {
-            alert('Erreur : ' + data);
+            this.openModalSaving(data);
           } else {
-            alert('Enregistrement effectué !');
-            this.clear();
+            this.openModalSaving();
             this.commentaire = '';
             this.description = '';
             this.contenu = [];
           }
+          this.clear();
         },
       });
     }
+  }
+
+  openModalSaving(error: string | null = null, type: number = 1) {
+    const modalRef = this.modalService.open(ModalSavingComponent, {
+      size: 'sm',
+      centered: true,
+    });
+    modalRef.componentInstance.error = error;
+    modalRef.componentInstance.type = type;
   }
 
   openModalCheckService(services: any) {

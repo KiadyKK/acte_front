@@ -3,6 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ModalResumeComponent } from 'src/app/shared/modal-resume/modal-resume.component';
+import { ModalSavingComponent } from 'src/app/shared/modal-saving/modal-saving.component';
 
 @Component({
   selector: 'app-modify-fields',
@@ -130,18 +131,26 @@ export class ModifyFieldsComponent {
 
     this.acteMasseService.saveModifyFields(formData).subscribe({
       next: (data) => {
-        if (data.error) {
-          alert('Erreur : ' + data.error);
-          this.clear();
+        if (data) {
+          this.openModalSaving(data);
         } else {
-          alert('Enregistrement effectué !');
-          this.clear();
+          this.openModalSaving();
           this.commentaire = '';
           this.description = '';
           this.contenu = [];
         }
+        this.clear();
       },
     });
+  }
+
+  openModalSaving(error: string | null = null, type: number = 1) {
+    const modalRef = this.modalService.open(ModalSavingComponent, {
+      size: 'sm',
+      centered: true,
+    });
+    modalRef.componentInstance.error = error;
+    modalRef.componentInstance.type = type;
   }
 
   clear(): void {
