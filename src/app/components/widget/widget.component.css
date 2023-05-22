@@ -11,6 +11,18 @@
   color: white;
 }
 
+.widget-action {
+  cursor: pointer;
+}
+
+.widget-action:hover {
+  color: #492191;
+}
+
+kendo-dateinput {
+  width: 100px !important;
+}
+
 .VALIDER {
   background-color: #7fdd4c;
 }
@@ -28,16 +40,4 @@
 }
 .MANUEL {
   background-color: #f19df0;
-}
-
-.widget-action {
-  cursor: pointer;
-}
-
-.widget-action:hover {
-  color: #492191;
-}
-
-kendo-dateinput {
-  width: 100px !important;
 }

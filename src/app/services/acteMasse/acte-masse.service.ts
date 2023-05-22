@@ -1,8 +1,10 @@
 import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment.development';
 
-const ACTE_API = 'http://localhost:8080/acte-masse/';
+const apiURL = environment.apiUrl;
+const ACTE_API = apiURL + 'acte-masse/';
 
 @Injectable({
   providedIn: 'root',
@@ -37,19 +39,23 @@ export class ActeMasseService {
   }
 
   getRateplansRead(): Observable<any> {
-    return this.http.get(ACTE_API + 'rateplans-read')
+    return this.http.get(ACTE_API + 'rateplans-read');
   }
 
   getServiceRateplans(rpcode: number, rpVscode: number): Observable<any> {
-    return this.http.get(ACTE_API + `service-rateplans?rpcode=${rpcode}&rpVscode=${rpVscode}`)
+    return this.http.get(
+      ACTE_API + `service-rateplans?rpcode=${rpcode}&rpVscode=${rpVscode}`
+    );
   }
 
   getParametersRead(sncode: number, sccode: number): Observable<any> {
-    return this.http.get(ACTE_API + `parameters-read?sncode=${sncode}&sccode=${sccode}`)
+    return this.http.get(
+      ACTE_API + `parameters-read?sncode=${sncode}&sccode=${sccode}`
+    );
   }
 
   getClient(custcode: string): Observable<any> {
-    return this.http.get(ACTE_API + `custcode?custcode=${custcode}`)
+    return this.http.get(ACTE_API + `custcode?custcode=${custcode}`);
   }
 
   verifydesactivation(data: any): Observable<any> {

@@ -42,14 +42,26 @@
 
     <div>
       <label for="acte" class="form-label mb-0">Acte</label>
-      <input
-        class="form-control form-control-sm"
-        type="text"
-        name="searchTerm"
-        id="acte"
-        [(ngModel)]="searchAction"
-        (ngModelChange)="searchByAction($event)"
-      />
+      <select
+        class="form-select form-select-sm"
+        aria-label="Default select example"
+        [(ngModel)]="searchEtat"
+        (ngModelChange)="searchByActe($event)"
+      >
+        <option value="" aria-placeholder="Etat"></option>
+        <option value="Nouvelle Activation" aria-placeholder="Etat">Nouvelle Activation</option>
+        <option value="Désactivation" aria-placeholder="Etat">Désactivation</option>
+        <option value="Suspension" aria-placeholder="Etat">Suspension</option>
+        <option value="Revoke" aria-placeholder="Etat">Revoke</option>
+        <option value="Limite Consommation" aria-placeholder="Etat">Limite Consommation</option>
+        <option value="Modification forfait" aria-placeholder="Etat">Modification forfait</option>
+        <option value="Take Over" aria-placeholder="Etat">Take Over</option>
+        <option value="Reengagement" aria-placeholder="Etat">Reengagement</option>
+        <option value="Ajout de service" aria-placeholder="Etat">Ajout de service</option>
+        <option value="Modification service" aria-placeholder="Etat">Modification service</option>
+        <option value="Modification status service" aria-placeholder="Etat">Modification status service</option>
+        <option value="Modification plan tarifaire" aria-placeholder="Etat">Modification plan tarifaire</option>
+      </select>
     </div>
   </div>
 

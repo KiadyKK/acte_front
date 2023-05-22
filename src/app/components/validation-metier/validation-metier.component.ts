@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { MetierService } from 'src/app/services/metier/metier.service';
-import { Interaction } from 'src/app/models/interaction.model';
-import { GlobalConstants } from 'src/app/shared/globalConstants/global-constants';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Interaction } from 'src/app/models/interaction.model';
+import { MetierService } from 'src/app/services/metier/metier.service';
+import { ModalSavingComponent } from 'src/app/shared/modal-saving/modal-saving.component';
 import { ModalLogComponent } from './modal-log/modal-log.component';
+import { ModalRejectComponent } from './modal-reject/modal-reject.component';
 import { ModalRetourCxComponent } from './modal-retour-cx/modal-retour-cx.component';
+import { ModalValidationComponent } from './modal-validation/modal-validation.component';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-validation-metier',
@@ -13,7 +16,7 @@ import { ModalRetourCxComponent } from './modal-retour-cx/modal-retour-cx.compon
   styleUrls: ['./validation-metier.component.css'],
 })
 export class ValidationMetierComponent implements OnInit {
-  public apiUrl: string = GlobalConstants.apiURL;
+  public apiUrl: string = environment.apiUrl;
   public date: Date = new Date();
   public comValidateur: string;
   public content: Interaction = new Interaction();
@@ -39,22 +42,38 @@ export class ValidationMetierComponent implements OnInit {
   }
 
   rejeter(): void {
-    if (confirm('Voulez-vous vraiment rejeter cet acte ?')) {
-      let data: any = {
-        id: this.content.idActe,
-        comment: this.comValidateur,
-      };
-      this.metierService.rejeter(data).subscribe({
-        next: (data) => {
-          if (data > 0) {
-            alert('Annulation terminée !');
-            this.content = new Interaction();
-          } else {
-            alert('Annulation echouée !');
-          }
-        },
-      });
-    }
+    const modalRef = this.modalService.open(ModalRejectComponent, {
+      windowClass: 'modal-reject',
+      centered: true,
+    });
+    modalRef.result.then(
+      (res) => {
+        let data: any = {
+          id: this.content.idActe,
+          comment: this.comValidateur,
+        };
+        this.metierService.rejeter(data).subscribe({
+          next: (data) => {
+            if (data > 0) {
+              this.openModalSaving(null, 0);
+              this.onActeClick(this.content.idActe);
+            } else {
+              this.openModalSaving(data, 0);
+            }
+          },
+        });
+      },
+      (dismiss) => {}
+    );
+  }
+
+  openModalSaving(error: string | null = null, type: number = 1) {
+    const modalRef = this.modalService.open(ModalSavingComponent, {
+      size: 'sm',
+      centered: true,
+    });
+    modalRef.componentInstance.error = error;
+    modalRef.componentInstance.type = type;
   }
 
   valider(): void {
@@ -78,12 +97,12 @@ export class ValidationMetierComponent implements OnInit {
         };
         this.metierService.validerJoker(data1).subscribe({
           next: (data) => {
-            if (!data.error) {
-              alert('Validation terminée !');
-              this.onActeClick(this.content.idActe);
+            if (!data.msisdnError.length) {
+              this.openModalValidation(false);
             } else {
-              alert('Msisdn : ' + data.msisdnError + '\nError : ' + data.error);
+              this.openModalValidation(true);
             }
+            this.onActeClick(this.content.idActe);
           },
         });
 
@@ -99,12 +118,13 @@ export class ValidationMetierComponent implements OnInit {
         };
         this.metierService.validerJoker(data2).subscribe({
           next: (data) => {
-            if (!data.error) {
-              alert('Validation terminée !');
-              this.onActeClick(this.content.idActe);
+            console.log(data);
+            if (!data.msisdnError.length) {
+              this.openModalValidation(false);
             } else {
-              alert('Msisdn : ' + data.msisdnError + '\nError : ' + data.error);
+              this.openModalValidation(true);
             }
+            this.onActeClick(this.content.idActe);
           },
         });
 
@@ -125,12 +145,12 @@ export class ValidationMetierComponent implements OnInit {
         };
         this.metierService.validerJoker(data).subscribe({
           next: (data) => {
-            if (!data.error) {
-              alert('Validation terminée !');
-              this.onActeClick(this.content.idActe);
+            if (!data.msisdnError.length) {
+              this.openModalValidation(false);
             } else {
-              alert('Msisdn : ' + data.msisdnError + '\nError : ' + data.error);
+              this.openModalValidation(true);
             }
+            this.onActeClick(this.content.idActe);
           },
         });
 
@@ -139,6 +159,14 @@ export class ValidationMetierComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  openModalValidation(error: boolean) {
+    const modalRef = this.modalService.open(ModalValidationComponent, {
+      size: 'sm',
+      centered: true,
+    });
+    modalRef.componentInstance.error = error;
   }
 
   afficherLog(): void {

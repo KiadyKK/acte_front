@@ -1,0 +1,29 @@
+<div class="modal-header bg-orange">
+  <button
+    type="button"
+    class="btn btn-lg text-light ms-auto p-0"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <i class="bi bi-x-lg"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <p>Voulez-vous vraiment rejeter cet acte ?</p>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-outline-secondary btn-sm"
+    (click)="activeModal.dismiss('cancel click')"
+  >
+    Non
+  </button>
+  <button
+    type="button"
+    class="btn btn-danger btn-sm"
+    (click)="activeModal.close('Ok click')"
+  >
+    Oui
+  </button>
+</div>

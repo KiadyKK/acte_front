@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment.development';
 
-const TECHNIQUE_API = 'http://localhost:8080/validation-technique/';
-
+const apiURL = environment.apiUrl;
+const TECHNIQUE_API = apiURL + 'validation-technique/';
 
 @Injectable({
   providedIn: 'root',

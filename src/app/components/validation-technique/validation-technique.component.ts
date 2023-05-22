@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Interaction } from 'src/app/models/interaction.model';
 import { MetierService } from 'src/app/services/metier/metier.service';
 import { TechniqueService } from 'src/app/services/technique/technique.service';
-import { GlobalConstants } from 'src/app/shared/globalConstants/global-constants';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-validation-technique',
@@ -10,7 +10,7 @@ import { GlobalConstants } from 'src/app/shared/globalConstants/global-constants
   styleUrls: ['./validation-technique.component.css'],
 })
 export class ValidationTechniqueComponent {
-  public apiUrl: string = GlobalConstants.apiURL;
+  public apiUrl: string = environment.apiUrl;
   public date: Date = new Date();
   public comValidateur: string;
   public content: Interaction = new Interaction();
@@ -66,27 +66,27 @@ export class ValidationTechniqueComponent {
     switch (this.content.idAction) {
       case 1:
         //NOUVELLE ACTIVATION***************************************
-          let data1: any = {
-            id: this.content.idActe,
-            listeMsisdn: this.content.input.liste,
-            validForm: validForm,
-            titre: 'Nouvelle activation',
-            checkdatepriseencompte: this.content.checkdatepriseencompte,
-            comment: this.comValidateur,
-          }
-          this.metierService.validerJoker(data1).subscribe({
-            next: (data) => {
-              if (!data.error) {
-                alert('Validation terminée !');
-                this.onActeClick(this.content.idActe);
-              } else {
-                alert('Msisdn : ' + data.msisdnError + '\nError : ' + data.error);
-              }
-            },
-          });
+        let data1: any = {
+          id: this.content.idActe,
+          listeMsisdn: this.content.input.liste,
+          validForm: validForm,
+          titre: 'Nouvelle activation',
+          checkdatepriseencompte: this.content.checkdatepriseencompte,
+          comment: this.comValidateur,
+        };
+        this.metierService.validerJoker(data1).subscribe({
+          next: (data) => {
+            if (!data.error) {
+              alert('Validation terminée !');
+              this.onActeClick(this.content.idActe);
+            } else {
+              alert('Msisdn : ' + data.msisdnError + '\nError : ' + data.error);
+            }
+          },
+        });
 
-          break;
-          
+        break;
+
       //DESACTIVATION*********************************************
       case 3:
         let data: any = {

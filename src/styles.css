@@ -163,7 +163,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 }
 
 .sub-title-yellow {
-  background-color: #FFF6B6;
+  background-color: #fff6b6;
 }
 
 /* .accordion-item {
@@ -296,4 +296,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 
 .fs-13 {
   font-size: 13px;
+}
+
+.modal-reject .modal-dialog {
+  width: 350px;
 }
