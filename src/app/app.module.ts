@@ -34,6 +34,7 @@ import { ModalSavingComponent } from './shared/modal-saving/modal-saving.compone
 import { ModalValidationComponent } from './components/validation-metier/modal-validation/modal-validation.component';
 import { ModalRejectComponent } from './components/validation-metier/modal-reject/modal-reject.component';
 import { BnNgIdleService } from 'bn-ng-idle';
+import { ModalAlertComponent } from './shared/modal-alert/modal-alert.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { BnNgIdleService } from 'bn-ng-idle';
     ModalSavingComponent,
     ModalValidationComponent,
     ModalRejectComponent,
+    ModalAlertComponent,
   ],
   imports: [
     BrowserModule,

@@ -18,11 +18,11 @@ export const navbarData = [
     icon: 'bi bi-pencil-square',
     label: 'Modification Informations',
   },
-  // {
-  //   routerLink: 'takeover',
-  //   icon: 'bi bi-unlock',
-  //   label: 'Take-Over',
-  // },
+  {
+    routerLink: 'takeover',
+    icon: 'bi bi-unlock',
+    label: 'Take-Over',
+  },
   // {
   //   routerLink: 'metier',
   //   icon: 'bi bi-check-circle',

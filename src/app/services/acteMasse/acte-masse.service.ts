@@ -34,6 +34,12 @@ export class ActeMasseService {
     });
   }
 
+  saveTakeOver(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'take-over', data, {
+      responseType: 'text',
+    });
+  }
+
   getReasonsRead(rsState: string): Observable<any> {
     return this.http.get(ACTE_API + `reasons-read?rsState=${rsState}`);
   }
@@ -68,5 +74,9 @@ export class ActeMasseService {
 
   verifyModifyFields(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-modify-fields', data);
+  }
+
+  verifyTakeOver(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-take-over', data);
   }
 }
