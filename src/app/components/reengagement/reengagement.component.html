@@ -1,6 +1,6 @@
-<div class="title"><i class="bi bi-unlock me-2"></i>Take-Over</div>
+<div class="title"><i class="bi bi-arrow-repeat me-2"></i>Réengagement</div>
 <div class="card flex-row m-3 p-3">
-  <div class="col-md-4 pe-2">
+  <div class="col-md-3 pe-2">
     <label for="formFile" class="form-label m-0 mb-2"
       ><strong>Fichier CSV</strong></label
     >
@@ -13,21 +13,38 @@
     />
   </div>
 
-  <div class="col-md-2 ms-3 pe-2">
-    <label for="custcode" class="form-label m-0 mb-2"
-      ><strong>Custcode</strong></label
+  <div class="col-md-3 ps-3 pe-2" *ngIf="minComParam">
+    <label class="form-label m-0 mb-2"><strong>{{ minComParam.prmDes }}</strong></label>
+    <select
+      class="form-select form-select-sm"
+      aria-label="Default select example"
+      [(ngModel)]="selectedMinComParam"
     >
-    <div class="input-group input-group-sm">
-      <input type="text" class="form-control" [(ngModel)]="custcode" />
-      <button
-        [disabled]="custcode === ''"
-        class="btn btn-primary"
-        type="button"
-        (click)="rechercheClient()"
+      <option
+        *ngFor="let item of minComParam.nValues"
+        [ngValue]="item"
+        aria-placeholder="Durée d'engagement"
       >
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
+        {{ item.valueDes }}
+      </option>
+    </select>
+  </div>
+  
+  <div class="col-md-3 ps-3 pe-2" *ngIf="minComStatus">
+    <label class="form-label m-0 mb-2"><strong>{{ minComStatus.prmDes }}</strong></label>
+    <select
+      class="form-select form-select-sm"
+      aria-label="Default select example"
+      [(ngModel)]="selectedMinComStatus"
+    >
+      <option
+        *ngFor="let item of minComStatus.nValues"
+        [ngValue]="item"
+        aria-placeholder="Durée d'engagement"
+      >
+        {{ item.valueDes }}
+      </option>
+    </select>
   </div>
 
   <div class="example-wrapper ms-3">
@@ -72,7 +89,6 @@
                   <tr>
                     <th scope="col">MSISDN</th>
                     <th scope="col">CLIENT</th>
-                    <th scope="col">CUSTCODE</th>
                     <th scope="col">STATUT</th>
                   </tr>
                 </thead>
@@ -80,7 +96,6 @@
                   <tr *ngFor="let item of contenu">
                     <td>{{ item.msisdn }}</td>
                     <td>{{ item.client }}</td>
-                    <td>{{ item.csCode }}</td>
                     <td class="p-0">
                       <i
                         [ngClass]="

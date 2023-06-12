@@ -40,6 +40,12 @@ export class ActeMasseService {
     });
   }
 
+  saveReengagement(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'reengagement', data, {
+      responseType: 'text',
+    });
+  }
+
   getReasonsRead(rsState: string): Observable<any> {
     return this.http.get(ACTE_API + `reasons-read?rsState=${rsState}`);
   }
@@ -78,5 +84,9 @@ export class ActeMasseService {
 
   verifyTakeOver(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-take-over', data);
+  }
+
+  verifyReengagement(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-reengagement', data);
   }
 }

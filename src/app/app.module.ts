@@ -35,6 +35,7 @@ import { ModalValidationComponent } from './components/validation-metier/modal-v
 import { ModalRejectComponent } from './components/validation-metier/modal-reject/modal-reject.component';
 import { BnNgIdleService } from 'bn-ng-idle';
 import { ModalAlertComponent } from './shared/modal-alert/modal-alert.component';
+import { ReengagementComponent } from './components/reengagement/reengagement.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { ModalAlertComponent } from './shared/modal-alert/modal-alert.component'
     ModalValidationComponent,
     ModalRejectComponent,
     ModalAlertComponent,
+    ReengagementComponent,
   ],
   imports: [
     BrowserModule,

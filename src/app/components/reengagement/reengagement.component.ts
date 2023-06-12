@@ -2,23 +2,24 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
-import { ModalAlertComponent } from 'src/app/shared/modal-alert/modal-alert.component';
 import { ModalResumeComponent } from 'src/app/shared/modal-resume/modal-resume.component';
 import { ModalSavingComponent } from 'src/app/shared/modal-saving/modal-saving.component';
 
 @Component({
-  selector: 'app-takeover',
-  templateUrl: './takeover.component.html',
-  styleUrls: ['./takeover.component.css'],
+  selector: 'app-reengagement',
+  templateUrl: './reengagement.component.html',
+  styleUrls: ['./reengagement.component.css'],
 })
-export class TakeoverComponent {
+export class ReengagementComponent {
   @ViewChild('inputFile')
   inputFile: ElementRef;
 
   private selectedFile: File | null;
 
-  public custcode: string = '';
-  public client: any = '';
+  public selectedMinComParam: any = null;
+  public selectedMinComStatus: any = null;
+  public minComParam: any;
+  public minComStatus: any;
   public date: Date = new Date();
   public checkDate: boolean = false;
   public description: string = '';
@@ -28,12 +29,27 @@ export class TakeoverComponent {
   public fichier: string = '';
   public contenu: Array<any> = [];
   public listeMsisdn: Array<any>;
+  public parametres: Array<any> = [];
 
   constructor(
     private storageService: StorageService,
     private acteMasseService: ActeMasseService,
     private modalService: NgbModal
   ) {}
+
+  ngOnInit(): void {
+    this.acteMasseService.getParametersRead(1847, 1).subscribe({
+      next: (data) => {
+        if (data[0].prmNo === 1) {
+          this.minComParam = data[0];
+          this.minComStatus = data[1];
+        } else {
+          this.minComParam = data[1];
+          this.minComStatus = data[0];
+        }
+      },
+    });
+  }
 
   onFileChange(event: any) {
     if (event.target.files.length > 0) {
@@ -69,11 +85,11 @@ export class TakeoverComponent {
             );
             this.listeMsisdn = listeMsisdn;
             let data: any = {
-              id_action: 6,
+              id_action: 7,
               msisdn: listeMsisdn,
               fichier: this.selectedFile!.name,
             };
-            this.acteMasseService.verifyTakeOver(data).subscribe({
+            this.acteMasseService.verifyReengagement(data).subscribe({
               next: (data) => {
                 if (data.hasOwnProperty('liste')) {
                   this.contenu = data.liste;
@@ -112,79 +128,8 @@ export class TakeoverComponent {
     }
   }
 
-  rechercheClient(): void {
-    this.acteMasseService.getClient(this.custcode).subscribe({
-      next: (data) => {
-        if (data) {
-          this.client = data;
-          const text: string = 'Client : ' + data.client;
-          this.openModalAlert(text);
-        } else {
-          this.openModalAlert('Client introuvable !');
-        }
-      },
-    });
-  }
-
-  openModalAlert(text: string) {
-    const modalRef = this.modalService.open(ModalAlertComponent, {
-      // size: 'sm',
-      centered: true,
-    });
-    modalRef.componentInstance.text = text;
-  }
-
   onCheckDateChange(event: any): void {
     this.checkDate = event.target.checked;
-  }
-
-  disableValider(): boolean {
-    return this.fichier === '' ||
-      this.description === '' ||
-      this.commentaire === ''
-      ? true
-      : false;
-  }
-
-  valider(): void {
-    let data: any = {
-      initiateur: this.storageService.getItem('trigramme'),
-      idUtilisateur: +this.storageService.getItem('user_id'),
-      comment: this.commentaire,
-      date_prise_compte: this.date,
-      listeMsisdn: {
-        fichier: this.fichier,
-        nbLigne: this.nbLigne,
-        nb_erreur: this.nbrError,
-        liste: this.contenu,
-      },
-      rsCode: 42,
-      rsDes: 'Take Over',
-      descript_court: this.description,
-      checkdateprise: this.checkDate ? 'true' : 'false',
-      client: this.client,
-      idAction: 6,
-      etat: 'PENDING',
-      lbl_etape: 'En attente de validation métier',
-    };
-
-    const formData: FormData = new FormData();
-    formData.append('file', this.selectedFile!);
-    formData.append('data', JSON.stringify(data));
-
-    this.acteMasseService.saveTakeOver(formData).subscribe({
-      next: (data) => {
-        if (data) {
-          this.openModalSaving(data);
-        } else {
-          this.openModalSaving();
-          this.commentaire = '';
-          this.description = '';
-          this.contenu = [];
-        }
-        this.clear();
-      },
-    });
   }
 
   openModalSaving(error: string | null = null, type: number = 1) {
@@ -211,5 +156,65 @@ export class TakeoverComponent {
     });
     modalRef.componentInstance.nbLigne = this.nbLigne;
     modalRef.componentInstance.nbrError = this.nbrError;
+  }
+
+  disableValider(): boolean {
+    return this.fichier === '' ||
+      !this.selectedMinComParam ||
+      !this.selectedMinComStatus ||
+      this.description === '' ||
+      this.commentaire === ''
+      ? true
+      : false;
+  }
+
+  valider(): void {
+    this.selectedMinComParam.prmDes = this.minComParam.prmDes;
+    this.selectedMinComParam.prmNo = this.minComParam.prmNo;
+    this.selectedMinComStatus.prmDes = this.minComStatus.prmDes;
+    this.selectedMinComStatus.prmNo = this.minComStatus.prmNo;
+    this.parametres.push(this.selectedMinComParam, this.selectedMinComStatus);
+    let data: any = {
+      initiateur: this.storageService.getItem('trigramme'),
+      idUtilisateur: +this.storageService.getItem('user_id'),
+      comment: this.commentaire,
+      date_prise_compte: this.date,
+      listeMsisdn: {
+        fichier: this.fichier,
+        nbLigne: this.nbLigne,
+        nb_erreur: this.nbrError,
+        liste: this.contenu,
+      },
+      descript_court: this.description,
+      checkdateprise: this.checkDate ? 'true' : 'false',
+      idAction: 7,
+      etat: 'PENDING',
+      lblAction: 'Reengagement',
+      lbl_etape: 'En attente de validation métier',
+      parametre_service: [
+        {
+          sncode: 1847,
+          servicename: "Durée d'engagement",
+          parametre: this.parametres,
+        },
+      ],
+    };
+    const formData: FormData = new FormData();
+    formData.append('file', this.selectedFile!);
+    formData.append('data', JSON.stringify(data));
+
+    this.acteMasseService.saveReengagement(formData).subscribe({
+      next: (data) => {
+        if (data) {
+          this.openModalSaving(data);
+        } else {
+          this.openModalSaving();
+          this.commentaire = '';
+          this.description = '';
+          this.contenu = [];
+        }
+        this.clear();
+      },
+    });
   }
 }
