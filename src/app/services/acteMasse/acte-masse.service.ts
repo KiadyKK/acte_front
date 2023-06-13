@@ -40,6 +40,12 @@ export class ActeMasseService {
     });
   }
 
+  saveLimitConso(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'limit-conso', data, {
+      responseType: 'text',
+    });
+  }
+
   saveReengagement(data: FormData): Observable<any> {
     return this.http.post(ACTE_API + 'reengagement', data, {
       responseType: 'text',
@@ -88,5 +94,9 @@ export class ActeMasseService {
 
   verifyReengagement(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-reengagement', data);
+  }
+  
+  verifyLimitConso(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-limit-conso', data);
   }
 }

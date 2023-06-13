@@ -10,6 +10,7 @@ import { TakeoverComponent } from './components/takeover/takeover.component';
 import { ModifyFieldsComponent } from './components/modify-fields/modify-fields.component';
 import { WidgetComponent } from './components/widget/widget.component';
 import { ReengagementComponent } from './components/reengagement/reengagement.component';
+import { LimitConsoComponent } from './components/limit-conso/limit-conso.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -51,6 +52,11 @@ const routes: Routes = [
   {
     path: 'reengagement',
     component: ReengagementComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'limit-conso',
+    component: LimitConsoComponent,
     canActivate: [AuthGuard],
   },
   { path: '', redirectTo: 'board', pathMatch: 'full' },

@@ -156,6 +156,31 @@ export class ValidationMetierComponent implements OnInit {
 
         break;
 
+      //LIMIT CONSO*********************************************
+      case 4:
+        let data4: any = {
+          id: this.content.idActe,
+          listeMsisdn: this.content.input.liste,
+          validForm: validForm,
+          rsCode: this.content.id_reutilisable,
+          titre: 'Limit Consommation',
+          checkdatepriseencompte: this.content.checkdatepriseencompte,
+          comment: this.comValidateur,
+          date_prise_new: date_prise_new,
+          type: 2,
+        };
+        // this.metierService.validerJoker(data4).subscribe({
+        //   next: (data) => {
+        //     if (!data.msisdnError.length) {
+        //       this.openModalValidation(false);
+        //     } else {
+        //       this.openModalValidation(true);
+        //     }
+        //     this.onActeClick(this.content.idActe);
+        //   },
+        // });
+
+        break;
       //TAKE OVER*********************************************
       case 6:
         let data6: any = {

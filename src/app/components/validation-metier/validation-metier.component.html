@@ -18,6 +18,7 @@
           *ngIf="
             content.idAction === 2 ||
             content.idAction === 3 ||
+            content.idAction === 4 ||
             content.idAction === 7 ||
             content.idAction == 12 ||
             content.idAction == 13
@@ -28,6 +29,7 @@
             <tr>
               <th>MSISDN</th>
               <th>CLIENT</th>
+              <th>LIMIT CONSO</th>
               <th>STATUS</th>
             </tr>
           </thead>
@@ -38,6 +40,9 @@
               </td>
               <td>
                 {{ item.client }}
+              </td>
+              <td>
+                {{ item.lc }}
               </td>
               <td>
                 {{ item.s_msisdn }}
