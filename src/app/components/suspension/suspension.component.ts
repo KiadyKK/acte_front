@@ -133,7 +133,7 @@ export class SuspensionComponent {
   valider(): void {
     let data: any = {
       initiateur: this.storageService.getItem('trigramme'),
-      idUtilisateur: this.storageService.getItem('user_id'),
+      idUtilisateur: +this.storageService.getItem('user_id'),
       comment: this.commentaire,
       date_prise_compte: this.date,
       listeMsisdn: {
