@@ -6,11 +6,11 @@ import { ModalResumeComponent } from 'src/app/shared/modal-resume/modal-resume.c
 import { ModalSavingComponent } from 'src/app/shared/modal-saving/modal-saving.component';
 
 @Component({
-  selector: 'app-suspension',
-  templateUrl: './suspension.component.html',
-  styleUrls: ['./suspension.component.css'],
+  selector: 'app-revoke',
+  templateUrl: './revoke.component.html',
+  styleUrls: ['./revoke.component.css'],
 })
-export class SuspensionComponent {
+export class RevokeComponent {
   @ViewChild('inputFile')
   inputFile: ElementRef;
 
@@ -35,7 +35,7 @@ export class SuspensionComponent {
   ) {}
 
   ngOnInit(): void {
-    this.acteMasseService.getReasonsRead('s').subscribe({
+    this.acteMasseService.getReasonsRead('r').subscribe({
       next: (data) => {
         this.reasons = data;
       },

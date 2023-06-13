@@ -38,6 +38,7 @@ import { ModalAlertComponent } from './shared/modal-alert/modal-alert.component'
 import { ReengagementComponent } from './components/reengagement/reengagement.component';
 import { LimitConsoComponent } from './components/limit-conso/limit-conso.component';
 import { SuspensionComponent } from './components/suspension/suspension.component';
+import { RevokeComponent } from './components/revoke/revoke.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { SuspensionComponent } from './components/suspension/suspension.componen
     ReengagementComponent,
     LimitConsoComponent,
     SuspensionComponent,
+    RevokeComponent,
   ],
   imports: [
     BrowserModule,
