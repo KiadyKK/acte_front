@@ -208,7 +208,7 @@ export class ValidationMetierComponent implements OnInit {
 
         break;
 
-        //REENGAGEMENT*********************************************
+      //REENGAGEMENT*********************************************
       case 7:
         let data7: any = {
           id: this.content.idActe,
@@ -232,6 +232,30 @@ export class ValidationMetierComponent implements OnInit {
 
         break;
 
+      //SUSPENSION*********************************************
+      case 12:
+        let data12: any = {
+          id: this.content.idActe,
+          listeMsisdn: this.content.input.liste,
+          validForm: validForm,
+          rsCode: this.content.id_reutilisable,
+          titre: 'Suspension',
+          checkdatepriseencompte: this.content.checkdatepriseencompte,
+          comment: this.comValidateur,
+          date_prise_new: date_prise_new,
+        };
+        // this.metierService.validerJoker(data12).subscribe({
+        //   next: (data) => {
+        //     if (!data.msisdnError.length) {
+        //       this.openModalValidation(false);
+        //     } else {
+        //       this.openModalValidation(true);
+        //     }
+        //     this.onActeClick(this.content.idActe);
+        //   },
+        // });
+
+        break;
       default:
         break;
     }

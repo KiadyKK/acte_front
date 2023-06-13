@@ -29,7 +29,7 @@
             <tr>
               <th>MSISDN</th>
               <th>CLIENT</th>
-              <th>LIMIT CONSO</th>
+              <th *ngIf="content.idAction === 4">LIMIT CONSO</th>
               <th>STATUS</th>
             </tr>
           </thead>
@@ -41,7 +41,7 @@
               <td>
                 {{ item.client }}
               </td>
-              <td>
+              <td *ngIf="content.idAction === 4">
                 {{ item.lc }}
               </td>
               <td>
