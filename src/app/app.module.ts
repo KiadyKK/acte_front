@@ -37,6 +37,7 @@ import { BnNgIdleService } from 'bn-ng-idle';
 import { ModalAlertComponent } from './shared/modal-alert/modal-alert.component';
 import { ReengagementComponent } from './components/reengagement/reengagement.component';
 import { LimitConsoComponent } from './components/limit-conso/limit-conso.component';
+import { SuspensionComponent } from './components/suspension/suspension.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { LimitConsoComponent } from './components/limit-conso/limit-conso.compon
     ModalAlertComponent,
     ReengagementComponent,
     LimitConsoComponent,
+    SuspensionComponent,
   ],
   imports: [
     BrowserModule,
