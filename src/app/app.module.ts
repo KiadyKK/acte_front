@@ -39,6 +39,7 @@ import { ReengagementComponent } from './components/reengagement/reengagement.co
 import { LimitConsoComponent } from './components/limit-conso/limit-conso.component';
 import { SuspensionComponent } from './components/suspension/suspension.component';
 import { RevokeComponent } from './components/revoke/revoke.component';
+import { ForfaitComponent } from './components/forfait/forfait.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { RevokeComponent } from './components/revoke/revoke.component';
     LimitConsoComponent,
     SuspensionComponent,
     RevokeComponent,
+    ForfaitComponent,
   ],
   imports: [
     BrowserModule,

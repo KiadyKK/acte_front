@@ -181,7 +181,7 @@ export class ValidationMetierComponent implements OnInit {
         // });
 
         break;
-        
+
       //TAKE OVER*********************************************
       case 6:
         let data6: any = {
@@ -196,16 +196,16 @@ export class ValidationMetierComponent implements OnInit {
           checkdatepriseencompte: this.content.checkdatepriseencompte,
           comment: this.comValidateur,
         };
-        // this.metierService.validerJoker(data6).subscribe({
-        //   next: (data) => {
-        //     if (!data.msisdnError.length) {
-        //       this.openModalValidation(false);
-        //     } else {
-        //       this.openModalValidation(true);
-        //     }
-        //     this.onActeClick(this.content.idActe);
-        //   },
-        // });
+        this.metierService.validerJoker(data6).subscribe({
+          next: (data) => {
+            if (!data.msisdnError.length) {
+              this.openModalValidation(false);
+            } else {
+              this.openModalValidation(true);
+            }
+            this.onActeClick(this.content.idActe);
+          },
+        });
 
         break;
 
@@ -241,6 +241,31 @@ export class ValidationMetierComponent implements OnInit {
           validForm: validForm,
           rsCode: this.content.id_reutilisable,
           titre: 'Suspension',
+          checkdatepriseencompte: this.content.checkdatepriseencompte,
+          comment: this.comValidateur,
+          date_prise_new: date_prise_new,
+        };
+        // this.metierService.validerJoker(data12).subscribe({
+        //   next: (data) => {
+        //     if (!data.msisdnError.length) {
+        //       this.openModalValidation(false);
+        //     } else {
+        //       this.openModalValidation(true);
+        //     }
+        //     this.onActeClick(this.content.idActe);
+        //   },
+        // });
+
+        break;
+
+      //REVOKE*********************************************
+      case 13:
+        let data13: any = {
+          id: this.content.idActe,
+          listeMsisdn: this.content.input.liste,
+          validForm: validForm,
+          rsCode: this.content.id_reutilisable,
+          titre: 'Revoke',
           checkdatepriseencompte: this.content.checkdatepriseencompte,
           comment: this.comValidateur,
           date_prise_new: date_prise_new,

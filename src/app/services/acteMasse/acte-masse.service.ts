@@ -119,4 +119,8 @@ export class ActeMasseService {
   verifyRevoke(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-revoke', data);
   }
+
+  verifyForfait(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-forfait', data);
+  }
 }
