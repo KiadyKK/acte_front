@@ -58,6 +58,12 @@ export class ActeMasseService {
     });
   }
 
+  saveRevoke(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'revoke', data, {
+      responseType: 'text',
+    });
+  }
+
   getReasonsRead(rsState: string): Observable<any> {
     return this.http.get(ACTE_API + `reasons-read?rsState=${rsState}`);
   }

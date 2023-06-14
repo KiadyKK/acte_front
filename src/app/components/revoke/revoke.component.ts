@@ -146,9 +146,9 @@ export class RevokeComponent {
       rsDes: this.selectedReason.rsDes,
       descript_court: this.description,
       checkdateprise: this.checkDate ? 'true' : 'false',
-      idAction: 12,
+      idAction: 13,
       etat: 'PENDING',
-      lblAction: 'Suspension',
+      lblAction: 'Revoke',
       lbl_etape: 'En attente de validation métier',
     };
 
@@ -156,7 +156,7 @@ export class RevokeComponent {
     formData.append('file', this.selectedFile!);
     formData.append('data', JSON.stringify(data));
 
-    this.acteMasseService.saveSuspension(formData).subscribe({
+    this.acteMasseService.saveRevoke(formData).subscribe({
       next: (data) => {
         if (data) {
           this.openModalSaving(data);
