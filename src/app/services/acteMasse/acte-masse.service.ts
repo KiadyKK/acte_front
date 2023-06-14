@@ -109,4 +109,8 @@ export class ActeMasseService {
   verifySuspension(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-suspension', data);
   }
+
+  verifyRevoke(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-revoke', data);
+  }
 }

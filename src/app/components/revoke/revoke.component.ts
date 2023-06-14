@@ -74,11 +74,11 @@ export class RevokeComponent {
             );
             this.listeMsisdn = listeMsisdn;
             let data: any = {
-              id_action: 12,
+              id_action: 13,
               msisdn: listeMsisdn,
               fichier: this.selectedFile!.name,
             };
-            this.acteMasseService.verifySuspension(data).subscribe({
+            this.acteMasseService.verifyRevoke(data).subscribe({
               next: (data) => {
                 if (data.hasOwnProperty('liste')) {
                   this.contenu = data.liste;

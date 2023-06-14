@@ -181,6 +181,7 @@ export class ValidationMetierComponent implements OnInit {
         // });
 
         break;
+        
       //TAKE OVER*********************************************
       case 6:
         let data6: any = {
