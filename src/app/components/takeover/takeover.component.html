@@ -1,6 +1,6 @@
 <div class="title"><i class="bi bi-unlock me-2"></i>Take-Over</div>
 <div class="card flex-row m-3 p-3">
-  <div class="col-md-4 pe-2">
+  <div class="col-md-3 pe-2">
     <label for="formFile" class="form-label m-0 mb-2"
       ><strong>Fichier CSV</strong></label
     >
@@ -13,7 +13,7 @@
     />
   </div>
 
-  <div class="col-md-2 ms-3 pe-2">
+  <div class="col-md-2 ms-3 pe-2" *ngIf="fichier">
     <label for="custcode" class="form-label m-0 mb-2"
       ><strong>Custcode</strong></label
     >
@@ -30,7 +30,7 @@
     </div>
   </div>
 
-  <div class="example-wrapper ms-3">
+  <div class="example-wrapper ms-3" *ngIf="client">
     <div>
       <input
         type="checkbox"
@@ -50,16 +50,6 @@
       [(value)]="date"
     >
     </kendo-datetimepicker>
-  </div>
-
-  <div class="d-flex align-items-end ms-4">
-    <button
-      class="btn btn-success btn-sm"
-      [disabled]="disableValider()"
-      (click)="valider()"
-    >
-      <i class="bi bi-check2-circle me-2"></i>Valider
-    </button>
   </div>
 </div>
 
