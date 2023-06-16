@@ -63,7 +63,10 @@ export class ActivationComponent {
   onFileChange(event: any): void {
     if (event.target.files.length > 0) {
       this.selectedFile = event.target.files.item(0);
-      if (this.selectedFile!.type === 'text/csv') {
+      if (
+        this.selectedFile!.type === 'text/csv' ||
+        this.selectedFile!.type === 'application/vnd.ms-excel'
+      ) {
         let allTextLines = [];
 
         // File reader method

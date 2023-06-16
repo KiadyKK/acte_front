@@ -3,12 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Interaction } from 'src/app/models/interaction.model';
 import { MetierService } from 'src/app/services/metier/metier.service';
-import { GlobalConstants } from 'src/app/shared/globalConstants/global-constants';
 import { ModalSavingComponent } from 'src/app/shared/modal-saving/modal-saving.component';
 import { ModalLogComponent } from './modal-log/modal-log.component';
 import { ModalRejectComponent } from './modal-reject/modal-reject.component';
 import { ModalRetourCxComponent } from './modal-retour-cx/modal-retour-cx.component';
 import { ModalValidationComponent } from './modal-validation/modal-validation.component';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-validation-metier',
@@ -16,7 +16,7 @@ import { ModalValidationComponent } from './modal-validation/modal-validation.co
   styleUrls: ['./validation-metier.component.css'],
 })
 export class ValidationMetierComponent implements OnInit {
-  public apiUrl: string = GlobalConstants.apiURL;
+  public apiUrl: string = environment.apiUrl;
   public date: Date = new Date();
   public comValidateur: string;
   public content: Interaction = new Interaction();
@@ -85,8 +85,8 @@ export class ValidationMetierComponent implements OnInit {
         ? new Date()
         : this.content.date_prise_compte?.replace(' ', 'T');
     switch (this.content.idAction) {
+      //NOUVELLE ACTIVATION***************************************
       case 1:
-        //NOUVELLE ACTIVATION***************************************
         let data1: any = {
           id: this.content.idActe,
           listeMsisdn: this.content.input.liste,
@@ -108,8 +108,8 @@ export class ValidationMetierComponent implements OnInit {
 
         break;
 
+      //MODIFICATION INFO CLIENT***************************************
       case 2:
-        //MODIFICATION INFO CLIENT***************************************
         let data2: any = {
           id: this.content.idActe,
           listeMsisdn: this.content.input.liste,
@@ -132,7 +132,7 @@ export class ValidationMetierComponent implements OnInit {
 
       //DESACTIVATION*********************************************
       case 3:
-        let data: any = {
+        let data3: any = {
           id: this.content.idActe,
           listeMsisdn: this.content.input.liste,
           validForm: validForm,
@@ -143,7 +143,34 @@ export class ValidationMetierComponent implements OnInit {
           date_prise_new: date_prise_new,
           type: 2,
         };
-        this.metierService.validerJoker(data).subscribe({
+        this.metierService.validerJoker(data3).subscribe({
+          next: (data) => {
+            if (!data.msisdnError.length) {
+              this.openModalValidation(false);
+            } else {
+              this.openModalValidation(true);
+            }
+            this.onActeClick(this.content.idActe);
+          },
+        });
+
+        break;
+
+      //TAKE OVER*********************************************
+      case 6:
+        let data6: any = {
+          id: this.content.idActe,
+          listeMsisdn: this.content.input.liste,
+          validForm: validForm,
+          csCode: this.content.custcode.custcode,
+          csId: this.content.custcode.csId,
+          csIdPub: this.content.custcode.csIdPub,
+          rsCode: this.content.id_reutilisable,
+          titre: 'Take Over',
+          checkdatepriseencompte: this.content.checkdatepriseencompte,
+          comment: this.comValidateur,
+        };
+        this.metierService.validerJoker(data6).subscribe({
           next: (data) => {
             if (!data.msisdnError.length) {
               this.openModalValidation(false);

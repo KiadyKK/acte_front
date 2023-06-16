@@ -66,6 +66,34 @@
             </tr>
           </tbody>
         </table>
+
+        <table
+          class="table table-sm table-striped table-bordered"
+          *ngIf="content.idAction === 6"
+        >
+          <thead>
+            <tr>
+              <th scope="col">MSISDN</th>
+              <th scope="col">CLIENT</th>
+              <th scope="col">CUSTCODE</th>
+              <th scope="col">STATUT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of content.input.liste">
+              <td>{{ item.msisdn }}</td>
+              <td>{{ item.client }}</td>
+              <td>{{ item.csCode }}</td>
+              <td class="p-0">
+                <i
+                  [ngClass]="
+                    item.s_msisdn === 'OK' ? 'bi bi-check-lg' : 'bi bi-x-lg'
+                  "
+                ></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </ng-template>
     </ngb-panel>
   </ngb-accordion>

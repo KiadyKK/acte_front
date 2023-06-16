@@ -17,7 +17,7 @@ export class WidgetComponent implements OnInit {
   searchEtat: string = '';
   searchAction: string = '';
   page = 1;
-  pageSize = 15;
+  pageSize = 7;
 
   id_role: number;
   user_id: number;

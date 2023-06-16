@@ -1,28 +1,3 @@
-.parametre {
-  background-color: #343a40;
-  padding: 20px;
-  display: flex;
-  color: #fff;
-}
-
-.content-lg {
-  background-color: #777;
-  padding: 20px;
-  height: 37.5vh;
-}
-
-.content {
-  margin-top: 6px;
-  background-color: #fff;
-  padding: 10px;
-}
-
-.content-md {
-  background-color: #b3b3b3;
-  padding: 20px;
-  /* height: 46.5vh; */
-}
-
 .bi-check-lg {
   color: #50be87;
   font-size: 19px;

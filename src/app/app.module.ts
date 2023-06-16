@@ -33,6 +33,8 @@ import { ModalRetourCxComponent } from './components/validation-metier/modal-ret
 import { ModalSavingComponent } from './shared/modal-saving/modal-saving.component';
 import { ModalValidationComponent } from './components/validation-metier/modal-validation/modal-validation.component';
 import { ModalRejectComponent } from './components/validation-metier/modal-reject/modal-reject.component';
+import { BnNgIdleService } from 'bn-ng-idle';
+import { ModalAlertComponent } from './shared/modal-alert/modal-alert.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +59,7 @@ import { ModalRejectComponent } from './components/validation-metier/modal-rejec
     ModalSavingComponent,
     ModalValidationComponent,
     ModalRejectComponent,
+    ModalAlertComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,7 +75,7 @@ import { ModalRejectComponent } from './components/validation-metier/modal-rejec
     MatProgressSpinnerModule,
     NgbModule
   ],
-  providers: [authInterceptorProviders, spinnerInterceptorProviders],
+  providers: [authInterceptorProviders, spinnerInterceptorProviders, BnNgIdleService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
