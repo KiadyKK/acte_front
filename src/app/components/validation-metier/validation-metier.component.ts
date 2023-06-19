@@ -194,16 +194,16 @@ export class ValidationMetierComponent implements OnInit {
           checkdatepriseencompte: this.content.checkdatepriseencompte,
           comment: this.comValidateur,
         };
-        // this.metierService.validerJoker(data6).subscribe({
-        //   next: (data) => {
-        //     if (!data.msisdnError.length) {
-        //       this.openModalValidation(false);
-        //     } else {
-        //       this.openModalValidation(true);
-        //     }
-        //     this.onActeClick(this.content.idActe);
-        //   },
-        // });
+        this.metierService.validerJoker(data7).subscribe({
+          next: (data) => {
+            if (!data.msisdnError.length) {
+              this.openModalValidation(false);
+            } else {
+              this.openModalValidation(true);
+            }
+            this.onActeClick(this.content.idActe);
+          },
+        });
 
         break;
 
