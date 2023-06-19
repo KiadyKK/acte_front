@@ -13,7 +13,7 @@
     />
   </div>
 
-  <div class="col-md-3 ps-3 pe-2" *ngIf="minComParam">
+  <div class="col-md-3 ps-3 pe-2" *ngIf="fichier">
     <label class="form-label m-0 mb-2"><strong>{{ minComParam.prmDes }}</strong></label>
     <select
       class="form-select form-select-sm"
@@ -30,7 +30,7 @@
     </select>
   </div>
   
-  <div class="col-md-3 ps-3 pe-2" *ngIf="minComStatus">
+  <div class="col-md-3 ps-3 pe-2" *ngIf="selectedMinComParam">
     <label class="form-label m-0 mb-2"><strong>{{ minComStatus.prmDes }}</strong></label>
     <select
       class="form-select form-select-sm"
@@ -47,7 +47,7 @@
     </select>
   </div>
 
-  <div class="example-wrapper ms-3">
+  <div class="example-wrapper ms-3" *ngIf="selectedMinComStatus">
     <div>
       <input
         type="checkbox"
