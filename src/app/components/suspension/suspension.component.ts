@@ -123,7 +123,8 @@ export class SuspensionComponent {
 
   disableValider(): boolean {
     return this.fichier === '' ||
-      this.nbrError !== 0 ||
+      // this.nbrError !== 0 ||
+      !this.selectedReason ||
       this.description === '' ||
       this.commentaire === ''
       ? true
@@ -187,6 +188,7 @@ export class SuspensionComponent {
     this.nbLigne = '';
     this.nbrError = 0;
     this.checkDate = false;
+    this.selectedReason = ''
   }
 
   openModalResume() {

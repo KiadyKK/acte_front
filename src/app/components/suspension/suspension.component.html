@@ -1,6 +1,19 @@
 <div class="title"><i class="bi bi-slash-square me-2"></i>Suspension</div>
 <div class="card flex-row m-3 p-3">
   <div class="col-md-3 pe-4">
+    <label for="formFile" class="form-label m-0 mb-2"
+      ><strong>Fichier CSV</strong></label
+    >
+    <input
+      #inputFile
+      class="form-control form-control-sm me-3"
+      type="file"
+      id="formFile"
+      (change)="onFileChange($event)"
+    />
+  </div>
+
+  <div class="col-md-3 pe-4" *ngIf="fichier">
     <label class="form-label m-0 mb-2"><strong>Raison</strong></label>
     <select
       class="form-select form-select-sm"
@@ -17,20 +30,7 @@
     </select>
   </div>
 
-  <div class="col-md-3 pe-4" *ngIf="selectedReason">
-    <label for="formFile" class="form-label m-0 mb-2"
-      ><strong>Fichier CSV</strong></label
-    >
-    <input
-      #inputFile
-      class="form-control form-control-sm me-3"
-      type="file"
-      id="formFile"
-      (change)="onFileChange($event)"
-    />
-  </div>
-
-  <div class="example-wrapper" *ngIf="fichier">
+  <div class="example-wrapper" *ngIf="selectedReason">
     <div>
       <input
         type="checkbox"
@@ -60,13 +60,13 @@
         class="accordion-blue"
         activeIds="config-panel-three"
       >
-        <ngb-panel
-          id="config-panel-three"
-          title="Contenu du fichier CSV"
-        >
+        <ngb-panel id="config-panel-three" title="Contenu du fichier CSV">
           <ng-template ngbPanelContent>
             <div class="accordion-contents-40">
-              <table class="table table-sm table-striped table-bordered" *ngIf="contenu.length > 0">
+              <table
+                class="table table-sm table-striped table-bordered"
+                *ngIf="contenu.length > 0"
+              >
                 <thead>
                   <tr>
                     <th scope="col">MSISDN</th>
