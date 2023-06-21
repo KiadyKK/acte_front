@@ -40,6 +40,7 @@ import { LimitConsoComponent } from './components/limit-conso/limit-conso.compon
 import { SuspensionComponent } from './components/suspension/suspension.component';
 import { RevokeComponent } from './components/revoke/revoke.component';
 import { ForfaitComponent } from './components/forfait/forfait.component';
+import { AjoutServiceComponent } from './components/ajout-service/ajout-service.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { ForfaitComponent } from './components/forfait/forfait.component';
     SuspensionComponent,
     RevokeComponent,
     ForfaitComponent,
+    AjoutServiceComponent,
   ],
   imports: [
     BrowserModule,

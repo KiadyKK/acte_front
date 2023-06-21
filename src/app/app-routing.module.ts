@@ -14,6 +14,7 @@ import { LimitConsoComponent } from './components/limit-conso/limit-conso.compon
 import { SuspensionComponent } from './components/suspension/suspension.component';
 import { RevokeComponent } from './components/revoke/revoke.component';
 import { ForfaitComponent } from './components/forfait/forfait.component';
+import { AjoutServiceComponent } from './components/ajout-service/ajout-service.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -75,6 +76,11 @@ const routes: Routes = [
   {
     path: 'forfait',
     component: ForfaitComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'ajout-service',
+    component: AjoutServiceComponent,
     canActivate: [AuthGuard],
   },
   { path: '', redirectTo: 'board', pathMatch: 'full' },
