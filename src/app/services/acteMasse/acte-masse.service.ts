@@ -64,6 +64,12 @@ export class ActeMasseService {
     });
   }
 
+  saveAjoutService(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'ajout-service', data, {
+      responseType: 'text',
+    });
+  }
+
   getReasonsRead(rsState: string): Observable<any> {
     return this.http.get(ACTE_API + `reasons-read?rsState=${rsState}`);
   }
