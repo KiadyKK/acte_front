@@ -2,8 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
-import { ModalResumeComponent } from 'src/app/shared/modal-resume/modal-resume.component';
 import { ModalSavingComponent } from 'src/app/shared/modal-saving/modal-saving.component';
+import { ModalResumeAjoutComponent } from './modal-resume-ajout/modal-resume-ajout.component';
 
 @Component({
   selector: 'app-ajout-service',
@@ -32,6 +32,7 @@ export class AjoutServiceComponent {
   public serviceRateplans: any;
   public listServices: Array<any> = [];
   public listParametres: any;
+  public checkService: boolean = false;
 
   public service: any;
 
@@ -164,35 +165,48 @@ export class AjoutServiceComponent {
   }
 
   onCheckboxChange(event: any, key: any): void {
+    this.checkService = true;
     this.listParametres = [];
     let service = this.serviceRateplans[key].filter((item: any) => {
       return item.servicename === event.target.value;
     });
 
-    if (event.target.checked) {
-      if (service[0].serviceParamerterInd) {
-        this.service = service[0];
-        let { sncode, sccode } = service[0];
-        this.acteMasseService.getParametersRead(sncode, sccode).subscribe({
-          next: (data) => {
-            this.listParametres = data;
-            this.updateViaService(data, service);
-          },
-        });
-      } else {
-        let new_service: any = {
-          sncode: service[0].sncode,
-          spcode: service[0].spcode,
-          servicename: service[0].servicename,
-        };
-        this.listServices.push(new_service);
+    let { sncode, sccode } = service[0];
+
+    let msisdnError: string = '';
+    for (let i = 0; i < this.contenu.length; i++) {
+      if (this.contenu[i].service.includes(sncode)) {
+        msisdnError += '-' + this.contenu[i].msisdn + '\n';
       }
+    }
+
+    if (msisdnError !== '') {
+      alert('Ce service est déja utilisé par le(s) numéro(s) suivant(s) : \n' + msisdnError);
     } else {
-      const index = this.listServices.findIndex(
-        (x) => x.servicename === service[0].servicename
-      );
-      if (index > -1) {
-        this.listServices.splice(index, 1);
+      if (event.target.checked) {
+        if (service[0].serviceParamerterInd) {
+          this.service = service[0];
+          this.acteMasseService.getParametersRead(sncode, sccode).subscribe({
+            next: (data) => {
+              this.listParametres = data;
+              this.updateViaService(data, service);
+            },
+          });
+        } else {
+          let new_service: any = {
+            sncode: service[0].sncode,
+            spcode: service[0].spcode,
+            servicename: service[0].servicename,
+          };
+          this.listServices.push(new_service);
+        }
+      } else {
+        const index = this.listServices.findIndex(
+          (x) => x.servicename === service[0].servicename
+        );
+        if (index > -1) {
+          this.listServices.splice(index, 1);
+        }
       }
     }
   }
@@ -392,6 +406,7 @@ export class AjoutServiceComponent {
   disableValider(): boolean {
     return this.fichier === '' ||
       !this.checkratePlans ||
+      !this.selectedReason ||
       this.nbrError !== 0 ||
       this.description === '' ||
       this.commentaire === ''
@@ -454,16 +469,23 @@ export class AjoutServiceComponent {
   clear(): void {
     this.inputFile.nativeElement.value = '';
     this.selectedFile = null;
+    this.contenu = [];
+    this.selectedReason = '';
     this.fichier = '';
+    this.checkService = false;
+    this.serviceRateplans = [];
+    this.listServices = []
+    this.listParametres = [];
     this.nbLigne = '';
     this.nbrError = 0;
   }
 
   openModalResume() {
-    const modalRef = this.modalService.open(ModalResumeComponent, {
+    const modalRef = this.modalService.open(ModalResumeAjoutComponent, {
       size: 'lg',
       centered: true,
     });
+    modalRef.componentInstance.services = this.listServices;
     modalRef.componentInstance.nbLigne = this.nbLigne;
     modalRef.componentInstance.nbrError = this.nbrError;
   }

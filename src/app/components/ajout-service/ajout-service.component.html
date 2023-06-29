@@ -152,6 +152,7 @@
                       class="form-check-input"
                       [value]="service.servicename"
                       (change)="onCheckboxChange($event, item.key)"
+                      [disabled]="checkService"
                     />
                     <i
                       class="bi bi-asterisk text-danger ms-1"
@@ -286,7 +287,14 @@
 <div class="m-3">
   <p class="m-0 text-end">
     <button
-      class="btn btn-primary btn-sm"
+      class="btn btn-secondary btn-sm"
+      (click)="clear()"
+    >
+      <i class="bi bi-arrow-repeat me-2"></i>Rafraichir
+    </button>
+
+    <button
+      class="btn btn-primary btn-sm ms-2"
       *ngIf="fichier"
       (click)="openModalResume()"
     >
