@@ -10,6 +10,11 @@ import { TakeoverComponent } from './components/takeover/takeover.component';
 import { ModifyFieldsComponent } from './components/modify-fields/modify-fields.component';
 import { WidgetComponent } from './components/widget/widget.component';
 import { ReengagementComponent } from './components/reengagement/reengagement.component';
+import { LimitConsoComponent } from './components/limit-conso/limit-conso.component';
+import { SuspensionComponent } from './components/suspension/suspension.component';
+import { RevokeComponent } from './components/revoke/revoke.component';
+import { ForfaitComponent } from './components/forfait/forfait.component';
+import { AjoutServiceComponent } from './components/ajout-service/ajout-service.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -51,6 +56,31 @@ const routes: Routes = [
   {
     path: 'reengagement',
     component: ReengagementComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'limit-conso',
+    component: LimitConsoComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'suspension',
+    component: SuspensionComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'revoke',
+    component: RevokeComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'forfait',
+    component: ForfaitComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'ajout-service',
+    component: AjoutServiceComponent,
     canActivate: [AuthGuard],
   },
   { path: '', redirectTo: 'board', pathMatch: 'full' },

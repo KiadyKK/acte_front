@@ -6,16 +6,18 @@ import { ModalResumeComponent } from 'src/app/shared/modal-resume/modal-resume.c
 import { ModalSavingComponent } from 'src/app/shared/modal-saving/modal-saving.component';
 
 @Component({
-  selector: 'app-modify-fields',
-  templateUrl: './modify-fields.component.html',
-  styleUrls: ['./modify-fields.component.css'],
+  selector: 'app-limit-conso',
+  templateUrl: './limit-conso.component.html',
+  styleUrls: ['./limit-conso.component.css'],
 })
-export class ModifyFieldsComponent {
+export class LimitConsoComponent {
   @ViewChild('inputFile')
   inputFile: ElementRef;
 
   private selectedFile: File | null;
 
+  public date: Date = new Date();
+  public checkDate: boolean = false;
   public description: string = '';
   public commentaire: string = '';
   public nbLigne: string;
@@ -32,7 +34,10 @@ export class ModifyFieldsComponent {
   onFileChange(event: any) {
     if (event.target.files.length > 0) {
       this.selectedFile = event.target.files.item(0);
-      if (this.selectedFile!.type === 'text/csv' || this.selectedFile!.type === 'application/vnd.ms-excel') {
+      if (
+        this.selectedFile!.type === 'text/csv' ||
+        this.selectedFile!.type === 'application/vnd.ms-excel'
+      ) {
         let allTextLines = [];
 
         // File reader method
@@ -42,47 +47,58 @@ export class ModifyFieldsComponent {
           let csv: any = reader.result;
           allTextLines = csv.split('\r\n');
 
-          let listeMsisdn: Array<any> = [];
-          let msisdnError: string = '';
+          let listeMsisdns: Array<any> = [];
+          let listeConsos: Array<any> = [];
 
           for (let i = 0; i < allTextLines.length; i++) {
-            let col = allTextLines[i].split(';');
-            if (col[4].length !== 12) {
-              msisdnError = col[4];
-              break;
-            }
-            listeMsisdn.push({
-              adrLname: col[0],
-              adrName: col[1],
-              adrStreet: col[2],
-              adrCity: col[3],
-              msisdn: col[4],
-            });
+            listeMsisdns.push(allTextLines[i].split(';')[0]);
+            listeConsos.push(allTextLines[i].split(';')[1]);
           }
 
-          let data: any = {
-            id_action: 2,
-            csv: listeMsisdn,
-            fichier: this.selectedFile!.name,
-          };
+          let duplicateMsisdns: Array<any> = this.findDuplicates(
+            listeMsisdns,
+            true,
+            [12]
+          );
 
-          if (msisdnError != '') {
-            alert('Erreur format msisdn : ' + msisdnError);
+          if (duplicateMsisdns.length) {
+            let duplicate: string = '';
+            duplicateMsisdns.forEach((element) => {
+              duplicate += '- ' + element + '\n';
+            });
+            alert(
+              'Erreur MSISDN. Veulliez vérifier ces informations : \n' +
+                duplicate
+            );
             this.clear();
           } else {
-            this.acteMasseService.verifyModifyFields(data).subscribe({
-              next: (data) => {
-                for (let i = 0; i < listeMsisdn.length; i++) {
-                  for (let j = 0; j < data.liste.length; j++) {
-                    if (listeMsisdn[i].msisdn === data.liste[j].msisdn) {
-                      data.liste[j].adrLname = listeMsisdn[i].adrLname;
-                      data.liste[j].adrName = listeMsisdn[i].adrName;
-                      data.liste[j].adrStreet = listeMsisdn[i].adrStreet;
-                      data.liste[j].adrCity = listeMsisdn[i].adrCity;
-                    }
-                  }
-                }
+            let listeMsisdn: Array<any> = this.findDuplicates(
+              listeMsisdns,
+              false
+            );
 
+            let listeConso: Array<any> = this.findDuplicates(
+              listeConsos,
+              false
+            );
+
+            let csv: Array<any> = [];
+
+            for (let i = 0; i < listeMsisdn.length; i++) {
+              csv.push({
+                msisdn: listeMsisdn[i],
+                conso: +listeConso[i],
+              });
+            }
+
+            let data: any = {
+              id_action: 4,
+              csv: csv,
+              fichier: this.selectedFile!.name,
+            };
+
+            this.acteMasseService.verifyLimitConso(data).subscribe({
+              next: (data) => {
                 this.contenu = data.liste;
                 this.fichier = this.selectedFile!.name;
                 this.nbLigne = data.liste.length;
@@ -98,9 +114,31 @@ export class ModifyFieldsComponent {
     }
   }
 
+  findDuplicates(
+    array: Array<any>,
+    duplicate: boolean,
+    length: Array<number> = [0]
+  ): Array<any> {
+    if (duplicate) {
+      return array.filter(
+        (item, index) =>
+          (array.indexOf(item) !== index && item !== '') ||
+          !length.includes(item.length)
+      );
+    } else {
+      return array.filter(
+        (item, index) => array.indexOf(item) === index && item !== ''
+      );
+    }
+  }
+
+  onCheckDateChange(event: any): void {
+    this.checkDate = event.target.checked;
+  }
+
   disableValider(): boolean {
     return this.fichier === '' ||
-      // this.nbrError !== 0 ||
+      this.nbrError !== 0 ||
       this.description === '' ||
       this.commentaire === ''
       ? true
@@ -112,6 +150,7 @@ export class ModifyFieldsComponent {
       initiateur: this.storageService.getItem('trigramme'),
       idUtilisateur: +this.storageService.getItem('user_id'),
       comment: this.commentaire,
+      date_prise_compte: this.date,
       listeMsisdn: {
         fichier: this.fichier,
         nbLigne: this.nbLigne,
@@ -119,9 +158,10 @@ export class ModifyFieldsComponent {
         liste: this.contenu,
       },
       descript_court: this.description,
-      idAction: 2,
+      checkdateprise: this.checkDate ? 'true' : 'false',
+      idAction: 4,
       etat: 'PENDING',
-      lblAction: 'Modification Info-client',
+      lblAction: 'Limite Consommation',
       lbl_etape: 'En attente de validation métier',
     };
 
@@ -129,7 +169,7 @@ export class ModifyFieldsComponent {
     formData.append('file', this.selectedFile!);
     formData.append('data', JSON.stringify(data));
 
-    this.acteMasseService.saveModifyFields(formData).subscribe({
+    this.acteMasseService.saveLimitConso(formData).subscribe({
       next: (data) => {
         if (data) {
           this.openModalSaving(data);

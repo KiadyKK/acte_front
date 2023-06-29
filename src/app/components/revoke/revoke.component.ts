@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
@@ -6,22 +6,27 @@ import { ModalResumeComponent } from 'src/app/shared/modal-resume/modal-resume.c
 import { ModalSavingComponent } from 'src/app/shared/modal-saving/modal-saving.component';
 
 @Component({
-  selector: 'app-modify-fields',
-  templateUrl: './modify-fields.component.html',
-  styleUrls: ['./modify-fields.component.css'],
+  selector: 'app-revoke',
+  templateUrl: './revoke.component.html',
+  styleUrls: ['./revoke.component.css'],
 })
-export class ModifyFieldsComponent {
+export class RevokeComponent {
   @ViewChild('inputFile')
   inputFile: ElementRef;
 
   private selectedFile: File | null;
 
+  public reasons: any;
+  public date: Date = new Date();
+  public checkDate: boolean = false;
   public description: string = '';
   public commentaire: string = '';
   public nbLigne: string;
   public contenu: Array<any> = [];
   public fichier: string = '';
   public nbrError: number = 0;
+  public selectedReason: any;
+  public listeMsisdn: Array<any>;
 
   constructor(
     private storageService: StorageService,
@@ -29,10 +34,21 @@ export class ModifyFieldsComponent {
     private modalService: NgbModal
   ) {}
 
+  ngOnInit(): void {
+    this.acteMasseService.getReasonsRead('r').subscribe({
+      next: (data) => {
+        this.reasons = data;
+      },
+    });
+  }
+
   onFileChange(event: any) {
     if (event.target.files.length > 0) {
       this.selectedFile = event.target.files.item(0);
-      if (this.selectedFile!.type === 'text/csv' || this.selectedFile!.type === 'application/vnd.ms-excel') {
+      if (
+        this.selectedFile!.type === 'text/csv' ||
+        this.selectedFile!.type === 'application/vnd.ms-excel'
+      ) {
         let allTextLines = [];
 
         // File reader method
@@ -41,52 +57,43 @@ export class ModifyFieldsComponent {
         reader.onload = (e) => {
           let csv: any = reader.result;
           allTextLines = csv.split('\r\n');
-
-          let listeMsisdn: Array<any> = [];
-          let msisdnError: string = '';
-
-          for (let i = 0; i < allTextLines.length; i++) {
-            let col = allTextLines[i].split(';');
-            if (col[4].length !== 12) {
-              msisdnError = col[4];
-              break;
-            }
-            listeMsisdn.push({
-              adrLname: col[0],
-              adrName: col[1],
-              adrStreet: col[2],
-              adrCity: col[3],
-              msisdn: col[4],
+          let duplicates: Array<any> = this.findDuplicates(allTextLines, true);
+          if (duplicates.length) {
+            let duplicate: string = '';
+            duplicates.forEach((element) => {
+              duplicate += '- ' + element + '\n';
             });
-          }
-
-          let data: any = {
-            id_action: 2,
-            csv: listeMsisdn,
-            fichier: this.selectedFile!.name,
-          };
-
-          if (msisdnError != '') {
-            alert('Erreur format msisdn : ' + msisdnError);
-            this.clear();
+            alert(
+              'Erreur doublon. Veulliez vérifier ces informations : \n' +
+                duplicate
+            );
           } else {
-            this.acteMasseService.verifyModifyFields(data).subscribe({
+            let listeMsisdn: Array<any> = this.findDuplicates(
+              allTextLines,
+              false
+            );
+            this.listeMsisdn = listeMsisdn;
+            let data: any = {
+              id_action: 13,
+              msisdn: listeMsisdn,
+              fichier: this.selectedFile!.name,
+            };
+            this.acteMasseService.verifyRevoke(data).subscribe({
               next: (data) => {
-                for (let i = 0; i < listeMsisdn.length; i++) {
-                  for (let j = 0; j < data.liste.length; j++) {
-                    if (listeMsisdn[i].msisdn === data.liste[j].msisdn) {
-                      data.liste[j].adrLname = listeMsisdn[i].adrLname;
-                      data.liste[j].adrName = listeMsisdn[i].adrName;
-                      data.liste[j].adrStreet = listeMsisdn[i].adrStreet;
-                      data.liste[j].adrCity = listeMsisdn[i].adrCity;
-                    }
-                  }
+                if (data.hasOwnProperty('liste')) {
+                  this.contenu = data.liste;
+                  this.fichier = this.selectedFile!.name;
+                  this.nbLigne = data.liste.length;
+                  this.nbrError = data.nb_erreur;
+                } else {
+                  this.clear();
+                  alert(
+                    'Msisdn incorrecte : ' +
+                      data.msisdn +
+                      '\nErreur : ' +
+                      data.error
+                  );
                 }
-
-                this.contenu = data.liste;
-                this.fichier = this.selectedFile!.name;
-                this.nbLigne = data.liste.length;
-                this.nbrError = data.nb_erreur;
               },
             });
           }
@@ -98,9 +105,25 @@ export class ModifyFieldsComponent {
     }
   }
 
+  findDuplicates(array: Array<any>, duplicate: boolean): Array<any> {
+    if (duplicate) {
+      return array.filter(
+        (item, index) => array.indexOf(item) !== index && item !== ''
+      );
+    } else {
+      return array.filter(
+        (item, index) => array.indexOf(item) === index && item !== ''
+      );
+    }
+  }
+
+  onCheckDateChange(event: any): void {
+    this.checkDate = event.target.checked;
+  }
+
   disableValider(): boolean {
     return this.fichier === '' ||
-      // this.nbrError !== 0 ||
+      this.nbrError !== 0 ||
       this.description === '' ||
       this.commentaire === ''
       ? true
@@ -112,16 +135,20 @@ export class ModifyFieldsComponent {
       initiateur: this.storageService.getItem('trigramme'),
       idUtilisateur: +this.storageService.getItem('user_id'),
       comment: this.commentaire,
+      date_prise_compte: this.date,
       listeMsisdn: {
         fichier: this.fichier,
         nbLigne: this.nbLigne,
         nb_erreur: this.nbrError,
         liste: this.contenu,
       },
+      rsCode: this.selectedReason.rsCode,
+      rsDes: this.selectedReason.rsDes,
       descript_court: this.description,
-      idAction: 2,
+      checkdateprise: this.checkDate ? 'true' : 'false',
+      idAction: 13,
       etat: 'PENDING',
-      lblAction: 'Modification Info-client',
+      lblAction: 'Revoke',
       lbl_etape: 'En attente de validation métier',
     };
 
@@ -129,7 +156,7 @@ export class ModifyFieldsComponent {
     formData.append('file', this.selectedFile!);
     formData.append('data', JSON.stringify(data));
 
-    this.acteMasseService.saveModifyFields(formData).subscribe({
+    this.acteMasseService.saveRevoke(formData).subscribe({
       next: (data) => {
         if (data) {
           this.openModalSaving(data);
@@ -159,6 +186,7 @@ export class ModifyFieldsComponent {
     this.fichier = '';
     this.nbLigne = '';
     this.nbrError = 0;
+    this.checkDate = false;
   }
 
   openModalResume() {

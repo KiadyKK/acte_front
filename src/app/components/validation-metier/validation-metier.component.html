@@ -18,6 +18,8 @@
           *ngIf="
             content.idAction === 2 ||
             content.idAction === 3 ||
+            content.idAction === 4 ||
+            content.idAction === 5 ||
             content.idAction === 7 ||
             content.idAction == 12 ||
             content.idAction == 13
@@ -28,6 +30,7 @@
             <tr>
               <th>MSISDN</th>
               <th>CLIENT</th>
+              <th *ngIf="content.idAction === 4">LIMIT CONSO</th>
               <th>STATUS</th>
             </tr>
           </thead>
@@ -38,6 +41,9 @@
               </td>
               <td>
                 {{ item.client }}
+              </td>
+              <td *ngIf="content.idAction === 4">
+                {{ item.lc }}
               </td>
               <td>
                 {{ item.s_msisdn }}
@@ -105,7 +111,9 @@
     #acc="ngbAccordion"
     class="accordion-green"
     activeIds="config-panel-four"
-    *ngIf="content.idAction === 1 || content.idAction === 7"
+    *ngIf="
+      content.idAction === 1 || content.idAction === 5 || content.idAction === 7
+    "
   >
     <ngb-panel
       id="config-panel-four"
@@ -113,7 +121,10 @@
       [disabled]="!content.id"
     >
       <ng-template ngbPanelContent>
-        <p class="text-center text-uppercase" *ngIf="content.idAction === 1">
+        <p
+          class="text-center text-uppercase"
+          *ngIf="content.idAction === 1 || content.idAction === 5"
+        >
           <strong>Plan Tarifaire : </strong>{{ content.plan_tarifaire.rpDes }}
         </p>
         <table class="table table-sm table-striped table-bordered">

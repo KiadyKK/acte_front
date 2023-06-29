@@ -40,8 +40,32 @@ export class ActeMasseService {
     });
   }
 
+  saveLimitConso(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'limit-conso', data, {
+      responseType: 'text',
+    });
+  }
+
   saveReengagement(data: FormData): Observable<any> {
     return this.http.post(ACTE_API + 'reengagement', data, {
+      responseType: 'text',
+    });
+  }
+
+  saveSuspension(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'suspension', data, {
+      responseType: 'text',
+    });
+  }
+
+  saveRevoke(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'revoke', data, {
+      responseType: 'text',
+    });
+  }
+
+  saveAjoutService(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'ajout-service', data, {
       responseType: 'text',
     });
   }
@@ -88,5 +112,25 @@ export class ActeMasseService {
 
   verifyReengagement(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-reengagement', data);
+  }
+  
+  verifyLimitConso(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-limit-conso', data);
+  }
+  
+  verifySuspension(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-suspension', data);
+  }
+
+  verifyRevoke(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-revoke', data);
+  }
+
+  verifyForfait(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-forfait', data);
+  }
+
+  verifyAjoutService(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-ajout-service', data);
   }
 }

@@ -156,6 +156,55 @@ export class ValidationMetierComponent implements OnInit {
 
         break;
 
+      //LIMIT CONSO*********************************************
+      case 4:
+        let data4: any = {
+          id: this.content.idActe,
+          listeMsisdn: this.content.input.liste,
+          validForm: validForm,
+          rsCode: this.content.id_reutilisable,
+          titre: 'Limit Consommation',
+          checkdatepriseencompte: this.content.checkdatepriseencompte,
+          comment: this.comValidateur,
+          date_prise_new: date_prise_new,
+          type: 2,
+        };
+        // this.metierService.validerJoker(data4).subscribe({
+        //   next: (data) => {
+        //     if (!data.msisdnError.length) {
+        //       this.openModalValidation(false);
+        //     } else {
+        //       this.openModalValidation(true);
+        //     }
+        //     this.onActeClick(this.content.idActe);
+        //   },
+        // });
+
+        break;
+
+      //AJOUT SERVICE***************************************
+      case 5:
+        let data5: any = {
+          id: this.content.idActe,
+          listeMsisdn: this.content.input.liste,
+          validForm: validForm,
+          titre: 'Ajout de service',
+          checkdatepriseencompte: this.content.checkdatepriseencompte,
+          comment: this.comValidateur,
+        };
+        this.metierService.validerJoker(data5).subscribe({
+          next: (data) => {
+            if (!data.msisdnError.length) {
+              this.openModalValidation(false);
+            } else {
+              this.openModalValidation(true);
+            }
+            this.onActeClick(this.content.idActe);
+          },
+        });
+
+        break;
+
       //TAKE OVER*********************************************
       case 6:
         let data6: any = {
@@ -183,7 +232,7 @@ export class ValidationMetierComponent implements OnInit {
 
         break;
 
-        //REENGAGEMENT*********************************************
+      //REENGAGEMENT*********************************************
       case 7:
         let data7: any = {
           id: this.content.idActe,
@@ -204,6 +253,56 @@ export class ValidationMetierComponent implements OnInit {
             this.onActeClick(this.content.idActe);
           },
         });
+
+        break;
+
+      //SUSPENSION*********************************************
+      case 12:
+        let data12: any = {
+          id: this.content.idActe,
+          listeMsisdn: this.content.input.liste,
+          validForm: validForm,
+          rsCode: this.content.id_reutilisable,
+          titre: 'Suspension',
+          checkdatepriseencompte: this.content.checkdatepriseencompte,
+          comment: this.comValidateur,
+          date_prise_new: date_prise_new,
+        };
+        // this.metierService.validerJoker(data12).subscribe({
+        //   next: (data) => {
+        //     if (!data.msisdnError.length) {
+        //       this.openModalValidation(false);
+        //     } else {
+        //       this.openModalValidation(true);
+        //     }
+        //     this.onActeClick(this.content.idActe);
+        //   },
+        // });
+
+        break;
+
+      //REVOKE*********************************************
+      case 13:
+        let data13: any = {
+          id: this.content.idActe,
+          listeMsisdn: this.content.input.liste,
+          validForm: validForm,
+          rsCode: this.content.id_reutilisable,
+          titre: 'Revoke',
+          checkdatepriseencompte: this.content.checkdatepriseencompte,
+          comment: this.comValidateur,
+          date_prise_new: date_prise_new,
+        };
+        // this.metierService.validerJoker(data12).subscribe({
+        //   next: (data) => {
+        //     if (!data.msisdnError.length) {
+        //       this.openModalValidation(false);
+        //     } else {
+        //       this.openModalValidation(true);
+        //     }
+        //     this.onActeClick(this.content.idActe);
+        //   },
+        // });
 
         break;
 

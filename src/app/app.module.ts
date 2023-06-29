@@ -36,6 +36,12 @@ import { ModalRejectComponent } from './components/validation-metier/modal-rejec
 import { BnNgIdleService } from 'bn-ng-idle';
 import { ModalAlertComponent } from './shared/modal-alert/modal-alert.component';
 import { ReengagementComponent } from './components/reengagement/reengagement.component';
+import { LimitConsoComponent } from './components/limit-conso/limit-conso.component';
+import { SuspensionComponent } from './components/suspension/suspension.component';
+import { RevokeComponent } from './components/revoke/revoke.component';
+import { ForfaitComponent } from './components/forfait/forfait.component';
+import { AjoutServiceComponent } from './components/ajout-service/ajout-service.component';
+import { ModalResumeAjoutComponent } from './components/ajout-service/modal-resume-ajout/modal-resume-ajout.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +68,12 @@ import { ReengagementComponent } from './components/reengagement/reengagement.co
     ModalRejectComponent,
     ModalAlertComponent,
     ReengagementComponent,
+    LimitConsoComponent,
+    SuspensionComponent,
+    RevokeComponent,
+    ForfaitComponent,
+    AjoutServiceComponent,
+    ModalResumeAjoutComponent,
   ],
   imports: [
     BrowserModule,
