@@ -1,0 +1,292 @@
+<div class="title"><i class="bi bi-shuffle me-2"></i>Changement service</div>
+<div class="card flex-row m-3 p-3">
+  <div class="col-md-3 pe-3">
+    <label for="formFile" class="form-label m-0 mb-2"
+      ><strong>Fichier CSV</strong></label
+    >
+    <input
+      #inputFile
+      class="form-control form-control-sm me-3"
+      type="file"
+      id="formFile"
+      (change)="onFileChange($event)"
+    />
+  </div>
+
+  <div class="example-wrapper" *ngIf="fichier">
+    <div>
+      <input
+        type="checkbox"
+        id="date"
+        class="form-check-input me-2"
+        [value]="checkDate"
+        (change)="onCheckDateChange($event)"
+      />
+      <label for="date" class="form-check-label mb-2"
+        ><strong>Date de prise en compte</strong></label
+      >
+    </div>
+    <kendo-datetimepicker
+      [disabled]="!checkDate"
+      format="dd/MM/yyyy HH:mm:ss"
+      [(value)]="date"
+    >
+    </kendo-datetimepicker>
+  </div>
+</div>
+
+<div class="m-3">
+  <div class="row">
+    <div class="col-md-7">
+      <ngb-accordion
+        #acc="ngbAccordion"
+        class="accordion-blue"
+        activeIds="config-panel-three"
+      >
+        <ngb-panel id="config-panel-three" title="Contenu du fichier CSV">
+          <ng-template ngbPanelContent>
+            <div class="accordion-contents-40">
+              <table
+                class="table table-sm table-striped table-bordered"
+                *ngIf="contenu.length > 0"
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">MSISDN</th>
+                    <th scope="col">PLAN TARIFAIRE</th>
+                    <th scope="col">STATUT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of contenu">
+                    <td>{{ item.msisdn }}</td>
+                    <td>{{ item.notification }}</td>
+                    <td class="p-0">
+                      <i
+                        [ngClass]="
+                          item.s_msisdn === 'OK'
+                            ? 'bi bi-check-lg'
+                            : 'bi bi-x-lg'
+                        "
+                      ></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+
+    <div class="col-md-5">
+      <ngb-accordion
+        #acc="ngbAccordion"
+        class="accordion-orange"
+        activeIds="config-panel-one"
+      >
+        <ngb-panel id="config-panel-one" title="Information">
+          <ng-template ngbPanelContent>
+            <div class="accordion-contents-40">
+              <label for="description" class="mb-1"
+                ><strong>Description courte</strong
+                ><span class="red">*</span></label
+              >
+              <textarea
+                class="form-control form-control-sm mb-2"
+                id="description"
+                rows="1"
+                [(ngModel)]="description"
+              ></textarea>
+              <label for="commentaire" class="mb-1"
+                ><strong>Commentaire</strong><span class="red">*</span></label
+              >
+              <textarea
+                class="form-control form-control-sm"
+                id="commentaire"
+                rows="3"
+                [(ngModel)]="commentaire"
+              ></textarea>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+  </div>
+</div>
+
+<div class="m-3">
+  <div class="row">
+    <div class="col-md-6">
+      <ngb-accordion
+        #acc="ngbAccordion"
+        class="accordion-pink accordion-h50"
+        activeIds="config-panel-one"
+      >
+        <ngb-panel id="config-panel-one" title="Services">
+          <ng-template ngbPanelContent>
+            <div class="accordion-contents-50 fs-13">
+              <li *ngFor="let item of serviceRateplans | keyvalue">
+                <strong>{{ item.key }}</strong>
+                <ul class="ps-3">
+                  <li *ngFor="let service of $any(item).value">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      [value]="service.servicename"
+                      (change)="onCheckboxChange($event, item.key)"
+                      [disabled]="checkService"
+                    />
+                    <i
+                      class="bi bi-asterisk text-danger ms-1"
+                      *ngIf="service.svCsind === 'true'"
+                    ></i>
+                    {{ service.servicename }}
+                  </li>
+                </ul>
+              </li>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+
+    <div class="col-md-6">
+      <ngb-accordion
+        #acc="ngbAccordion"
+        class="accordion-gris accordion-h50"
+        activeIds="config-panel-one"
+      >
+        <ngb-panel id="config-panel-one" title="Paramètres">
+          <ng-template ngbPanelContent>
+            <div class="accordion-contents-50">
+              <div class="my-2" *ngFor="let parametre of listParametres">
+                <ngb-accordion
+                  #acc="ngbAccordion"
+                  class="accordion-h50 accordion-small fs-13"
+                >
+                  <ngb-panel>
+                    <ng-template ngbPanelTitle>
+                      <i
+                        class="bi bi-check-circle-fill text-success h6 mb-0 me-1"
+                        *ngIf="parametre.defValue"
+                      ></i>
+                      <i
+                        class="bi bi-x-circle-fill text-danger h6 mb-0 me-1"
+                        *ngIf="!parametre.defValue"
+                      ></i>
+                      <span class="fw-bold">{{ parametre.prmDes }}</span>
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                      <div class="ms-3 my-2">
+                        <div
+                          class="pe-3"
+                          *ngIf="
+                            parametre.type == 'DF' || parametre.type == 'SE'
+                          "
+                        >
+                          <input
+                            type="text"
+                            class="form-control form-control-sm"
+                            [value]="parametre.defValue ?? ''"
+                            (keyup)="onTextParameterChange($event, parametre)"
+                          />
+                        </div>
+                        <div *ngIf="parametre.nValues.length">
+                          <ng-container
+                            *ngFor="let nValue of parametre.nValues"
+                          >
+                            <div
+                              class="form-check"
+                              *ngIf="
+                                parametre.type == 'CB' || parametre.type == 'LB'
+                              "
+                            >
+                              <input
+                                class="form-check-input"
+                                type="radio"
+                                [name]="parametre.prmDes"
+                                [id]="nValue.valueDes"
+                                [checked]="parametre.defValue === nValue.value"
+                                [value]="nValue.valueDes ?? nValue.value"
+                                (change)="
+                                  onRadioParameterChange(parametre, nValue)
+                                "
+                              />
+                              <label
+                                class="form-check-label"
+                                [for]="nValue.valueDes"
+                                *ngIf="
+                                  nValue.valueDes != null &&
+                                  parametre.type != 'DF'
+                                "
+                                >{{ nValue.valueDes }}</label
+                              >
+                              <label
+                                class="form-check-label"
+                                [for]="nValue.valueDes"
+                                *ngIf="
+                                  nValue.valueDes == null &&
+                                  parametre.type != 'DF'
+                                "
+                                >{{ nValue.value }}</label
+                              >
+                            </div>
+                          </ng-container>
+                        </div>
+                        <!-- <div *ngIf="!parametre.nValues.length">
+                              <li>
+                                <div
+                                  *ngIf="
+                                    parametre.type == 'CB' ||
+                                    parametre.type == 'LB'
+                                  "
+                                >
+                                  <input
+                                    class="form-check-input"
+                                    [name]="parametre.prmDes"
+                                    type="radio"
+                                    [id]="parametre.nValues.valueDes"
+                                  />
+                                  <label [for]="parametre.nValues.valueDes">{{
+                                    parametre.nValues.valueDes
+                                  }}</label>
+                                </div>
+                              </li>
+                            </div> -->
+                      </div>
+                    </ng-template>
+                  </ngb-panel>
+                </ngb-accordion>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+  </div>
+</div>
+
+<div class="m-3">
+  <p class="m-0 text-end">
+    <button class="btn btn-secondary btn-sm" (click)="clear()">
+      <i class="bi bi-arrow-repeat me-2"></i>Rafraichir
+    </button>
+
+    <button
+      class="btn btn-primary btn-sm ms-2"
+      *ngIf="fichier"
+      (click)="openModalResume()"
+    >
+      <i class="bi bi-journal-text me-2"></i>Résumé
+    </button>
+
+    <button
+      class="btn btn-success btn-sm ms-2"
+      *ngIf="!disableValider()"
+      (click)="valider()"
+    >
+      <i class="bi bi-check2-circle me-2"></i>Valider
+    </button>
+  </p>
+</div>

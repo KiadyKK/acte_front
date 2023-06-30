@@ -15,6 +15,7 @@ import { SuspensionComponent } from './components/suspension/suspension.componen
 import { RevokeComponent } from './components/revoke/revoke.component';
 import { ForfaitComponent } from './components/forfait/forfait.component';
 import { AjoutServiceComponent } from './components/ajout-service/ajout-service.component';
+import { ChgmtServiceComponent } from './components/chgmt-service/chgmt-service.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -81,6 +82,11 @@ const routes: Routes = [
   {
     path: 'ajout-service',
     component: AjoutServiceComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'changement-service',
+    component: ChgmtServiceComponent,
     canActivate: [AuthGuard],
   },
   { path: '', redirectTo: 'board', pathMatch: 'full' },

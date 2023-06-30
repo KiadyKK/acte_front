@@ -42,6 +42,7 @@ import { RevokeComponent } from './components/revoke/revoke.component';
 import { ForfaitComponent } from './components/forfait/forfait.component';
 import { AjoutServiceComponent } from './components/ajout-service/ajout-service.component';
 import { ModalResumeAjoutComponent } from './components/ajout-service/modal-resume-ajout/modal-resume-ajout.component';
+import { ChgmtServiceComponent } from './components/chgmt-service/chgmt-service.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { ModalResumeAjoutComponent } from './components/ajout-service/modal-resu
     ForfaitComponent,
     AjoutServiceComponent,
     ModalResumeAjoutComponent,
+    ChgmtServiceComponent,
   ],
   imports: [
     BrowserModule,

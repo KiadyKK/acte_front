@@ -133,4 +133,8 @@ export class ActeMasseService {
   verifyAjoutService(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-ajout-service', data);
   }
+
+  verifyChgmtService(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-changement-service', data);
+  }
 }

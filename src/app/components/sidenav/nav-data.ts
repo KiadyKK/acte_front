@@ -53,6 +53,11 @@ export const navbarData = [
     icon: 'bi bi-plus-circle',
     label: 'Ajout service',
   },
+  {
+    routerLink: 'changement-service',
+    icon: 'bi bi-shuffle',
+    label: 'Changement service',
+  },
   // {
   //   routerLink: 'metier',
   //   icon: 'bi bi-check-circle',
