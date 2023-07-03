@@ -33,15 +33,15 @@
   </div>
 
   <div *ngIf="selectedReason">
-    <label class="form-label m-0 mb-2">Status</label>
+    <label class="form-label m-0 mb-2"><strong>Status</strong></label>
     <select
       class="form-select form-select-sm"
       aria-label="Default select example"
       [(ngModel)]="status"
     >
       <option hidden value="" aria-placeholder="Status"></option>
-      <option value="true" aria-placeholder="Status">Activer</option>
-      <option value="false" aria-placeholder="Status">Désactiver</option>
+      <option value="Activé" aria-placeholder="Status">Activé</option>
+      <option value="Désactivé" aria-placeholder="Status">Désactivé</option>
     </select>
   </div>
 </div>

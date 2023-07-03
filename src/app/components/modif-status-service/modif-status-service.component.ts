@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ModalSavingComponent } from 'src/app/shared/modal-saving/modal-saving.component';
-import { ModalResumeAjoutComponent } from '../ajout-service/modal-resume-ajout/modal-resume-ajout.component';
+import { ModalResumeStatusComponent } from './modal-resume-status/modal-resume-status.component';
 
 @Component({
   selector: 'app-modif-status-service',
@@ -18,7 +18,7 @@ export class ModifStatusServiceComponent {
 
   public reasons: any;
   public selectedReason: any;
-  public status: boolean;
+  public status: string = '';
   public description: string = '';
   public commentaire: string = '';
   public nbLigne: string;
@@ -172,16 +172,13 @@ export class ModifStatusServiceComponent {
 
     let msisdnError: string = '';
     for (let i = 0; i < this.contenu.length; i++) {
-      if (this.contenu[i].service.includes(sncode)) {
-        msisdnError += '-' + this.contenu[i].msisdn + '\n';
+      if (!this.contenu[i].service.includes(sncode)) {
+        msisdnError += '- ' + this.contenu[i].msisdn + '\n';
       }
     }
 
     if (msisdnError !== '') {
-      alert(
-        'Ce service est déja utilisé par le(s) numéro(s) suivant(s) : \n' +
-          msisdnError
-      );
+      alert('Ces numéros ne disposent pas ce service : \n' + msisdnError);
     } else {
       if (event.target.checked) {
         let new_service: any = {
@@ -205,6 +202,8 @@ export class ModifStatusServiceComponent {
     return this.fichier === '' ||
       !this.checkratePlans ||
       !this.selectedReason ||
+      this.status === '' ||
+      !this.listServices.length ||
       this.nbrError !== 0 ||
       this.description === '' ||
       this.commentaire === ''
@@ -229,6 +228,7 @@ export class ModifStatusServiceComponent {
       descript_court: this.description,
       id_reutilisable: this.selectedReason.rsCode,
       lblraison: this.selectedReason.rsDes,
+      parametre: this.status,
       idAction: 11,
       etat: 'PENDING',
       lblAction: 'Modification status service',
@@ -239,14 +239,12 @@ export class ModifStatusServiceComponent {
     formData.append('file', this.selectedFile!);
     formData.append('data', JSON.stringify(data));
 
-    this.acteMasseService.saveAjoutService(formData).subscribe({
+    this.acteMasseService.saveModificationStatusService(formData).subscribe({
       next: (data) => {
         if (data) {
           this.openModalSaving(data);
         } else {
           this.openModalSaving();
-          this.commentaire = '';
-          this.description = '';
           this.contenu = [];
         }
         this.clear();
@@ -274,15 +272,18 @@ export class ModifStatusServiceComponent {
     this.listServices = [];
     this.nbLigne = '';
     this.nbrError = 0;
+    this.commentaire = '';
+    this.description = '';
   }
 
   openModalResume() {
-    const modalRef = this.modalService.open(ModalResumeAjoutComponent, {
+    const modalRef = this.modalService.open(ModalResumeStatusComponent, {
       size: 'lg',
       centered: true,
     });
     modalRef.componentInstance.services = this.listServices;
     modalRef.componentInstance.nbLigne = this.nbLigne;
     modalRef.componentInstance.nbrError = this.nbrError;
+    modalRef.componentInstance.status = this.status;
   }
 }

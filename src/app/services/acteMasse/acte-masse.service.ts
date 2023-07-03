@@ -70,6 +70,12 @@ export class ActeMasseService {
     });
   }
 
+  saveModificationStatusService(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'modify-status-service', data, {
+      responseType: 'text',
+    });
+  }
+
   getReasonsRead(rsState: string): Observable<any> {
     return this.http.get(ACTE_API + `reasons-read?rsState=${rsState}`);
   }

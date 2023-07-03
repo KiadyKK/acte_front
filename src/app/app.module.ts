@@ -43,6 +43,7 @@ import { ForfaitComponent } from './components/forfait/forfait.component';
 import { AjoutServiceComponent } from './components/ajout-service/ajout-service.component';
 import { ModalResumeAjoutComponent } from './components/ajout-service/modal-resume-ajout/modal-resume-ajout.component';
 import { ModifStatusServiceComponent } from './components/modif-status-service/modif-status-service.component';
+import { ModalResumeStatusComponent } from './components/modif-status-service/modal-resume-status/modal-resume-status.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { ModifStatusServiceComponent } from './components/modif-status-service/m
     AjoutServiceComponent,
     ModalResumeAjoutComponent,
     ModifStatusServiceComponent,
+    ModalResumeStatusComponent,
   ],
   imports: [
     BrowserModule,
