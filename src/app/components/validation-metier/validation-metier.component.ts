@@ -256,6 +256,29 @@ export class ValidationMetierComponent implements OnInit {
 
         break;
 
+      //MODIFICATION STATUS SERVICE***************************************
+      case 11:
+        let data11: any = {
+          id: this.content.idActe,
+          listeMsisdn: this.content.input.liste,
+          validForm: validForm,
+          titre: 'Modification status service',
+          checkdatepriseencompte: this.content.checkdatepriseencompte,
+          comment: this.comValidateur,
+        };
+        this.metierService.validerJoker(data11).subscribe({
+          next: (data) => {
+            if (!data.msisdnError.length) {
+              this.openModalValidation(false);
+            } else {
+              this.openModalValidation(true);
+            }
+            this.onActeClick(this.content.idActe);
+          },
+        });
+
+        break;
+
       //SUSPENSION*********************************************
       case 12:
         let data12: any = {

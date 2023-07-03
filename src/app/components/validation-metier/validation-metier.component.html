@@ -21,8 +21,9 @@
             content.idAction === 4 ||
             content.idAction === 5 ||
             content.idAction === 7 ||
-            content.idAction == 12 ||
-            content.idAction == 13
+            content.idAction === 11 ||
+            content.idAction === 12 ||
+            content.idAction === 13
           "
           class="table table-sm table-striped table-bordered"
         >
@@ -112,7 +113,10 @@
     class="accordion-green"
     activeIds="config-panel-four"
     *ngIf="
-      content.idAction === 1 || content.idAction === 5 || content.idAction === 7
+      content.idAction === 1 ||
+      content.idAction === 5 ||
+      content.idAction === 7 ||
+      content.idAction === 11
     "
   >
     <ngb-panel
@@ -123,7 +127,11 @@
       <ng-template ngbPanelContent>
         <p
           class="text-center text-uppercase"
-          *ngIf="content.idAction === 1 || content.idAction === 5"
+          *ngIf="
+            content.idAction === 1 ||
+            content.idAction === 5 ||
+            content.idAction === 11
+          "
         >
           <strong>Plan Tarifaire : </strong>{{ content.plan_tarifaire.rpDes }}
         </p>
@@ -132,18 +140,20 @@
             <tr>
               <th scope="col">N°</th>
               <th scope="col">Services</th>
-              <th scope="col">Paramètres</th>
+              <th scope="col" *ngIf="content.idAction !== 11">Paramètres</th>
+              <th scope="col" *ngIf="content.idAction === 11">Status</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let service of content.service_param; index as i">
               <th>{{ i + 1 }}</th>
               <td>{{ service.servicename }}</td>
-              <td>
+              <td *ngIf="content.idAction !== 11">
                 <li *ngFor="let param of service.parametre">
                   {{ param.prmDes + " (" + param.valueDes + ")" }}
                 </li>
               </td>
+              <td *ngIf="content.idAction === 11">{{ content.parametre }}</td>
             </tr>
           </tbody>
         </table>
