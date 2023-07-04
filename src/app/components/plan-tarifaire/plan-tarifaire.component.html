@@ -1,0 +1,218 @@
+<div class="title"><i class="bi bi-journal-text me-2"></i>Modification plan tarifaire</div>
+<div class="card flex-row m-3 p-3">
+  <div class="col-md-3 pe-3">
+    <label for="formFile" class="form-label m-0 mb-2"
+      ><strong>Fichier CSV</strong></label
+    >
+    <input
+      #inputFile
+      class="form-control form-control-sm me-3"
+      type="file"
+      id="formFile"
+      (change)="onFileChange($event)"
+    />
+  </div>
+
+  <div class="col-md-3 ps-3 pe-4" *ngIf="fichier">
+    <label class="form-label m-0 mb-2"><strong>Plan tarifaire</strong></label>
+    <select
+      class="form-select form-select-sm"
+      aria-label="Default select example"
+      [(ngModel)]="selectedRateplans"
+      (ngModelChange)="onRatePlansChange()"
+    >
+      <option
+        *ngFor="let rateplan of rateplans"
+        [ngValue]="rateplan"
+        aria-placeholder="Plan"
+      >
+        {{ rateplan.rpDes }}
+      </option>
+    </select>
+  </div>
+
+  <div class="example-wrapper" *ngIf="selectedRateplans">
+    <div>
+      <input
+        type="checkbox"
+        id="date"
+        class="form-check-input me-2"
+        [value]="checkDate"
+        (change)="onCheckDateChange($event)"
+      />
+      <label for="date" class="form-check-label mb-2"
+        ><strong>Date de prise en compte</strong></label
+      >
+    </div>
+    <kendo-datetimepicker
+      [disabled]="!checkDate"
+      format="dd/MM/yyyy HH:mm:ss"
+      [(value)]="date"
+    >
+    </kendo-datetimepicker>
+  </div>
+</div>
+
+<div class="m-3">
+  <div class="row">
+    <div class="col-md-7">
+      <ngb-accordion
+        #acc="ngbAccordion"
+        class="accordion-blue"
+        activeIds="config-panel-three"
+      >
+        <ngb-panel id="config-panel-three" title="Contenu du fichier CSV">
+          <ng-template ngbPanelContent>
+            <div class="accordion-contents-40">
+              <table
+                class="table table-sm table-striped table-bordered"
+                *ngIf="contenu.length > 0"
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">MSISDN</th>
+                    <th scope="col">PLAN TARIFAIRE</th>
+                    <th scope="col">STATUT</th>
+                    <th scope="col">TYPE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of contenu">
+                    <td>{{ item.msisdn }}</td>
+                    <td>{{ item.notification }}</td>
+                    <td class="p-0">
+                      <i
+                        [ngClass]="
+                          item.s_msisdn === 'OK'
+                            ? 'bi bi-check-lg'
+                            : 'bi bi-x-lg'
+                        "
+                      ></i>
+                    </td>
+                    <td>{{ item.type }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+
+    <div class="col-md-5">
+      <ngb-accordion
+        #acc="ngbAccordion"
+        class="accordion-orange"
+        activeIds="config-panel-one"
+      >
+        <ngb-panel id="config-panel-one" title="Information">
+          <ng-template ngbPanelContent>
+            <div class="accordion-contents-40">
+              <label for="description" class="mb-1"
+                ><strong>Description courte</strong
+                ><span class="red">*</span></label
+              >
+              <textarea
+                class="form-control form-control-sm mb-2"
+                id="description"
+                rows="1"
+                [(ngModel)]="description"
+              ></textarea>
+              <label for="commentaire" class="mb-1"
+                ><strong>Commentaire</strong><span class="red">*</span></label
+              >
+              <textarea
+                class="form-control form-control-sm"
+                id="commentaire"
+                rows="3"
+                [(ngModel)]="commentaire"
+              ></textarea>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+  </div>
+</div>
+
+<div class="m-3">
+  <div class="row">
+    <div class="col-md-6">
+      <ngb-accordion
+        #acc="ngbAccordion"
+        class="accordion-gris accordion-h50"
+        activeIds="config-panel-one"
+      >
+        <ngb-panel id="config-panel-one" title="Anciens services">
+          <ng-template ngbPanelContent>
+            <div class="accordion-contents-50 fs-13">
+              <li *ngFor="let item of serviceRateplans | keyvalue">
+                <strong>{{ item.key }}</strong>
+                <ul class="ps-3">
+                  <li *ngFor="let service of $any(item).value">
+                    <i
+                      class="bi bi-asterisk text-danger ms-1"
+                      *ngIf="service.svCsind === 'true'"
+                    ></i>
+                    {{ service.servicename }}
+                  </li>
+                </ul>
+              </li>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+
+    <div class="col-md-6">
+      <ngb-accordion
+        #acc="ngbAccordion"
+        class="accordion-pink accordion-h50"
+        activeIds="config-panel-one"
+      >
+        <ngb-panel id="config-panel-one" title="Nouveaux services">
+          <ng-template ngbPanelContent>
+            <div class="accordion-contents-50 fs-13">
+              <li *ngFor="let item of newServiceRateplans | keyvalue">
+                <strong>{{ item.key }}</strong>
+                <ul class="ps-3">
+                  <li *ngFor="let service of $any(item).value">
+                    <i
+                      class="bi bi-asterisk text-danger ms-1"
+                      *ngIf="service.svCsind === 'true'"
+                    ></i>
+                    {{ service.servicename }}
+                  </li>
+                </ul>
+              </li>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+  </div>
+</div>
+
+<div class="m-3">
+  <p class="m-0 text-end">
+    <button class="btn btn-secondary btn-sm" (click)="clear()">
+      <i class="bi bi-arrow-repeat me-2"></i>Rafraichir
+    </button>
+
+    <button
+      class="btn btn-primary btn-sm ms-2"
+      *ngIf="fichier"
+      (click)="openModalResume()"
+    >
+      <i class="bi bi-journal-text me-2"></i>Résumé
+    </button>
+
+    <button
+      class="btn btn-success btn-sm ms-2"
+      *ngIf="!disableValider()"
+      (click)="valider()"
+    >
+      <i class="bi bi-check2-circle me-2"></i>Valider
+    </button>
+  </p>
+</div>

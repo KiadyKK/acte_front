@@ -58,6 +58,11 @@ export const navbarData = [
     icon: 'bi bi-record-circle',
     label: 'Modification status service',
   },
+  {
+    routerLink: 'plan-tarifaire',
+    icon: 'bi bi-journal-text',
+    label: 'Modification plan tarifaire',
+  },
   // {
   //   routerLink: 'metier',
   //   icon: 'bi bi-check-circle',

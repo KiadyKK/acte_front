@@ -1,0 +1,115 @@
+<div class="modal-header bg-orange">
+  <h5 class="modal-title">Résumé</h5>
+  <button
+    type="button"
+    class="btn btn-lg text-light p-0"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <i class="bi bi-x-lg"></i>
+  </button>
+</div>
+
+<div class="modal-body fs-13">
+  <p>
+    <strong>Nombre de ligne : </strong
+    ><span class="ms-auto">{{ nbLigne }}</span>
+  </p>
+  <p
+    [ngClass]="{
+      'text-danger': +nbrError !== 0 && nbrError !== ''
+    }"
+  >
+    <i
+      *ngIf="+nbrError !== 0 && nbrError !== ''"
+      class="bi bi-x-circle-fill me-1"
+    ></i
+    ><strong>Nombre d'erreur : </strong
+    ><span class="ms-auto">{{ nbrError }}</span>
+  </p>
+
+  <hr />
+
+  <div class="row p-3">
+    <table class="table table-sm table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Services retirés</th>
+          <th>Services ajoutés</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <li *ngFor="let item of servicesRemoved | keyvalue">
+              <strong>{{ item.key }}</strong>
+              <ul class="ps-3">
+                <li *ngFor="let service of $any(item).value">
+                  <i
+                    class="bi bi-asterisk text-danger ms-1"
+                    *ngIf="service.svCsind === 'true'"
+                  ></i>
+                  {{ service.servicename }}
+                </li>
+              </ul>
+            </li>
+          </td>
+          <td>
+            <li *ngFor="let item of servicesAdded | keyvalue">
+              <strong>{{ item.key }}</strong>
+              <ul class="ps-3">
+                <li *ngFor="let service of $any(item).value">
+                  <i
+                    class="bi bi-asterisk text-danger ms-1"
+                    *ngIf="service.svCsind === 'true'"
+                  ></i>
+                  {{ service.servicename }}
+                </li>
+              </ul>
+            </li>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- <div class="col-md-6">
+      <p><strong>Services retirés</strong></p>
+      <li *ngFor="let item of servicesRemoved | keyvalue">
+        <strong>{{ item.key }}</strong>
+        <ul class="ps-3">
+          <li *ngFor="let service of $any(item).value">
+            <i
+              class="bi bi-asterisk text-danger ms-1"
+              *ngIf="service.svCsind === 'true'"
+            ></i>
+            {{ service.servicename }}
+          </li>
+        </ul>
+      </li>
+    </div>
+    <div class="col-md-6">
+      <p><strong>Services ajoutés</strong></p>
+      <li *ngFor="let item of servicesAdded | keyvalue">
+        <strong>{{ item.key }}</strong>
+        <ul class="ps-3">
+          <li *ngFor="let service of $any(item).value">
+            <i
+              class="bi bi-asterisk text-danger ms-1"
+              *ngIf="service.svCsind === 'true'"
+            ></i>
+            {{ service.servicename }}
+          </li>
+        </ul>
+      </li>
+    </div> -->
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-success btn-sm"
+    (click)="activeModal.close('Close click')"
+  >
+    Fermer
+  </button>
+</div>

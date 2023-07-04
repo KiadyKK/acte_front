@@ -44,6 +44,8 @@ import { AjoutServiceComponent } from './components/ajout-service/ajout-service.
 import { ModalResumeAjoutComponent } from './components/ajout-service/modal-resume-ajout/modal-resume-ajout.component';
 import { ModifStatusServiceComponent } from './components/modif-status-service/modif-status-service.component';
 import { ModalResumeStatusComponent } from './components/modif-status-service/modal-resume-status/modal-resume-status.component';
+import { PlanTarifaireComponent } from './components/plan-tarifaire/plan-tarifaire.component';
+import { ModalResumePlanComponent } from './components/plan-tarifaire/modal-resume-plan/modal-resume-plan.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +80,8 @@ import { ModalResumeStatusComponent } from './components/modif-status-service/mo
     ModalResumeAjoutComponent,
     ModifStatusServiceComponent,
     ModalResumeStatusComponent,
+    PlanTarifaireComponent,
+    ModalResumePlanComponent,
   ],
   imports: [
     BrowserModule,

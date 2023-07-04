@@ -76,6 +76,12 @@ export class ActeMasseService {
     });
   }
 
+  savePlanTarifaire(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'plan-tarifaire', data, {
+      responseType: 'text',
+    });
+  }
+
   getReasonsRead(rsState: string): Observable<any> {
     return this.http.get(ACTE_API + `reasons-read?rsState=${rsState}`);
   }
@@ -142,5 +148,9 @@ export class ActeMasseService {
 
   verifyModifStatusService(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-modif-status-service', data);
+  }
+
+  verifyPlantarifaire(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-plan-tarifaire', data);
   }
 }
