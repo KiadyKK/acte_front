@@ -12,27 +12,6 @@
       (change)="onFileChange($event)"
     />
   </div>
-
-  <div class="example-wrapper" *ngIf="fichier">
-    <div>
-      <input
-        type="checkbox"
-        id="date"
-        class="form-check-input me-2"
-        [value]="checkDate"
-        (change)="onCheckDateChange($event)"
-      />
-      <label for="date" class="form-check-label mb-2"
-        ><strong>Date de prise en compte</strong></label
-      >
-    </div>
-    <kendo-datetimepicker
-      [disabled]="!checkDate"
-      format="dd/MM/yyyy HH:mm:ss"
-      [(value)]="date"
-    >
-    </kendo-datetimepicker>
-  </div>
 </div>
 
 <div class="m-3">
@@ -123,7 +102,161 @@
         class="accordion-pink accordion-h50"
         activeIds="config-panel-one"
       >
-        <ngb-panel id="config-panel-one" title="Services">
+        <ngb-panel id="config-panel-one" title="Anciens services">
+          <ng-template ngbPanelContent>
+            <div class="accordion-contents-50 fs-13">
+              <li *ngFor="let item of oldServiceRateplans | keyvalue">
+                <strong>{{ item.key }}</strong>
+                <ul class="ps-3">
+                  <li *ngFor="let service of $any(item).value">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      [value]="service.servicename"
+                      (change)="onOldCheckboxChange($event, item.key)"
+                      [disabled]="oldCheckService"
+                    />
+                    <i
+                      class="bi bi-asterisk text-danger ms-1"
+                      *ngIf="service.svCsind === 'true'"
+                    ></i>
+                    {{ service.servicename }}
+                  </li>
+                </ul>
+              </li>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+
+    <div class="col-md-6">
+      <ngb-accordion
+        #acc="ngbAccordion"
+        class="accordion-gris accordion-h50"
+        activeIds="config-panel-one"
+      >
+        <ngb-panel id="config-panel-one" title="Anciens paramètres">
+          <ng-template ngbPanelContent>
+            <div class="accordion-contents-50">
+              <div class="my-2" *ngFor="let parametre of oldListParametres">
+                <ngb-accordion
+                  #acc="ngbAccordion"
+                  class="accordion-h50 accordion-small fs-13"
+                >
+                  <ngb-panel>
+                    <ng-template ngbPanelTitle>
+                      <i
+                        class="bi bi-check-circle-fill text-success h6 mb-0 me-1"
+                        *ngIf="parametre.defValue"
+                      ></i>
+                      <i
+                        class="bi bi-x-circle-fill text-danger h6 mb-0 me-1"
+                        *ngIf="!parametre.defValue"
+                      ></i>
+                      <span class="fw-bold">{{ parametre.prmDes }}</span>
+                    </ng-template>
+                    <ng-template ngbPanelContent>
+                      <div class="ms-3 my-2">
+                        <div
+                          class="pe-3"
+                          *ngIf="
+                            parametre.type == 'DF' || parametre.type == 'SE'
+                          "
+                        >
+                          <input
+                            type="text"
+                            class="form-control form-control-sm"
+                            [value]="parametre.defValue ?? ''"
+                            (keyup)="
+                              onOldTextParameterChange($event, parametre)
+                            "
+                          />
+                        </div>
+                        <div *ngIf="parametre.nValues.length">
+                          <ng-container
+                            *ngFor="let nValue of parametre.nValues"
+                          >
+                            <div
+                              class="form-check"
+                              *ngIf="
+                                parametre.type == 'CB' || parametre.type == 'LB'
+                              "
+                            >
+                              <input
+                                class="form-check-input"
+                                type="radio"
+                                [name]="'old' + parametre.prmDes"
+                                [id]="nValue.valueDes"
+                                [checked]="parametre.defValue === nValue.value"
+                                [value]="nValue.valueDes ?? nValue.value"
+                                (change)="
+                                  onOldRadioParameterChange(parametre, nValue)
+                                "
+                              />
+                              <label
+                                class="form-check-label"
+                                [for]="nValue.valueDes"
+                                *ngIf="
+                                  nValue.valueDes != null &&
+                                  parametre.type != 'DF'
+                                "
+                                >{{ nValue.valueDes }}</label
+                              >
+                              <label
+                                class="form-check-label"
+                                [for]="nValue.valueDes"
+                                *ngIf="
+                                  nValue.valueDes == null &&
+                                  parametre.type != 'DF'
+                                "
+                                >{{ nValue.value }}</label
+                              >
+                            </div>
+                          </ng-container>
+                        </div>
+                        <!-- <div *ngIf="!parametre.nValues.length">
+                              <li>
+                                <div
+                                  *ngIf="
+                                    parametre.type == 'CB' ||
+                                    parametre.type == 'LB'
+                                  "
+                                >
+                                  <input
+                                    class="form-check-input"
+                                    [name]="parametre.prmDes"
+                                    type="radio"
+                                    [id]="parametre.nValues.valueDes"
+                                  />
+                                  <label [for]="parametre.nValues.valueDes">{{
+                                    parametre.nValues.valueDes
+                                  }}</label>
+                                </div>
+                              </li>
+                            </div> -->
+                      </div>
+                    </ng-template>
+                  </ngb-panel>
+                </ngb-accordion>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+  </div>
+</div>
+
+<div class="m-3">
+  <div class="row">
+    <div class="col-md-6">
+      <ngb-accordion
+        #acc="ngbAccordion"
+        class="accordion-pink accordion-h50"
+        activeIds="config-panel-one"
+      >
+        <ngb-panel id="config-panel-one" title="Nouveaux services">
           <ng-template ngbPanelContent>
             <div class="accordion-contents-50 fs-13">
               <li *ngFor="let item of serviceRateplans | keyvalue">
@@ -157,7 +290,7 @@
         class="accordion-gris accordion-h50"
         activeIds="config-panel-one"
       >
-        <ngb-panel id="config-panel-one" title="Paramètres">
+        <ngb-panel id="config-panel-one" title="Nouveaux paramètres">
           <ng-template ngbPanelContent>
             <div class="accordion-contents-50">
               <div class="my-2" *ngFor="let parametre of listParametres">
