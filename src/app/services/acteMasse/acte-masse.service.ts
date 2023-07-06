@@ -90,6 +90,10 @@ export class ActeMasseService {
     return this.http.get(ACTE_API + 'rateplans-read');
   }
 
+  getChangeRateplansRead(): Observable<any> {
+    return this.http.get(ACTE_API + 'change-rateplans-read');
+  }
+
   getServiceRateplans(rpcode: number, rpVscode: number): Observable<any> {
     return this.http.get(
       ACTE_API + `service-rateplans?rpcode=${rpcode}&rpVscode=${rpVscode}`

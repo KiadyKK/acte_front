@@ -21,6 +21,7 @@
             content.idAction === 4 ||
             content.idAction === 5 ||
             content.idAction === 7 ||
+            content.idAction === 10 ||
             content.idAction === 11 ||
             content.idAction === 12 ||
             content.idAction === 13
@@ -31,6 +32,7 @@
             <tr>
               <th>MSISDN</th>
               <th>CLIENT</th>
+              <th *ngIf="content.idAction === 10">PLAN TARIFAIRE</th>
               <th *ngIf="content.idAction === 4">LIMIT CONSO</th>
               <th>STATUS</th>
             </tr>
@@ -42,6 +44,9 @@
               </td>
               <td>
                 {{ item.client }}
+              </td>
+              <td *ngIf="content.idAction === 10">
+                {{ item.notification }}
               </td>
               <td *ngIf="content.idAction === 4">
                 {{ item.lc }}

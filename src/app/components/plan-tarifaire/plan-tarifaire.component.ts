@@ -17,9 +17,8 @@ export class PlanTarifaireComponent {
   private selectedFile: File | null;
 
   public rateplans: any;
+  public newRateplans: any;
   public selectedRateplans: any;
-  public date: Date = new Date();
-  public checkDate: boolean = false;
   public description: string = '';
   public commentaire: string = '';
   public nbLigne: string;
@@ -43,9 +42,19 @@ export class PlanTarifaireComponent {
   ) {}
 
   ngOnInit(): void {
-    this.acteMasseService.getRateplansRead().subscribe({
+    this.acteMasseService.getChangeRateplansRead().subscribe({
       next: (data) => {
-        this.rateplans = data.sort((a: any, b: any) => {
+        const { changeRatePlans, allRatePlans } = data;
+
+        let mergeRatePlans: Array<any> = allRatePlans.filter(
+          (allRatePlan: any) => {
+            return changeRatePlans.some((changeRatePlan: any) => {
+              return allRatePlan.rpcode === changeRatePlan.rpcode;
+            });
+          }
+        );
+
+        this.rateplans = mergeRatePlans.sort((a: any, b: any) => {
           return a.rpDes.localeCompare(b.rpDes);
         });
       },
@@ -184,7 +193,9 @@ export class PlanTarifaireComponent {
   }
 
   onRatePlansChange(): void {
-    const { rpcode, rpVscode } = this.selectedRateplans;
+    const { rpcode, rpVscode, rpDes } = this.selectedRateplans;
+    this.newRateplans = { rpcode, rpVscode, rpDes };
+
     this.acteMasseService.getServiceRateplans(rpcode, rpVscode).subscribe({
       next: (data) => {
         if (data.length) {
@@ -213,14 +224,9 @@ export class PlanTarifaireComponent {
     });
   }
 
-  onCheckDateChange(event: any): void {
-    this.checkDate = event.target.checked;
-  }
-
   disableValider(): boolean {
     return this.fichier === '' ||
       !this.checkratePlans ||
-      this.nbrError !== 0 ||
       this.description === '' ||
       this.commentaire === ''
       ? true
@@ -236,7 +242,7 @@ export class PlanTarifaireComponent {
     let data: any = {
       initiateur: this.storageService.getItem('trigramme'),
       idUtilisateur: +this.storageService.getItem('user_id'),
-      plan_tarifaire: this.ratePlans,
+      plan_tarifaire: this.newRateplans,
       comment: this.commentaire,
       service: {
         rpcode: this.ratePlans.rpcode,
@@ -249,8 +255,6 @@ export class PlanTarifaireComponent {
         liste: this.contenu,
       },
       descript_court: this.description,
-      date_prise_compte: this.date,
-      checkdateprise: this.checkDate ? 'true' : 'false',
       idAction: 10,
       etat: 'PENDING',
       lblAction: 'Modification plan tarifaire',
