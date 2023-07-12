@@ -407,9 +407,10 @@ export class AjoutServiceComponent {
     return this.fichier === '' ||
       !this.checkratePlans ||
       !this.selectedReason ||
-      this.nbrError !== 0 ||
+      // this.nbrError !== 0 ||
       this.description === '' ||
-      this.commentaire === ''
+      this.commentaire === '' ||
+      !this.listServices.length 
       ? true
       : false;
   }

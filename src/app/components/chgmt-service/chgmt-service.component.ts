@@ -636,7 +636,7 @@ export class ChgmtServiceComponent {
   disableValider(): boolean {
     return this.fichier === '' ||
       !this.checkratePlans ||
-      this.nbrError !== 0 ||
+      // this.nbrError !== 0 ||
       this.description === '' ||
       this.commentaire === ''
       ? true
@@ -663,8 +663,6 @@ export class ChgmtServiceComponent {
       lblAction: 'Changement service',
       lbl_etape: 'En attente de validation métier',
     };
-
-    console.log(data);
 
     const formData: FormData = new FormData();
     formData.append('file', this.selectedFile!);
