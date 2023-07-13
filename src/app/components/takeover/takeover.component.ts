@@ -3,8 +3,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ModalAlertComponent } from 'src/app/shared/modal-alert/modal-alert.component';
-import { ModalResumeComponent } from 'src/app/shared/modal-resume/modal-resume.component';
 import { ModalSavingComponent } from 'src/app/shared/modal-saving/modal-saving.component';
+import { ModalResumeTakeoverComponent } from './modal-resume-takeover/modal-resume-takeover.component';
 
 @Component({
   selector: 'app-takeover',
@@ -141,7 +141,8 @@ export class TakeoverComponent {
   disableValider(): boolean {
     return this.fichier === '' ||
       this.description === '' ||
-      this.commentaire === ''
+      this.commentaire === '' ||
+      !this.client
       ? true
       : false;
   }
@@ -205,11 +206,12 @@ export class TakeoverComponent {
   }
 
   openModalResume() {
-    const modalRef = this.modalService.open(ModalResumeComponent, {
+    const modalRef = this.modalService.open(ModalResumeTakeoverComponent, {
       size: 'lg',
       centered: true,
     });
     modalRef.componentInstance.nbLigne = this.nbLigne;
     modalRef.componentInstance.nbrError = this.nbrError;
+    modalRef.componentInstance.client = this.client.client;
   }
 }
