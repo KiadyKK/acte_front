@@ -40,7 +40,7 @@ export const navbarData = [
   },
   {
     routerLink: 'revoke',
-    icon: 'bi bi-x-circle',
+    icon: 'bi bi-dash-circle',
     label: 'Revoke',
   },
   // {

@@ -184,6 +184,7 @@ export class RevokeComponent {
     this.inputFile.nativeElement.value = '';
     this.selectedFile = null;
     this.fichier = '';
+    this.selectedReason = '';
     this.nbLigne = '';
     this.nbrError = 0;
     this.checkDate = false;
