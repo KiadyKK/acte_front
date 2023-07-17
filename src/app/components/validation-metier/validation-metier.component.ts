@@ -234,6 +234,31 @@ export class ValidationMetierComponent implements OnInit {
 
         break;
 
+      //Forfait*********************************************
+      case 9:
+        let data9: any = {
+          id: this.content.idActe,
+          listeMsisdn: this.content.input.liste,
+          sncode: this.content.service_param[0].sncode,
+          validForm: validForm,
+          titre: 'Forfait',
+          checkdatepriseencompte: this.content.checkdatepriseencompte,
+          comment: this.comValidateur,
+        };
+        console.log(data9);
+        // this.metierService.validerJoker(data9).subscribe({
+        //   next: (data) => {
+        //     if (!data.msisdnError.length) {
+        //       this.openModalValidation(false);
+        //     } else {
+        //       this.openModalValidation(true);
+        //     }
+        //     this.onActeClick(this.content.idActe);
+        //   },
+        // });
+
+        break;
+
       //SUSPENSION*********************************************
       case 12:
         let data12: any = {
@@ -271,16 +296,16 @@ export class ValidationMetierComponent implements OnInit {
           comment: this.comValidateur,
           date_prise_new: date_prise_new,
         };
-        // this.metierService.validerJoker(data12).subscribe({
-        //   next: (data) => {
-        //     if (!data.msisdnError.length) {
-        //       this.openModalValidation(false);
-        //     } else {
-        //       this.openModalValidation(true);
-        //     }
-        //     this.onActeClick(this.content.idActe);
-        //   },
-        // });
+        this.metierService.validerJoker(data13).subscribe({
+          next: (data) => {
+            if (!data.msisdnError.length) {
+              this.openModalValidation(false);
+            } else {
+              this.openModalValidation(true);
+            }
+            this.onActeClick(this.content.idActe);
+          },
+        });
 
         break;
       default:

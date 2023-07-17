@@ -75,6 +75,7 @@ export class ForfaitComponent {
             };
             this.acteMasseService.verifyForfait(data).subscribe({
               next: (data) => {
+                console.log(data);
                 if (data.hasOwnProperty('liste')) {
                   const liste = data.liste;
                   const rpcode: number = liste[0].rpcode;
