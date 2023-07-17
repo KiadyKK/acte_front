@@ -1,6 +1,6 @@
 <div class="title"><i class="bi bi-box-seam me-2"></i>Forfait</div>
 <div class="card flex-row m-3 p-3">
-  <div class="col-md-3 pe-4">
+  <div class="col-md-3">
     <label for="formFile" class="form-label m-0 mb-2"
       ><strong>Fichier CSV</strong></label
     >
@@ -13,7 +13,25 @@
     />
   </div>
 
-  <div class="example-wrapper" *ngIf="fichier">
+  <div class="col-md-3 ps-3" *ngFor="let item of listeServiceForfait; index as i">
+    <label class="form-label m-0 mb-2"><strong>{{ item.prmDes }}</strong></label>
+    <select
+      class="form-select form-select-sm"
+      aria-label="Default select example"
+      [(ngModel)]="selectedService[i]"
+      (change)="onSelectChange(item, i)"
+    >
+      <option
+        *ngFor="let param of item.nValues"
+        [ngValue]="param"
+        aria-placeholder="Forfait"
+      >
+        {{ param.valueDes }}
+      </option>
+    </select>
+  </div>
+
+  <div class="example-wrapper ps-3" *ngIf="selectedService.length">
     <div>
       <input
         type="checkbox"
@@ -53,6 +71,7 @@
                 <thead>
                   <tr>
                     <th scope="col">MSISDN</th>
+                    <th scope="col">PLAN TARIFAIRE</th>
                     <th scope="col">CLIENT</th>
                     <th scope="col">Hybrid</th>
                     <th scope="col">STATUT</th>
@@ -61,6 +80,7 @@
                 <tbody>
                   <tr *ngFor="let item of contenu">
                     <td>{{ item.msisdn }}</td>
+                    <td>{{ item.plan_tarifaire }}</td>
                     <td>{{ item.client }}</td>
                     <td class="p-0">
                       <i

@@ -34,6 +34,7 @@ export class ValidationMetierComponent implements OnInit {
   onActeClick(idActe: number): void {
     this.metierService.afficherInteraction(idActe).subscribe({
       next: (data: Interaction) => {
+        console.log(data);
         this.content = data;
         this.date = new Date(data.date_prise_compte!);
         this.comValidateur = data.commentaire!;

@@ -25,6 +25,11 @@ export class ForfaitComponent {
   public fichier: string = '';
   public nbrError: number = 0;
   public listeMsisdn: Array<any>;
+  public listeServiceForfait: Array<any>;
+  public servicename: string;
+  public sncode: number;
+  public selectedService: Array<any> = [];
+  public listParamaters: Array<any> = [];
 
   constructor(
     private storageService: StorageService,
@@ -70,9 +75,35 @@ export class ForfaitComponent {
             };
             this.acteMasseService.verifyForfait(data).subscribe({
               next: (data) => {
-                console.log(data);
                 if (data.hasOwnProperty('liste')) {
-                  this.contenu = data.liste;
+                  const liste = data.liste;
+                  const rpcode: number = liste[0].rpcode;
+
+                  let checkHybrid: boolean = liste.every(
+                    (item: any) => item.checkHybrid
+                  );
+
+                  let checkPlan: boolean = liste.every(
+                    (item: any) => item.rpcode === rpcode
+                  );
+
+                  if (!checkHybrid) {
+                    alert('Les numéros doivent être de type Hybrid.');
+                  } else if (!checkPlan) {
+                    alert('Les numéros doivent avoir le même plan tarifaire.');
+                  } else {
+                    this.acteMasseService
+                      .getListServiceForfait(rpcode)
+                      .subscribe({
+                        next: (data) => {
+                          this.servicename = data.servicename;
+                          this.sncode = data.sncode;
+                          this.listeServiceForfait = data.parametersRead;
+                        },
+                      });
+                  }
+
+                  this.contenu = liste;
                   this.fichier = this.selectedFile!.name;
                   this.nbLigne = data.liste.length;
                   this.nbrError = data.nb_erreur;
@@ -108,6 +139,13 @@ export class ForfaitComponent {
     }
   }
 
+  onSelectChange(item: any, i: number): void {
+    let selectedService = this.selectedService[i];
+    selectedService.prmDes = item.prmDes;
+    selectedService.prmNo = item.prmNo;
+    this.listParamaters[i] = selectedService;
+  }
+
   onCheckDateChange(event: any): void {
     this.checkDate = event.target.checked;
   }
@@ -122,6 +160,9 @@ export class ForfaitComponent {
   }
 
   valider(): void {
+    let parametre = this.listParamaters.filter(
+      (item: any) => Object.keys(item).length !== 0
+    );
     let data: any = {
       initiateur: this.storageService.getItem('trigramme'),
       idUtilisateur: +this.storageService.getItem('user_id'),
@@ -135,9 +176,16 @@ export class ForfaitComponent {
       },
       descript_court: this.description,
       checkdateprise: this.checkDate ? 'true' : 'false',
-      idAction: 13,
+      parametre_service: [
+        {
+          servicename: this.servicename,
+          sncode: this.sncode,
+          parametre: parametre,
+        },
+      ],
+      idAction: 9,
       etat: 'PENDING',
-      lblAction: 'Revoke',
+      lblAction: 'Forfait',
       lbl_etape: 'En attente de validation métier',
     };
 
@@ -145,7 +193,7 @@ export class ForfaitComponent {
     formData.append('file', this.selectedFile!);
     formData.append('data', JSON.stringify(data));
 
-    this.acteMasseService.saveRevoke(formData).subscribe({
+    this.acteMasseService.saveForfait(formData).subscribe({
       next: (data) => {
         if (data) {
           this.openModalSaving(data);
@@ -176,6 +224,9 @@ export class ForfaitComponent {
     this.nbLigne = '';
     this.nbrError = 0;
     this.checkDate = false;
+    this.listeServiceForfait = [];
+    this.selectedService = [];
+    this.listParamaters = [];
   }
 
   openModalResume() {
