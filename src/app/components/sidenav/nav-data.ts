@@ -43,6 +43,11 @@ export const navbarData = [
     icon: 'bi bi-dash-circle',
     label: 'Revoke',
   },
+  {
+    routerLink: 'forfait',
+    icon: 'bi bi-box-seam',
+    label: 'Forfait',
+  },
   // {
   //   routerLink: 'metier',
   //   icon: 'bi bi-check-circle',

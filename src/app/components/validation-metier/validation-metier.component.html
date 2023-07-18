@@ -20,6 +20,7 @@
             content.idAction === 3 ||
             content.idAction === 4 ||
             content.idAction === 7 ||
+            content.idAction === 9 ||
             content.idAction == 12 ||
             content.idAction == 13
           "
@@ -110,7 +111,9 @@
     #acc="ngbAccordion"
     class="accordion-green"
     activeIds="config-panel-four"
-    *ngIf="content.idAction === 1 || content.idAction === 7"
+    *ngIf="
+      content.idAction === 1 || content.idAction === 7 || content.idAction === 9
+    "
   >
     <ngb-panel
       id="config-panel-four"

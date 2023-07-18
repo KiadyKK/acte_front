@@ -13,6 +13,7 @@ import { ReengagementComponent } from './components/reengagement/reengagement.co
 import { LimitConsoComponent } from './components/limit-conso/limit-conso.component';
 import { SuspensionComponent } from './components/suspension/suspension.component';
 import { RevokeComponent } from './components/revoke/revoke.component';
+import { ForfaitComponent } from './components/forfait/forfait.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -69,6 +70,11 @@ const routes: Routes = [
   {
     path: 'revoke',
     component: RevokeComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'forfait',
+    component: ForfaitComponent,
     canActivate: [AuthGuard],
   },
   { path: '', redirectTo: 'board', pathMatch: 'full' },

@@ -34,6 +34,7 @@ export class ValidationMetierComponent implements OnInit {
   onActeClick(idActe: number): void {
     this.metierService.afficherInteraction(idActe).subscribe({
       next: (data: Interaction) => {
+        console.log(data);
         this.content = data;
         this.date = new Date(data.date_prise_compte!);
         this.comValidateur = data.commentaire!;
@@ -230,6 +231,31 @@ export class ValidationMetierComponent implements OnInit {
             this.onActeClick(this.content.idActe);
           },
         });
+
+        break;
+
+      //Forfait*********************************************
+      case 9:
+        let data9: any = {
+          id: this.content.idActe,
+          listeMsisdn: this.content.input.liste,
+          sncode: this.content.service_param[0].sncode,
+          validForm: validForm,
+          titre: 'Forfait',
+          checkdatepriseencompte: this.content.checkdatepriseencompte,
+          comment: this.comValidateur,
+        };
+        console.log(data9);
+        // this.metierService.validerJoker(data9).subscribe({
+        //   next: (data) => {
+        //     if (!data.msisdnError.length) {
+        //       this.openModalValidation(false);
+        //     } else {
+        //       this.openModalValidation(true);
+        //     }
+        //     this.onActeClick(this.content.idActe);
+        //   },
+        // });
 
         break;
 

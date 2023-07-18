@@ -64,6 +64,12 @@ export class ActeMasseService {
     });
   }
 
+  saveForfait(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'forfait', data, {
+      responseType: 'text',
+    });
+  }
+
   getReasonsRead(rsState: string): Observable<any> {
     return this.http.get(ACTE_API + `reasons-read?rsState=${rsState}`);
   }
@@ -118,5 +124,13 @@ export class ActeMasseService {
 
   verifyRevoke(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-revoke', data);
+  }
+
+  verifyForfait(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-forfait', data);
+  }
+
+  getListServiceForfait(rpcode: number): Observable<any> {
+    return this.http.get(ACTE_API + `list-service-forfait?rpcode=${rpcode}`);
   }
 }
