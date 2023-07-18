@@ -16,7 +16,7 @@ export const navbarData = [
   {
     routerLink: 'modify-fields',
     icon: 'bi bi-pencil-square',
-    label: 'Modification Informations',
+    label: 'Modification informations',
   },
   {
     routerLink: 'takeover',
@@ -47,6 +47,11 @@ export const navbarData = [
     routerLink: 'forfait',
     icon: 'bi bi-box-seam',
     label: 'Forfait',
+  },
+  {
+    routerLink: 'ajout-service',
+    icon: 'bi bi-plus-circle',
+    label: 'Ajout service',
   },
   // {
   //   routerLink: 'metier',

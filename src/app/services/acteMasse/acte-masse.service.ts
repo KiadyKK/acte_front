@@ -64,6 +64,12 @@ export class ActeMasseService {
     });
   }
 
+  saveAjoutService(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'ajout-service', data, {
+      responseType: 'text',
+    });
+  }
+
   saveForfait(data: FormData): Observable<any> {
     return this.http.post(ACTE_API + 'forfait', data, {
       responseType: 'text',
@@ -128,6 +134,10 @@ export class ActeMasseService {
 
   verifyForfait(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-forfait', data);
+  }
+
+  verifyAjoutService(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-ajout-service', data);
   }
 
   getListServiceForfait(rpcode: number): Observable<any> {

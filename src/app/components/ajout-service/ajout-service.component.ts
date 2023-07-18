@@ -1,40 +1,38 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActeMasseService } from 'src/app/services/acteMasse/acte-masse.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalListeServicesComponent } from './modal-liste-services/modal-liste-services.component';
-import { ModalChecklisteServicesComponent } from './modal-checkliste-services/modal-checkliste-services.component';
-import { ModalResultComponent } from './modal-result/modal-result.component';
 import { ModalSavingComponent } from 'src/app/shared/modal-saving/modal-saving.component';
+import { ModalResumeAjoutComponent } from './modal-resume-ajout/modal-resume-ajout.component';
 
 @Component({
-  selector: 'app-activation',
-  templateUrl: './activation.component.html',
-  styleUrls: ['./activation.component.css'],
+  selector: 'app-ajout-service',
+  templateUrl: './ajout-service.component.html',
+  styleUrls: ['./ajout-service.component.css'],
 })
-export class ActivationComponent {
+export class AjoutServiceComponent {
   @ViewChild('inputFile')
   inputFile: ElementRef;
 
   private selectedFile: File | null;
 
   public reasons: any;
-  public rateplans: any;
-  public serviceRateplans: any;
+  public selectedReason: any;
   public date: Date = new Date();
   public checkDate: boolean = false;
-  public client: any = '';
-  public custcode: string = '';
   public description: string = '';
   public commentaire: string = '';
   public nbLigne: string;
   public contenu: Array<any> = [];
   public fichier: string = '';
-  public nbrError: string = '';
-  public selectedReason: any;
-  public selectedRateplans: any;
+  public nbrError: number = 0;
+  public listeMsisdn: Array<any>;
+  public ratePlans: any;
+  public checkratePlans: boolean;
+  public serviceRateplans: any;
   public listServices: Array<any> = [];
   public listParametres: any;
+  public checkService: boolean = false;
 
   public service: any;
 
@@ -50,17 +48,9 @@ export class ActivationComponent {
         this.reasons = data;
       },
     });
-
-    this.acteMasseService.getRateplansRead().subscribe({
-      next: (data) => {
-        this.rateplans = data.sort((a: any, b: any) => {
-          return a.rpDes.localeCompare(b.rpDes);
-        });
-      },
-    });
   }
 
-  onFileChange(event: any): void {
+  onFileChange(event: any) {
     if (event.target.files.length > 0) {
       this.selectedFile = event.target.files.item(0);
       if (
@@ -75,75 +65,82 @@ export class ActivationComponent {
         reader.onload = (e) => {
           let csv: any = reader.result;
           allTextLines = csv.split('\r\n');
-
-          let listeMsisdns: Array<any> = [];
-          let listeSims: Array<any> = [];
-
-          for (let i = 0; i < allTextLines.length; i++) {
-            listeMsisdns.push(allTextLines[i].split(';')[0]);
-            listeSims.push(allTextLines[i].split(';')[1]);
-          }
-
-          let duplicateMsisdns: Array<any> = this.findDuplicates(
-            listeMsisdns,
-            true,
-            [12]
-          );
-          let duplicateSims: Array<any> = this.findDuplicates(
-            listeSims,
-            true,
-            [19, 20]
-          );
-
-          if (duplicateMsisdns.length) {
+          let duplicates: Array<any> = this.findDuplicates(allTextLines, true);
+          if (duplicates.length) {
             let duplicate: string = '';
-            duplicateMsisdns.forEach((element) => {
+            duplicates.forEach((element) => {
               duplicate += '- ' + element + '\n';
             });
             alert(
-              'Erreur MSISDN. Veulliez vérifier ces informations : \n' +
+              'Erreur doublon. Veulliez vérifier ces informations : \n' +
                 duplicate
             );
-            this.clear();
-          } else if (duplicateSims.length) {
-            let duplicate: string = '';
-            duplicateSims.forEach((element) => {
-              duplicate += '- ' + element + '\n';
-            });
-            alert(
-              'Erreur SIM. Veulliez vérifier ces informations : \n' + duplicate
-            );
-            this.clear();
           } else {
             let listeMsisdn: Array<any> = this.findDuplicates(
-              listeMsisdns,
+              allTextLines,
               false
             );
-
-            let listeSim: Array<any> = this.findDuplicates(listeSims, false);
-
-            let csv: Array<any> = [];
-
-            for (let i = 0; i < listeMsisdn.length; i++) {
-              csv.push({
-                msisdn: listeMsisdn[i],
-                sim:
-                  listeSim[i].length === 19 ? listeSim[i] + '*' : listeSim[i],
-              });
-            }
-
+            this.listeMsisdn = listeMsisdn;
             let data: any = {
-              id_action: 1,
-              csv: csv,
+              id_action: 5,
+              msisdn: listeMsisdn,
               fichier: this.selectedFile!.name,
             };
-
-            this.acteMasseService.verifyActivation(data).subscribe({
+            this.acteMasseService.verifyAjoutService(data).subscribe({
               next: (data) => {
-                this.contenu = data.liste;
-                this.fichier = this.selectedFile!.name;
-                this.nbLigne = data.liste.length;
-                this.nbrError = data.nb_erreur;
+                if (data.hasOwnProperty('liste')) {
+                  const rpcode = data.liste[0].rpcode;
+                  const rpVscode = data.liste[0].rpVscode;
+                  const rpDes = data.liste[0].notification;
+                  this.ratePlans = {
+                    rpcode: rpcode,
+                    rpVscode: rpVscode,
+                    rpDes: rpDes,
+                  };
+                  this.checkratePlans = data.liste.every(
+                    (item: any) => item.rpcode === rpcode
+                  );
+                  if (!this.checkratePlans) {
+                    alert('Les numéros doivent avoir le même plan tarifaire');
+                  } else {
+                    this.acteMasseService
+                      .getServiceRateplans(rpcode, rpVscode)
+                      .subscribe({
+                        next: (data) => {
+                          if (data.length) {
+                            let result = data.reduce((acc: any, cur: any) => {
+                              acc[cur.nom_package] = acc[cur.nom_package] || [];
+                              acc[cur.nom_package].push(cur);
+                              return acc;
+                            }, {});
+
+                            let resultSorted = Object.keys(result)
+                              .sort()
+                              .reduce((acc: any, cur: any) => {
+                                acc[cur] = result[cur];
+                                return acc;
+                              }, {});
+
+                            this.serviceRateplans = resultSorted;
+                          } else {
+                            alert('Aucun service pour ce plan tarifaire');
+                          }
+                        },
+                      });
+                  }
+                  this.contenu = data.liste;
+                  this.fichier = this.selectedFile!.name;
+                  this.nbLigne = data.liste.length;
+                  this.nbrError = data.nb_erreur;
+                } else {
+                  this.clear();
+                  alert(
+                    'Msisdn incorrecte : ' +
+                      data.msisdn +
+                      '\nErreur : ' +
+                      data.error
+                  );
+                }
               },
             });
           }
@@ -155,16 +152,10 @@ export class ActivationComponent {
     }
   }
 
-  findDuplicates(
-    array: Array<any>,
-    duplicate: boolean,
-    length: Array<number> = [0]
-  ): Array<any> {
+  findDuplicates(array: Array<any>, duplicate: boolean): Array<any> {
     if (duplicate) {
       return array.filter(
-        (item, index) =>
-          (array.indexOf(item) !== index && item !== '') ||
-          !length.includes(item.length)
+        (item, index) => array.indexOf(item) !== index && item !== ''
       );
     } else {
       return array.filter(
@@ -173,89 +164,49 @@ export class ActivationComponent {
     }
   }
 
-  onCheckDateChange(event: any): void {
-    this.checkDate = event.target.checked;
-  }
-
-  rechercheClient(): void {
-    this.acteMasseService.getClient(this.custcode).subscribe({
-      next: (data) => {
-        if (data) {
-          this.client = data;
-          this.openModalResult(data.client);
-        } else {
-          this.client = '';
-          this.openModalResult(null);
-        }
-      },
-    });
-  }
-
-  openModalResult(client: any): void {
-    const modalRef = this.modalService.open(ModalResultComponent, {
-      centered: true,
-    });
-    modalRef.componentInstance.client = client;
-  }
-
-  onRateplansChange(): void {
-    this.listServices = [];
-    this.listParametres = [];
-    let { rpcode, rpVscode } = this.selectedRateplans;
-    this.acteMasseService.getServiceRateplans(rpcode, rpVscode).subscribe({
-      next: (data) => {
-        if (data.length) {
-          let result = data.reduce((acc: any, cur: any) => {
-            acc[cur.nom_package] = acc[cur.nom_package] || [];
-            acc[cur.nom_package].push(cur);
-            return acc;
-          }, {});
-
-          let resultSorted = Object.keys(result)
-            .sort()
-            .reduce((acc: any, cur: any) => {
-              acc[cur] = result[cur];
-              return acc;
-            }, {});
-
-          this.serviceRateplans = resultSorted;
-        } else {
-          alert('Aucun service pour ce plan tarifaire');
-        }
-      },
-    });
-  }
-
   onCheckboxChange(event: any, key: any): void {
+    this.checkService = true;
     this.listParametres = [];
     let service = this.serviceRateplans[key].filter((item: any) => {
       return item.servicename === event.target.value;
     });
 
-    if (event.target.checked) {
-      if (service[0].serviceParamerterInd) {
-        this.service = service[0];
-        let { sncode, sccode } = service[0];
-        this.acteMasseService.getParametersRead(sncode, sccode).subscribe({
-          next: (data) => {
-            this.listParametres = data;
-            this.updateViaService(data, service);
-          },
-        });
-      } else {
-        let new_service: any = {
-          sncode: service[0].sncode,
-          spcode: service[0].spcode,
-          servicename: service[0].servicename,
-        };
-        this.listServices.push(new_service);
+    let { sncode, sccode } = service[0];
+
+    let msisdnError: string = '';
+    for (let i = 0; i < this.contenu.length; i++) {
+      if (this.contenu[i].service.includes(sncode)) {
+        msisdnError += '-' + this.contenu[i].msisdn + '\n';
       }
+    }
+
+    if (msisdnError !== '') {
+      alert('Ce service est déja utilisé par le(s) numéro(s) suivant(s) : \n' + msisdnError);
     } else {
-      const index = this.listServices.findIndex(
-        (x) => x.servicename === service[0].servicename
-      );
-      if (index > -1) {
-        this.listServices.splice(index, 1);
+      if (event.target.checked) {
+        if (service[0].serviceParamerterInd) {
+          this.service = service[0];
+          this.acteMasseService.getParametersRead(sncode, sccode).subscribe({
+            next: (data) => {
+              this.listParametres = data;
+              this.updateViaService(data, service);
+            },
+          });
+        } else {
+          let new_service: any = {
+            sncode: service[0].sncode,
+            spcode: service[0].spcode,
+            servicename: service[0].servicename,
+          };
+          this.listServices.push(new_service);
+        }
+      } else {
+        const index = this.listServices.findIndex(
+          (x) => x.servicename === service[0].servicename
+        );
+        if (index > -1) {
+          this.listServices.splice(index, 1);
+        }
       }
     }
   }
@@ -448,91 +399,62 @@ export class ActivationComponent {
     this.listServices.push(new_service);
   }
 
-  openModalListeService() {
-    const modalRef = this.modalService.open(ModalListeServicesComponent, {
-      size: 'lg',
-      centered: true,
-    });
-    modalRef.componentInstance.services = this.listServices;
-    modalRef.componentInstance.selectedRateplans = this.selectedRateplans.rpDes;
-    modalRef.componentInstance.client = this.client.client;
-    modalRef.componentInstance.nbLigne = this.nbLigne;
-    modalRef.componentInstance.nbrError = this.nbrError;
+  onCheckDateChange(event: any): void {
+    this.checkDate = event.target.checked;
   }
 
   disableValider(): boolean {
-    return (
-      this.fichier === '' ||
+    return this.fichier === '' ||
+      !this.checkratePlans ||
       !this.selectedReason ||
-      this.client === '' ||
-      +this.nbrError !== 0 ||
+      this.nbrError !== 0 ||
       this.description === '' ||
-      this.commentaire === '' ||
-      !this.listServices.length
-    );
+      this.commentaire === ''
+      ? true
+      : false;
   }
 
   valider(): void {
-    let requiredServices: Array<any> = [];
-    for (const key in this.serviceRateplans) {
-      this.serviceRateplans[key].forEach((item: any, index: number) => {
-        if (item.svCsind == 'true') {
-          requiredServices.push(item);
+    let data: any = {
+      initiateur: this.storageService.getItem('trigramme'),
+      idUtilisateur: +this.storageService.getItem('user_id'),
+      plan_tarifaire: this.ratePlans,
+      service: this.listServices,
+      comment: this.commentaire,
+      date_prise_compte: this.date,
+      listeMsisdn: {
+        fichier: this.fichier,
+        nbLigne: this.nbLigne,
+        nb_erreur: this.nbrError,
+        liste: this.contenu,
+      },
+      descript_court: this.description,
+      checkdateprise: this.checkDate ? 'true' : 'false',
+      id_reutilisable: this.selectedReason.rsCode,
+      lblraison: this.selectedReason.rsDes,
+      idAction: 5,
+      etat: 'PENDING',
+      lblAction: 'Ajout de service',
+      lbl_etape: 'En attente de validation métier',
+    };
+
+    const formData: FormData = new FormData();
+    formData.append('file', this.selectedFile!);
+    formData.append('data', JSON.stringify(data));
+
+    this.acteMasseService.saveAjoutService(formData).subscribe({
+      next: (data) => {
+        if (data) {
+          this.openModalSaving(data);
+        } else {
+          this.openModalSaving();
+          this.commentaire = '';
+          this.description = '';
+          this.contenu = [];
         }
-      });
-    }
-
-    let checkService = requiredServices.filter((requiredService: any) => {
-      return !this.listServices.some((listService: any) => {
-        return requiredService.servicename === listService.servicename;
-      });
+        this.clear();
+      },
     });
-
-    if (checkService.length) {
-      this.openModalCheckService(checkService);
-    } else {
-      let data: any = {
-        initiateur: this.storageService.getItem('trigramme'),
-        idUtilisateur: +this.storageService.getItem('user_id'),
-        client: this.client,
-        plan_tarifaire: this.selectedRateplans,
-        service: this.listServices,
-        descript_court: this.description,
-        comment: this.commentaire,
-        listeMsisdn: {
-          fichier: this.fichier,
-          nbLigne: this.nbLigne,
-          nb_erreur: this.nbrError,
-          liste: this.contenu,
-        },
-        date_prise_compte: this.date,
-        rsCode: this.selectedReason.rsCode,
-        rsDes: this.selectedReason.rsDes,
-        checkdateprise: this.checkDate ? 'true' : 'false',
-        idAction: 1,
-        etat: 'PENDING',
-        lblAction: 'Nouvelle Activation',
-        lbl_etape: 'En attente de validation métier',
-      };
-
-      const formData: FormData = new FormData();
-      formData.append('file', this.selectedFile!);
-      formData.append('data', JSON.stringify(data));
-
-      this.acteMasseService.saveActivation(formData).subscribe({
-        next: (data) => {
-          if (data) {
-            this.openModalSaving(data);
-          } else {
-            this.openModalSaving();
-            this.commentaire = '';
-            this.description = '';
-            this.contenu = [];
-          }
-          this.clear();
-        },
-      });
-    }
   }
 
   openModalSaving(error: string | null = null, type: number = 1) {
@@ -544,25 +466,27 @@ export class ActivationComponent {
     modalRef.componentInstance.type = type;
   }
 
-  openModalCheckService(services: any) {
-    const modalRef = this.modalService.open(ModalChecklisteServicesComponent, {
-      size: 'lg',
-      centered: true,
-    });
-    modalRef.componentInstance.services = services;
-  }
-
   clear(): void {
     this.inputFile.nativeElement.value = '';
     this.selectedFile = null;
-    this.date = new Date();
-    this.custcode = '';
+    this.contenu = [];
+    this.selectedReason = '';
     this.fichier = '';
-    this.client = '';
-    this.nbLigne = '';
-    this.nbrError = '';
-    this.checkDate = false;
-    this.serviceRateplans = null;
+    this.checkService = false;
+    this.serviceRateplans = [];
+    this.listServices = []
     this.listParametres = [];
+    this.nbLigne = '';
+    this.nbrError = 0;
+  }
+
+  openModalResume() {
+    const modalRef = this.modalService.open(ModalResumeAjoutComponent, {
+      size: 'lg',
+      centered: true,
+    });
+    modalRef.componentInstance.services = this.listServices;
+    modalRef.componentInstance.nbLigne = this.nbLigne;
+    modalRef.componentInstance.nbrError = this.nbrError;
   }
 }
