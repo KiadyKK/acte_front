@@ -1,0 +1,49 @@
+<div class="modal-header bg-orange">
+  <h5 class="modal-title">Résumé</h5>
+  <button
+    type="button"
+    class="btn btn-lg text-light p-0"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  >
+    <i class="bi bi-x-lg"></i>
+  </button>
+</div>
+
+<div class="modal-body">
+  <p>
+    <strong>Nombre de ligne : </strong
+    ><span class="ms-auto">{{ nbLigne }}</span>
+  </p>
+  <p
+    [ngClass]="{
+      'text-danger': +nbrError !== 0 && nbrError !== ''
+    }"
+  >
+    <i
+      *ngIf="+nbrError !== 0 && nbrError !== ''"
+      class="bi bi-x-circle-fill me-1"
+    ></i
+    ><strong>Nombre d'erreur : </strong
+    ><span class="ms-auto">{{ nbrError }}</span>
+  </p>
+
+  <hr />
+  <p *ngIf="services.length">
+    <strong
+      >Service à
+      {{ status === "Activé" ? " activer" : " désactiver" }} :</strong
+    >
+    {{ services[0].servicename }}
+  </p>
+</div>
+
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-success btn-sm"
+    (click)="activeModal.close('Close click')"
+  >
+    Fermer
+  </button>
+</div>

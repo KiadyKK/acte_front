@@ -15,6 +15,7 @@ import { SuspensionComponent } from './components/suspension/suspension.componen
 import { RevokeComponent } from './components/revoke/revoke.component';
 import { ForfaitComponent } from './components/forfait/forfait.component';
 import { AjoutServiceComponent } from './components/ajout-service/ajout-service.component';
+import { ModifStatusServiceComponent } from './components/modif-status-service/modif-status-service.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -81,6 +82,11 @@ const routes: Routes = [
   {
     path: 'ajout-service',
     component: AjoutServiceComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'modification-status-service',
+    component: ModifStatusServiceComponent,
     canActivate: [AuthGuard],
   },
   { path: '', redirectTo: 'board', pathMatch: 'full' },
