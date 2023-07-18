@@ -203,6 +203,7 @@ export class TakeoverComponent {
     this.fichier = '';
     this.nbLigne = '';
     this.nbrError = 0;
+    this.client = '';
   }
 
   openModalResume() {

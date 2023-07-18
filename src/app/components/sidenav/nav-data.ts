@@ -62,7 +62,12 @@ export const navbarData = [
     routerLink: 'changement-service',
     icon: 'bi bi-shuffle',
     label: 'Changement service',
-  }
+  },
+  {
+    routerLink: 'plan-tarifaire',
+    icon: 'bi bi-journal-text',
+    label: 'Modification plan tarifaire',
+  },
   // {
   //   routerLink: 'metier',
   //   icon: 'bi bi-check-circle',

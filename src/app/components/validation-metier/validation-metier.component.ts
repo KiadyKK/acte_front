@@ -34,7 +34,6 @@ export class ValidationMetierComponent implements OnInit {
   onActeClick(idActe: number): void {
     this.metierService.afficherInteraction(idActe).subscribe({
       next: (data: Interaction) => {
-        console.log(data);
         this.content = data;
         this.date = new Date(data.date_prise_compte!);
         this.comValidateur = data.commentaire!;
@@ -119,7 +118,6 @@ export class ValidationMetierComponent implements OnInit {
         };
         this.metierService.validerJoker(data2).subscribe({
           next: (data) => {
-            console.log(data);
             if (!data.msisdnError.length) {
               this.openModalValidation(false);
             } else {
@@ -306,6 +304,29 @@ export class ValidationMetierComponent implements OnInit {
 
         break;
 
+      //MODIFICATION PLAN TARIFAIRE***************************************
+      case 10:
+        let data10: any = {
+          id: this.content.idActe,
+          listeMsisdn: this.content.input.liste,
+          validForm: validForm,
+          titre: 'Modification plan tarifaire',
+          checkdatepriseencompte: this.content.checkdatepriseencompte,
+          comment: this.comValidateur,
+        };
+        this.metierService.validerJoker(data10).subscribe({
+          next: (data) => {
+            if (!data.msisdnError.length) {
+              this.openModalValidation(false);
+            } else {
+              this.openModalValidation(true);
+            }
+            this.onActeClick(this.content.idActe);
+          },
+        });
+
+        break;
+
       //MODIFICATION STATUS SERVICE***************************************
       case 11:
         let data11: any = {
@@ -341,16 +362,16 @@ export class ValidationMetierComponent implements OnInit {
           comment: this.comValidateur,
           date_prise_new: date_prise_new,
         };
-        // this.metierService.validerJoker(data12).subscribe({
-        //   next: (data) => {
-        //     if (!data.msisdnError.length) {
-        //       this.openModalValidation(false);
-        //     } else {
-        //       this.openModalValidation(true);
-        //     }
-        //     this.onActeClick(this.content.idActe);
-        //   },
-        // });
+        this.metierService.validerJoker(data12).subscribe({
+          next: (data) => {
+            if (!data.msisdnError.length) {
+              this.openModalValidation(false);
+            } else {
+              this.openModalValidation(true);
+            }
+            this.onActeClick(this.content.idActe);
+          },
+        });
 
         break;
 

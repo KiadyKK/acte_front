@@ -138,7 +138,7 @@ export class LimitConsoComponent {
 
   disableValider(): boolean {
     return this.fichier === '' ||
-      this.nbrError !== 0 ||
+      // this.nbrError !== 0 ||
       this.description === '' ||
       this.commentaire === ''
       ? true

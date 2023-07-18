@@ -147,6 +147,8 @@ export class ReengagementComponent {
     this.fichier = '';
     this.nbLigne = '';
     this.nbrError = 0;
+    this.selectedMinComStatus = ''
+    this.selectedMinComParam = ''
   }
 
   openModalResume() {

@@ -46,6 +46,8 @@ import { ChgmtServiceComponent } from './components/chgmt-service/chgmt-service.
 import { ModalResumeChgmtComponent } from './components/chgmt-service/modal-resume-chgmt/modal-resume-chgmt.component';
 import { ModifStatusServiceComponent } from './components/modif-status-service/modif-status-service.component';
 import { ModalResumeStatusComponent } from './components/modif-status-service/modal-resume-status/modal-resume-status.component';
+import { PlanTarifaireComponent } from './components/plan-tarifaire/plan-tarifaire.component';
+import { ModalResumePlanComponent } from './components/plan-tarifaire/modal-resume-plan/modal-resume-plan.component';
 import { ModalResumeTakeoverComponent } from './components/takeover/modal-resume-takeover/modal-resume-takeover.component';
 
 @NgModule({
@@ -83,6 +85,8 @@ import { ModalResumeTakeoverComponent } from './components/takeover/modal-resume
     ModalResumeChgmtComponent,
     ModifStatusServiceComponent,
     ModalResumeStatusComponent,
+    PlanTarifaireComponent,
+    ModalResumePlanComponent,
     ModalResumeTakeoverComponent,
   ],
   imports: [
