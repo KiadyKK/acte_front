@@ -38,6 +38,11 @@ export const navbarData = [
     icon: 'bi bi-slash-square',
     label: 'Suspension',
   },
+  {
+    routerLink: 'revoke',
+    icon: 'bi bi-dash-circle',
+    label: 'Revoke',
+  },
   // {
   //   routerLink: 'metier',
   //   icon: 'bi bi-check-circle',

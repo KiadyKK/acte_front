@@ -38,6 +38,7 @@ import { ModalAlertComponent } from './shared/modal-alert/modal-alert.component'
 import { ReengagementComponent } from './components/reengagement/reengagement.component';
 import { LimitConsoComponent } from './components/limit-conso/limit-conso.component';
 import { SuspensionComponent } from './components/suspension/suspension.component';
+import { RevokeComponent } from './components/revoke/revoke.component';
 import { ModalResumeTakeoverComponent } from './components/takeover/modal-resume-takeover/modal-resume-takeover.component';
 
 @NgModule({
@@ -67,6 +68,7 @@ import { ModalResumeTakeoverComponent } from './components/takeover/modal-resume
     ReengagementComponent,
     LimitConsoComponent,
     SuspensionComponent,
+    RevokeComponent,
     ModalResumeTakeoverComponent,
   ],
   imports: [
