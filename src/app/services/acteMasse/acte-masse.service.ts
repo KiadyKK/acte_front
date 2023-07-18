@@ -52,6 +52,12 @@ export class ActeMasseService {
     });
   }
 
+  saveSuspension(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'suspension', data, {
+      responseType: 'text',
+    });
+  }
+
   getReasonsRead(rsState: string): Observable<any> {
     return this.http.get(ACTE_API + `reasons-read?rsState=${rsState}`);
   }
@@ -98,5 +104,9 @@ export class ActeMasseService {
   
   verifyLimitConso(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-limit-conso', data);
+  }
+  
+  verifySuspension(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-suspension', data);
   }
 }

@@ -11,6 +11,7 @@ import { ModifyFieldsComponent } from './components/modify-fields/modify-fields.
 import { WidgetComponent } from './components/widget/widget.component';
 import { ReengagementComponent } from './components/reengagement/reengagement.component';
 import { LimitConsoComponent } from './components/limit-conso/limit-conso.component';
+import { SuspensionComponent } from './components/suspension/suspension.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -57,6 +58,11 @@ const routes: Routes = [
   {
     path: 'limit-conso',
     component: LimitConsoComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'suspension',
+    component: SuspensionComponent,
     canActivate: [AuthGuard],
   },
   { path: '', redirectTo: 'board', pathMatch: 'full' },

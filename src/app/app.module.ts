@@ -37,6 +37,7 @@ import { BnNgIdleService } from 'bn-ng-idle';
 import { ModalAlertComponent } from './shared/modal-alert/modal-alert.component';
 import { ReengagementComponent } from './components/reengagement/reengagement.component';
 import { LimitConsoComponent } from './components/limit-conso/limit-conso.component';
+import { SuspensionComponent } from './components/suspension/suspension.component';
 import { ModalResumeTakeoverComponent } from './components/takeover/modal-resume-takeover/modal-resume-takeover.component';
 
 @NgModule({
@@ -65,6 +66,7 @@ import { ModalResumeTakeoverComponent } from './components/takeover/modal-resume
     ModalAlertComponent,
     ReengagementComponent,
     LimitConsoComponent,
+    SuspensionComponent,
     ModalResumeTakeoverComponent,
   ],
   imports: [

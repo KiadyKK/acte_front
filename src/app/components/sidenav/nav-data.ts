@@ -28,11 +28,16 @@ export const navbarData = [
     icon: 'bi bi-arrow-repeat',
     label: 'Réengagement',
   },
-  // {
-  //   routerLink: 'limit-conso',
-  //   icon: 'bi bi-speedometer',
-  //   label: 'Limit Conso',
-  // },
+  {
+    routerLink: 'limit-conso',
+    icon: 'bi bi-speedometer',
+    label: 'Limit Conso',
+  },
+  {
+    routerLink: 'suspension',
+    icon: 'bi bi-slash-square',
+    label: 'Suspension',
+  },
   // {
   //   routerLink: 'metier',
   //   icon: 'bi bi-check-circle',
