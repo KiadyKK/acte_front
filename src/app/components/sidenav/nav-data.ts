@@ -23,6 +23,16 @@ export const navbarData = [
     icon: 'bi bi-unlock',
     label: 'Take-Over',
   },
+  {
+    routerLink: 'reengagement',
+    icon: 'bi bi-arrow-repeat',
+    label: 'Réengagement',
+  },
+  // {
+  //   routerLink: 'limit-conso',
+  //   icon: 'bi bi-speedometer',
+  //   label: 'Limit Conso',
+  // },
   // {
   //   routerLink: 'metier',
   //   icon: 'bi bi-check-circle',

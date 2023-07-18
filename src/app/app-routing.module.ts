@@ -9,6 +9,7 @@ import { ActivationComponent } from './components/activation/activation.componen
 import { TakeoverComponent } from './components/takeover/takeover.component';
 import { ModifyFieldsComponent } from './components/modify-fields/modify-fields.component';
 import { WidgetComponent } from './components/widget/widget.component';
+import { ReengagementComponent } from './components/reengagement/reengagement.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -45,6 +46,11 @@ const routes: Routes = [
   {
     path: 'technique',
     component: ValidationTechniqueComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'reengagement',
+    component: ReengagementComponent,
     canActivate: [AuthGuard],
   },
   { path: '', redirectTo: 'board', pathMatch: 'full' },
