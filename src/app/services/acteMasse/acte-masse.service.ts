@@ -70,6 +70,12 @@ export class ActeMasseService {
     });
   }
 
+  saveModifyService(data: FormData): Observable<any> {
+    return this.http.post(ACTE_API + 'modify-service', data, {
+      responseType: 'text',
+    });
+  }
+
   saveModificationStatusService(data: FormData): Observable<any> {
     return this.http.post(ACTE_API + 'modify-status-service', data, {
       responseType: 'text',
@@ -144,6 +150,10 @@ export class ActeMasseService {
 
   verifyAjoutService(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-ajout-service', data);
+  }
+
+  verifyChgmtService(data: any): Observable<any> {
+    return this.http.post(ACTE_API + 'verify-changement-service', data);
   }
 
   verifyModifStatusService(data: any): Observable<any> {
