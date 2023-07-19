@@ -16,6 +16,8 @@ export class ModifStatusServiceComponent {
 
   private selectedFile: File | null;
 
+  public date: Date = new Date();
+  public checkDate: boolean = false;
   public reasons: any;
   public selectedReason: any;
   public status: string = '';
@@ -33,6 +35,9 @@ export class ModifStatusServiceComponent {
   public checkService: boolean = false;
 
   public service: any;
+
+  page = 1;
+  pageSize = 4;
 
   constructor(
     private storageService: StorageService,
@@ -150,6 +155,15 @@ export class ModifStatusServiceComponent {
     }
   }
 
+  onStatusChange(): void {
+    let reason = this.status === 'Activé' ? 'a' : 'd';
+    this.acteMasseService.getReasonsRead(reason).subscribe({
+      next: (data) => {
+        this.reasons = data;
+      },
+    });
+  }
+
   findDuplicates(array: Array<any>, duplicate: boolean): Array<any> {
     if (duplicate) {
       return array.filter(
@@ -198,6 +212,10 @@ export class ModifStatusServiceComponent {
     }
   }
 
+  onCheckDateChange(event: any): void {
+    this.checkDate = event.target.checked;
+  }
+
   disableValider(): boolean {
     return this.fichier === '' ||
       !this.checkratePlans ||
@@ -219,6 +237,8 @@ export class ModifStatusServiceComponent {
       service: this.listServices,
       status: this.status,
       comment: this.commentaire,
+      date_prise_compte: this.date,
+      checkdateprise: this.checkDate ? 'true' : 'false',
       listeMsisdn: {
         fichier: this.fichier,
         nbLigne: this.nbLigne,
@@ -267,6 +287,7 @@ export class ModifStatusServiceComponent {
     this.contenu = [];
     this.selectedReason = '';
     this.fichier = '';
+    this.status = '';
     this.checkService = false;
     this.serviceRateplans = [];
     this.listServices = [];

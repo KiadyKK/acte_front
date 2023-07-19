@@ -298,6 +298,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
   font-size: 13px;
 }
 
+.fs-14 {
+  font-size: 14px;
+}
+
 .modal-reject .modal-dialog {
   width: 350px;
 }

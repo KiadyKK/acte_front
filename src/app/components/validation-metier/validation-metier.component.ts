@@ -20,6 +20,10 @@ export class ValidationMetierComponent implements OnInit {
   public date: Date = new Date();
   public comValidateur: string;
   public content: Interaction = new Interaction();
+  public liste: Array<any> = []
+
+  page = 1;
+  pageSize = 7;
 
   constructor(
     private metierService: MetierService,
@@ -35,6 +39,7 @@ export class ValidationMetierComponent implements OnInit {
     this.metierService.afficherInteraction(idActe).subscribe({
       next: (data: Interaction) => {
         this.content = data;
+        this.liste = data.input.liste;
         this.date = new Date(data.date_prise_compte!);
         this.comValidateur = data.commentaire!;
       },
@@ -290,17 +295,16 @@ export class ValidationMetierComponent implements OnInit {
           checkdatepriseencompte: this.content.checkdatepriseencompte,
           comment: this.comValidateur,
         };
-        console.log(data9);
-        // this.metierService.validerJoker(data9).subscribe({
-        //   next: (data) => {
-        //     if (!data.msisdnError.length) {
-        //       this.openModalValidation(false);
-        //     } else {
-        //       this.openModalValidation(true);
-        //     }
-        //     this.onActeClick(this.content.idActe);
-        //   },
-        // });
+        this.metierService.validerJoker(data9).subscribe({
+          next: (data) => {
+            if (!data.msisdnError.length) {
+              this.openModalValidation(false);
+            } else {
+              this.openModalValidation(true);
+            }
+            this.onActeClick(this.content.idActe);
+          },
+        });
 
         break;
 

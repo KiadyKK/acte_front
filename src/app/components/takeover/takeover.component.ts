@@ -29,6 +29,9 @@ export class TakeoverComponent {
   public contenu: Array<any> = [];
   public listeMsisdn: Array<any>;
 
+  page = 1;
+  pageSize = 4;
+
   constructor(
     private storageService: StorageService,
     private acteMasseService: ActeMasseService,

@@ -15,13 +15,28 @@
     />
   </div>
 
-  <div class="col-md-3 ps-3 pe-4" *ngIf="fichier">
+  <div *ngIf="fichier">
+    <label class="form-label m-0 mb-2"><strong>Status</strong></label>
+    <select
+      class="form-select form-select-sm"
+      aria-label="Default select example"
+      [(ngModel)]="status"
+      (change)="onStatusChange()"
+    >
+      <option hidden value="" aria-placeholder="Status"></option>
+      <option value="Activé" aria-placeholder="Status">Activé</option>
+      <option value="Désactivé" aria-placeholder="Status">Désactivé</option>
+    </select>
+  </div>
+
+  <div class="col-md-3 ps-3 pe-4" *ngIf="status">
     <label class="form-label m-0 mb-2"><strong>Raison</strong></label>
     <select
       class="form-select form-select-sm"
       aria-label="Default select example"
       [(ngModel)]="selectedReason"
     >
+      <option hidden value=""></option>
       <option
         *ngFor="let reason of reasons"
         [ngValue]="reason"
@@ -32,17 +47,25 @@
     </select>
   </div>
 
-  <div *ngIf="selectedReason">
-    <label class="form-label m-0 mb-2"><strong>Status</strong></label>
-    <select
-      class="form-select form-select-sm"
-      aria-label="Default select example"
-      [(ngModel)]="status"
+  <div class="example-wrapper" *ngIf="selectedReason">
+    <div>
+      <input
+        type="checkbox"
+        id="date"
+        class="form-check-input me-2"
+        [value]="checkDate"
+        (change)="onCheckDateChange($event)"
+      />
+      <label for="date" class="form-check-label mb-2"
+        ><strong>Date de désactivation</strong></label
+      >
+    </div>
+    <kendo-datetimepicker
+      [disabled]="!checkDate"
+      format="dd/MM/yyyy HH:mm:ss"
+      [(value)]="date"
     >
-      <option hidden value="" aria-placeholder="Status"></option>
-      <option value="Activé" aria-placeholder="Status">Activé</option>
-      <option value="Désactivé" aria-placeholder="Status">Désactivé</option>
-    </select>
+    </kendo-datetimepicker>
   </div>
 </div>
 
@@ -69,7 +92,14 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of contenu">
+                  <tr
+                    *ngFor="
+                      let item of contenu
+                        | slice
+                          : (page - 1) * pageSize
+                          : (page - 1) * pageSize + pageSize
+                    "
+                  >
                     <td>{{ item.msisdn }}</td>
                     <td>{{ item.notification }}</td>
                     <td class="p-0">
@@ -84,6 +114,19 @@
                   </tr>
                 </tbody>
               </table>
+              <div
+                class="d-flex justify-content-center"
+                *ngIf="contenu.length > 0"
+              >
+                <ngb-pagination
+                  [collectionSize]="contenu.length"
+                  [(page)]="page"
+                  [pageSize]="pageSize"
+                  [boundaryLinks]="true"
+                  [maxSize]="5"
+                  size="sm"
+                ></ngb-pagination>
+              </div>
             </div>
           </ng-template>
         </ngb-panel>

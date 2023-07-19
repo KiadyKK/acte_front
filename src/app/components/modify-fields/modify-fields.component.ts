@@ -23,6 +23,9 @@ export class ModifyFieldsComponent {
   public fichier: string = '';
   public nbrError: number = 0;
 
+  page = 1;
+  pageSize = 4;
+
   constructor(
     private storageService: StorageService,
     private acteMasseService: ActeMasseService,

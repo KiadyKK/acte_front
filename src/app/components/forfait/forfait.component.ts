@@ -31,6 +31,9 @@ export class ForfaitComponent {
   public selectedService: Array<any> = [];
   public listParamaters: Array<any> = [];
 
+  page = 1;
+  pageSize = 4;
+
   constructor(
     private storageService: StorageService,
     private acteMasseService: ActeMasseService,

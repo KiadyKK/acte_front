@@ -35,12 +35,12 @@ export const navbarData = [
   },
   {
     routerLink: 'suspension',
-    icon: 'bi bi-slash-square',
+    icon: 'bi bi-dash-circle',
     label: 'Suspension',
   },
   {
     routerLink: 'revoke',
-    icon: 'bi bi-dash-circle',
+    icon: 'bi bi-plus-circle',
     label: 'Revoke',
   },
   {

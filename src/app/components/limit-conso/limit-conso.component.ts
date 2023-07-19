@@ -25,6 +25,9 @@ export class LimitConsoComponent {
   public fichier: string = '';
   public nbrError: number = 0;
 
+  page = 1;
+  pageSize = 4;
+
   constructor(
     private storageService: StorageService,
     private acteMasseService: ActeMasseService,
@@ -77,17 +80,17 @@ export class LimitConsoComponent {
               false
             );
 
-            let listeConso: Array<any> = this.findDuplicates(
-              listeConsos,
-              false
-            );
+            // let listeConso: Array<any> = this.findDuplicates(
+            //   listeConsos,
+            //   false
+            // );
 
             let csv: Array<any> = [];
 
             for (let i = 0; i < listeMsisdn.length; i++) {
               csv.push({
                 msisdn: listeMsisdn[i],
-                conso: +listeConso[i],
+                conso: +listeConsos[i],
               });
             }
 

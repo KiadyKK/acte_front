@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://actmassetest.intranet.oma/api/',
+  apiUrl: 'https://actmasse.intranet.oma/api/',
 };

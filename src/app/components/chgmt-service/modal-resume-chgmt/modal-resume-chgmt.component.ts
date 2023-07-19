@@ -6,7 +6,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./modal-resume-chgmt.component.css']
 })
 export class ModalResumeChgmtComponent {
-  @Input() oldServices: any;
   @Input() services: any;
   @Input() nbLigne: any;
   @Input() nbrError: any;

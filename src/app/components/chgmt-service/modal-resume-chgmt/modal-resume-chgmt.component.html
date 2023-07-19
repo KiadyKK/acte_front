@@ -28,34 +28,15 @@
     ><span class="ms-auto">{{ nbrError }}</span>
   </p>
 
-  <hr />
+  <p class="mb-0">
+    <strong><span>Service à modifier : </span> {{ services[0].servicename }}</strong>
+  </p>
+  <ul *ngIf="services[0].parametre">
+    <li *ngFor="let param of services[0].parametre">
+      {{ param.prmDes + " (" + param.valueDes + ")" }}
+    </li>
+  </ul>
 
-  <ul>
-    <li *ngFor="let service of oldServices; index as i">
-      <strong
-        ><span class="text-decoration-underline">Service à modifier</span> :
-        {{ service.servicename }}</strong
-      >
-      <ul *ngIf="service.parametre">
-        <li *ngFor="let param of service.parametre">
-          {{ param.prmDes + " (" + param.valueDes + ")" }}
-        </li>
-      </ul>
-    </li>
-  </ul>
-  <ul>
-    <li *ngFor="let service of services; index as i">
-      <strong
-        ><span class="text-decoration-underline">Service à ajouter</span> :
-        {{ service.servicename }}</strong
-      >
-      <ul *ngIf="service.parametre">
-        <li *ngFor="let param of service.parametre">
-          {{ param.prmDes + " (" + param.valueDes + ")" }}
-        </li>
-      </ul>
-    </li>
-  </ul>
 </div>
 
 <div class="modal-footer">

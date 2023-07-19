@@ -13,8 +13,13 @@
     />
   </div>
 
-  <div class="col-md-3 ps-3" *ngFor="let item of listeServiceForfait; index as i">
-    <label class="form-label m-0 mb-2"><strong>{{ item.prmDes }}</strong></label>
+  <div
+    class="col-md-3 ps-3"
+    *ngFor="let item of listeServiceForfait; index as i"
+  >
+    <label class="form-label m-0 mb-2"
+      ><strong>{{ item.prmDes }}</strong></label
+    >
     <select
       class="form-select form-select-sm"
       aria-label="Default select example"
@@ -78,7 +83,14 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of contenu">
+                  <tr
+                    *ngFor="
+                      let item of contenu
+                        | slice
+                          : (page - 1) * pageSize
+                          : (page - 1) * pageSize + pageSize
+                    "
+                  >
                     <td>{{ item.msisdn }}</td>
                     <td>{{ item.plan_tarifaire }}</td>
                     <td>{{ item.client }}</td>
@@ -101,6 +113,19 @@
                   </tr>
                 </tbody>
               </table>
+              <div
+                class="d-flex justify-content-center"
+                *ngIf="contenu.length > 0"
+              >
+                <ngb-pagination
+                  [collectionSize]="contenu.length"
+                  [(page)]="page"
+                  [pageSize]="pageSize"
+                  [boundaryLinks]="true"
+                  [maxSize]="5"
+                  size="sm"
+                ></ngb-pagination>
+              </div>
             </div>
           </ng-template>
         </ngb-panel>

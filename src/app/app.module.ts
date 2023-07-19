@@ -49,6 +49,7 @@ import { ModalResumeStatusComponent } from './components/modif-status-service/mo
 import { PlanTarifaireComponent } from './components/plan-tarifaire/plan-tarifaire.component';
 import { ModalResumePlanComponent } from './components/plan-tarifaire/modal-resume-plan/modal-resume-plan.component';
 import { ModalResumeTakeoverComponent } from './components/takeover/modal-resume-takeover/modal-resume-takeover.component';
+import { ModalCheckServiceComponent } from './shared/modal-check-service/modal-check-service.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { ModalResumeTakeoverComponent } from './components/takeover/modal-resume
     PlanTarifaireComponent,
     ModalResumePlanComponent,
     ModalResumeTakeoverComponent,
+    ModalCheckServiceComponent,
   ],
   imports: [
     BrowserModule,

@@ -28,6 +28,9 @@ export class DesactivationComponent implements OnInit {
   public selectedReason: any;
   public listeMsisdn: Array<any>;
 
+  page = 1;
+  pageSize = 4;
+
   constructor(
     private storageService: StorageService,
     private acteMasseService: ActeMasseService,

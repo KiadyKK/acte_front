@@ -5,6 +5,7 @@
   top: 51px;
   width: 3rem;
   height: 100vh;
+  overflow-y: auto;
 }
 
 .sidenav > .logo-container {
@@ -65,7 +66,7 @@
 
 .sidenav-nav > .sidenav-nav-item {
   width: 100%;
-  margin-bottom: 0.625rem;
+  margin-bottom: 0.125rem;
 }
 
 .sidenav-nav > .sidenav-nav-item > .sidenav-nav-link {

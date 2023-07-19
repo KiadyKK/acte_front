@@ -27,5 +27,5 @@ export class Interaction {
   plan_tarifaire?: any;
   result?: any;
   service_a_modifier?: any;
-  service_param?: any
+  service_param?: any;
 }

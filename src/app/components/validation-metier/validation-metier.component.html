@@ -16,10 +16,12 @@
       <ng-template ngbPanelContent>
         <table
           *ngIf="
+            content.idAction === 1 ||
             content.idAction === 2 ||
             content.idAction === 3 ||
             content.idAction === 4 ||
             content.idAction === 5 ||
+            content.idAction === 6 ||
             content.idAction === 7 ||
             content.idAction === 8 ||
             content.idAction === 9 ||
@@ -29,86 +31,68 @@
             content.idAction === 13
           "
           class="table table-sm table-striped table-bordered"
+          aria-describedby="table"
         >
           <thead>
             <tr>
               <th>MSISDN</th>
-              <th>CLIENT</th>
-              <th *ngIf="content.idAction === 10">PLAN TARIFAIRE</th>
-              <th *ngIf="content.idAction === 4">LIMIT CONSO</th>
-              <th>STATUS</th>
+              <th *ngIf="content.idAction === 1">SIM</th>
+              <th *ngIf="content.idAction !== 1">CLIENT</th>
+              <th *ngIf="content.idAction === 10 && content.idAction !== 1">
+                PLAN TARIFAIRE
+              </th>
+              <th *ngIf="content.idAction === 4 && content.idAction !== 1">
+                LIMIT CONSO
+              </th>
+              <th *ngIf="content.idAction === 6 && content.idAction !== 1">
+                CUSTCODE
+              </th>
+              <th *ngIf="content.idAction !== 1">STATUS</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of content.input.liste">
+            <tr
+              *ngFor="
+                let item of liste
+                  | slice
+                    : (page - 1) * pageSize
+                    : (page - 1) * pageSize + pageSize
+              "
+            >
               <td>
                 {{ item.msisdn }}
               </td>
-              <td>
+              <td *ngIf="content.idAction === 1">
+                {{ item.sim }}
+              </td>
+              <td *ngIf="content.idAction !== 1">
                 {{ item.client }}
               </td>
-              <td *ngIf="content.idAction === 10">
+              <td *ngIf="content.idAction === 10 && content.idAction !== 1">
                 {{ item.notification }}
               </td>
-              <td *ngIf="content.idAction === 4">
+              <td *ngIf="content.idAction === 4 && content.idAction !== 1">
                 {{ item.lc }}
               </td>
-              <td>
+              <td *ngIf="content.idAction === 6 && content.idAction !== 1">
+                {{ item.csCode }}
+              </td>
+              <td *ngIf="content.idAction !== 1">
                 {{ item.s_msisdn }}
               </td>
             </tr>
           </tbody>
         </table>
 
-        <table
-          *ngIf="content.idAction === 1"
-          class="table table-sm table-striped table-bordered"
-        >
-          <thead>
-            <tr>
-              <th>MSISDN</th>
-              <th>SIM</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of content.input.liste">
-              <td>
-                {{ item.msisdn }}
-              </td>
-              <td>
-                {{ item.sim }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <table
-          class="table table-sm table-striped table-bordered"
-          *ngIf="content.idAction === 6"
-        >
-          <thead>
-            <tr>
-              <th scope="col">MSISDN</th>
-              <th scope="col">CLIENT</th>
-              <th scope="col">CUSTCODE</th>
-              <th scope="col">STATUT</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of content.input.liste">
-              <td>{{ item.msisdn }}</td>
-              <td>{{ item.client }}</td>
-              <td>{{ item.csCode }}</td>
-              <td class="p-0">
-                <i
-                  [ngClass]="
-                    item.s_msisdn === 'OK' ? 'bi bi-check-lg' : 'bi bi-x-lg'
-                  "
-                ></i>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="d-flex justify-content-center">
+          <ngb-pagination
+            [collectionSize]="content.input.liste.length"
+            [(page)]="page"
+            [pageSize]="pageSize"
+            [boundaryLinks]="true"
+            [maxSize]="5"
+          ></ngb-pagination>
+        </div>
       </ng-template>
     </ngb-panel>
   </ngb-accordion>
@@ -120,7 +104,6 @@
     class="accordion-green"
     activeIds="config-panel-four"
     *ngIf="
-      
       content.idAction === 1 ||
       content.idAction === 5 ||
       content.idAction === 7 ||
@@ -144,7 +127,10 @@
         >
           <strong>Plan Tarifaire : </strong>{{ content.plan_tarifaire.rpDes }}
         </p>
-        <table class="table table-sm table-striped table-bordered">
+        <table
+          class="table table-sm table-striped table-bordered"
+          aria-describedby="table-liste-service"
+        >
           <thead>
             <tr>
               <th scope="col">N°</th>
@@ -155,12 +141,14 @@
           </thead>
           <tbody>
             <tr *ngFor="let service of content.service_param; index as i">
-              <th>{{ i + 1 }}</th>
+              <th scope="row">{{ i + 1 }}</th>
               <td>{{ service.servicename }}</td>
               <td *ngIf="content.idAction !== 11">
-                <li *ngFor="let param of service.parametre">
-                  {{ param.prmDes + " (" + param.valueDes + ")" }}
-                </li>
+                <ul>
+                  <li *ngFor="let param of service.parametre">
+                    {{ param.prmDes + " (" + param.valueDes + ")" }}
+                  </li>
+                </ul>
               </td>
               <td *ngIf="content.idAction === 11">{{ content.parametre }}</td>
             </tr>
@@ -186,23 +174,10 @@
           <strong>Plan Tarifaire : </strong>{{ content.plan_tarifaire.rpDes }}
         </p>
         <ul>
-          <li *ngFor="let service of content.service_a_modifier; index as i">
-            <strong
-              ><span class="text-decoration-underline">Service à modifier</span> :
-              {{ service.servicename }}</strong
-            >
-            <ul *ngIf="service.parametre">
-              <li *ngFor="let param of service.parametre">
-                {{ param.prmDes + " (" + param.valueDes + ")" }}
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <ul>
           <li *ngFor="let service of content.service_param; index as i">
             <strong
-              ><span class="text-decoration-underline">Service à ajouter</span> :
-              {{ service.servicename }}</strong
+              ><span class="text-decoration-underline">Service à modifier</span>
+              : {{ service.servicename }}</strong
             >
             <ul *ngIf="service.parametre">
               <li *ngFor="let param of service.parametre">
@@ -336,13 +311,13 @@
         <i class="bi bi-info-circle me-2"></i>Retour CX
       </button>
     </p>
-    <!-- <span *ngIf="content.idRole == 2">En attente du validateur technique</span> -->
   </div>
 
   <div class="card p-3" *ngIf="content.id && content.idRole == 1">
     <div class="d-flex">
       <div
         class="example-wrapper me-3"
+        FD
         *ngIf="content.checkdatepriseencompte === 'true'"
       >
         <div>

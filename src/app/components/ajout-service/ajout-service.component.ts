@@ -33,8 +33,12 @@ export class AjoutServiceComponent {
   public listServices: Array<any> = [];
   public listParametres: any;
   public checkService: boolean = false;
+  public withService: string = '';
 
   public service: any;
+
+  page = 1;
+  pageSize = 4;
 
   constructor(
     private storageService: StorageService,
@@ -173,15 +177,14 @@ export class AjoutServiceComponent {
 
     let { sncode, sccode } = service[0];
 
-    let msisdnError: string = '';
     for (let i = 0; i < this.contenu.length; i++) {
       if (this.contenu[i].service.includes(sncode)) {
-        msisdnError += '-' + this.contenu[i].msisdn + '\n';
+        this.withService += '-' + this.contenu[i].msisdn + '\n';
       }
     }
 
-    if (msisdnError !== '') {
-      alert('Ce service est déja utilisé par le(s) numéro(s) suivant(s) : \n' + msisdnError);
+    if (this.withService !== '') {
+      alert('Ce service est déja utilisé par le(s) numéro(s) suivant(s) : \n' + this.withService);
     } else {
       if (event.target.checked) {
         if (service[0].serviceParamerterInd) {

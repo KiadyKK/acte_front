@@ -38,6 +38,9 @@ export class ActivationComponent {
 
   public service: any;
 
+  page = 1;
+  pageSize = 4;
+
   constructor(
     private storageService: StorageService,
     private acteMasseService: ActeMasseService,
