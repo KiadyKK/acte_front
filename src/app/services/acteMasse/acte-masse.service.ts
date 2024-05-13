@@ -130,6 +130,10 @@ export class ActeMasseService {
     return this.http.post(ACTE_API + 'verify-activation', data);
   }
 
+  getVerifyActivation(): Observable<any> {
+    return this.http.get(ACTE_API + 'verify-activation');
+  }
+
   verifyModifyFields(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-modify-fields', data);
   }
@@ -141,11 +145,11 @@ export class ActeMasseService {
   verifyReengagement(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-reengagement', data);
   }
-  
+
   verifyLimitConso(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-limit-conso', data);
   }
-  
+
   verifySuspension(data: any): Observable<any> {
     return this.http.post(ACTE_API + 'verify-suspension', data);
   }

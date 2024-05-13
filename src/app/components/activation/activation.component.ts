@@ -6,6 +6,8 @@ import { ModalListeServicesComponent } from './modal-liste-services/modal-liste-
 import { ModalChecklisteServicesComponent } from './modal-checkliste-services/modal-checkliste-services.component';
 import { ModalResultComponent } from './modal-result/modal-result.component';
 import { ModalSavingComponent } from 'src/app/shared/modal-saving/modal-saving.component';
+import { SocketService } from 'src/app/services/socket/socket.service';
+import { WebSocketSubject } from 'rxjs/webSocket';
 
 @Component({
   selector: 'app-activation',
@@ -17,6 +19,11 @@ export class ActivationComponent {
   inputFile: ElementRef;
 
   private selectedFile: File | null;
+
+  private wss: WebSocketSubject<string>;
+  public trigramme: string;
+  public roomKey: string;
+  public spinnerActive: boolean;
 
   public reasons: any;
   public rateplans: any;
@@ -44,10 +51,13 @@ export class ActivationComponent {
   constructor(
     private storageService: StorageService,
     private acteMasseService: ActeMasseService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private socketService: SocketService
   ) {}
 
   ngOnInit(): void {
+    this.trigramme = this.storageService.getItem('trigramme');
+
     this.acteMasseService.getReasonsRead('a').subscribe({
       next: (data) => {
         this.reasons = data;
@@ -141,20 +151,77 @@ export class ActivationComponent {
               fichier: this.selectedFile!.name,
             };
 
-            this.acteMasseService.verifyActivation(data).subscribe({
-              next: (data) => {
-                this.contenu = data.liste;
-                this.fichier = this.selectedFile!.name;
-                this.nbLigne = data.liste.length;
-                this.nbrError = data.nb_erreur;
-              },
-            });
+            this.createRoom(data);
           }
         };
       } else {
         alert('Vous devez uploader un fichier de type .csv');
         this.clear();
       }
+    }
+  }
+
+  createRoom(data: any) {
+    this.socketService.fetchRoomKey().subscribe({
+      next: (v) => {
+        this.roomKey = v;
+        data.roomKey = v;
+        this.spinnerActive = true;
+
+        this.acteMasseService.verifyActivation(data).subscribe({
+          next: (data) => {
+            // this.contenu = data.liste;
+            // this.fichier = this.selectedFile!.name;
+            // this.nbLigne = data.liste.length;
+            // this.nbrError = data.nb_erreur;
+          },
+        });
+      },
+      error: (e) => {
+        console.log(e);
+        this.spinnerActive = false;
+      },
+      complete: () => {
+        this.connectRoom();
+      },
+    });
+  }
+
+  connectRoom() {
+    let name = this.trigramme;
+    let key = this.roomKey;
+    this.wss = this.socketService.openWsConn(name, key);
+    if (this.wss != null) {
+      console.log(`Connected to room: ${key} using ${name}`);
+      // subscribe to webSocketSubject
+      let subscription = this.wss.subscribe({
+        next: (msg: string) => {
+          console.log(msg);
+          if (msg === 'Server: Ready') {
+            this.acteMasseService.getVerifyActivation().subscribe({
+              next: (data) => {
+                this.contenu = data.liste;
+                this.fichier = this.selectedFile!.name;
+                this.nbLigne = data.liste.length;
+                this.nbrError = data.nb_erreur;
+                this.spinnerActive = false;
+              },
+            });
+          }
+        },
+        error: (err: any) => {
+          console.log(err);
+          this.spinnerActive = false;
+        },
+        complete: () => {
+          this.spinnerActive = false;
+          alert(
+            'Connection is lost, please create a new room or connect to another one.'
+          );
+          subscription.unsubscribe();
+          // this.wss = null;
+        },
+      });
     }
   }
 
